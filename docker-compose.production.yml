@@ -1,5 +1,5 @@
 services:
-  backend:
+  server:
     build:
       context: .
       dockerfile: Dockerfile.backend
@@ -19,4 +19,4 @@ services:
       - "8080:80"
     restart: unless-stopped
     depends_on:
-      - backend
+      - server

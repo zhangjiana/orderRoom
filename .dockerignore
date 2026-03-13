@@ -2,6 +2,6 @@ node_modules
 dist
 .git
 .gitignore
-backend/data
+server/data
 *.log
 tmp

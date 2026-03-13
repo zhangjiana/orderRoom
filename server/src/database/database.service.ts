@@ -19,7 +19,7 @@ type MysqlConfig = {
 @Injectable()
 export class DatabaseService implements OnModuleInit, OnApplicationShutdown {
   private pool: Pool | null = null;
-  private readonly legacyDbPath = join(process.cwd(), "backend", "data", "db.json");
+  private readonly legacyDbPath = join(process.cwd(), "server", "data", "db.json");
 
   constructor(private readonly configService: ConfigService) {}
 

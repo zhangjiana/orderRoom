@@ -4,14 +4,17 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "dev:admin": "vite",
-    "dev:backend": "tsx watch --tsconfig backend/tsconfig.json backend/src/main.ts",
-    "build:admin": "tsc -b && vite build",
-    "build:backend": "tsc -p backend/tsconfig.json",
-    "build": "npm run build:backend && npm run build:admin",
-    "preview": "vite preview",
-    "start:backend": "node backend/dist/main.js"
+    "dev": "npm run dev:admin",
+    "dev:admin": "vite --config admin/vite.config.ts",
+    "dev:server": "tsx watch --tsconfig server/tsconfig.json server/src/main.ts",
+    "dev:backend": "npm run dev:server",
+    "build:admin": "tsc -p admin/tsconfig.json && vite build --config admin/vite.config.ts",
+    "build:server": "tsc -p server/tsconfig.json",
+    "build:backend": "npm run build:server",
+    "build": "npm run build:server && npm run build:admin",
+    "preview": "vite preview --config admin/vite.config.ts",
+    "start:server": "node server/dist/main.js",
+    "start:backend": "npm run start:server"
   },
   "dependencies": {
     "@ant-design/icons": "^6.1.0",

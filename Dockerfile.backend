@@ -3,25 +3,25 @@ FROM node:20-alpine AS build
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-COPY backend/package.json ./backend/package.json
-COPY backend/tsconfig.json ./backend/tsconfig.json
+COPY server/package.json ./server/package.json
+COPY server/tsconfig.json ./server/tsconfig.json
 RUN npm ci
 
-COPY backend ./backend
-RUN npm run build:backend
+COPY server ./server
+RUN npm run build:server
 
 FROM node:20-alpine
 
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-COPY backend/package.json ./backend/package.json
+COPY server/package.json ./server/package.json
 RUN npm ci --omit=dev
 
-COPY --from=build /app/backend/dist ./backend/dist
-COPY backend/data ./backend/data
+COPY --from=build /app/server/dist ./server/dist
+COPY server/data ./server/data
 
 ENV NODE_ENV=production
 EXPOSE 3001
 
-CMD ["node", "backend/dist/main.js"]
+CMD ["node", "server/dist/main.js"]

@@ -3,8 +3,8 @@
 餐厅包间预订平台，当前采用：
 
 - 微信小程序客户端：[`miniprogram/`](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/miniprogram)
-- `NestJS` 后端：[`backend/src/`](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/backend/src)
-- `Ant Design` Admin 管理台：[`src/`](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/src)
+- `NestJS` 后端：[`server/`](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/server)
+- `Ant Design` Admin 管理台：[`admin/`](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/admin)
 - `MySQL` 数据库
 
 ## 当前技术栈
@@ -27,19 +27,20 @@
 - `Vite`
 - `Ant Design`
 
-## 后端目录
+## 项目结构
 
-- 启动入口：[backend/src/main.ts](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/backend/src/main.ts)
-- 根模块：[backend/src/app.module.ts](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/backend/src/app.module.ts)
-- 数据库服务：[backend/src/database/database.service.ts](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/backend/src/database/database.service.ts)
-- 鉴权模块：[backend/src/auth/](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/backend/src/auth)
-- 后台接口：[backend/src/admin/](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/backend/src/admin)
-- 对外接口：[backend/src/public/](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/backend/src/public)
-
-## Admin 目录
-
-- 入口页面：[src/App.tsx](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/src/App.tsx)
-- 全局样式：[src/index.css](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/src/index.css)
+- `server/`
+  - 启动入口：[server/src/main.ts](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/server/src/main.ts)
+  - 根模块：[server/src/app.module.ts](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/server/src/app.module.ts)
+  - 数据库服务：[server/src/database/database.service.ts](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/server/src/database/database.service.ts)
+  - 鉴权模块：[server/src/auth/](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/server/src/auth)
+  - 后台接口：[server/src/admin/](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/server/src/admin)
+  - 对外接口：[server/src/public/](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/server/src/public)
+- `admin/`
+  - 入口页面：[admin/src/App.tsx](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/admin/src/App.tsx)
+  - 全局样式：[admin/src/index.css](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/admin/src/index.css)
+- `miniprogram/`
+  - 微信小程序业务页面和配置
 
 ## 本地开发
 
@@ -60,7 +61,7 @@ npm install
 ### 启动 Nest 后端
 
 ```bash
-npm run dev:backend
+npm run dev:server
 ```
 
 ### 启动 Ant Design Admin
@@ -72,14 +73,14 @@ npm run dev:admin
 默认地址：
 
 - Admin：`http://localhost:5173`
-- Backend：`http://localhost:3001`
+- Server：`http://localhost:3001`
 
 ## 构建
 
 构建后台：
 
 ```bash
-npm run build:backend
+npm run build:server
 ```
 
 构建 Admin：
@@ -102,7 +103,7 @@ npm run build
 
 - 创建数据库 `yanqing_binpeng`
 - 创建核心表
-- 从 [backend/data/db.json](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/backend/data/db.json) 导入种子数据
+- 从 [server/data/db.json](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/server/data/db.json) 导入种子数据
 - 初始化默认管理员账号
 
 默认后台账号：
