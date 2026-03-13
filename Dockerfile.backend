@@ -1,0 +1,27 @@
+FROM node:20-alpine AS build
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+COPY backend/package.json ./backend/package.json
+COPY backend/tsconfig.json ./backend/tsconfig.json
+RUN npm ci
+
+COPY backend ./backend
+RUN npm run build:backend
+
+FROM node:20-alpine
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+COPY backend/package.json ./backend/package.json
+RUN npm ci --omit=dev
+
+COPY --from=build /app/backend/dist ./backend/dist
+COPY backend/data ./backend/data
+
+ENV NODE_ENV=production
+EXPOSE 3001
+
+CMD ["node", "backend/dist/main.js"]

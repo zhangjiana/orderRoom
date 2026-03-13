@@ -1,0 +1,11 @@
+.env
+.env.*
+node_modules/
+dist/
+backend/dist/
+.DS_Store
+output/
+tmp/
+.playwright-cli/
+*.tsbuildinfo
+backend/data/platform.sqlite

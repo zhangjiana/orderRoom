@@ -1,0 +1,47 @@
+{
+  "name": "yanqing-binpeng-platform",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:admin": "vite",
+    "dev:backend": "tsx watch --tsconfig backend/tsconfig.json backend/src/main.ts",
+    "build:admin": "tsc -b && vite build",
+    "build:backend": "tsc -p backend/tsconfig.json",
+    "build": "npm run build:backend && npm run build:admin",
+    "preview": "vite preview",
+    "start:backend": "node backend/dist/main.js"
+  },
+  "dependencies": {
+    "@ant-design/icons": "^6.1.0",
+    "@nestjs/common": "^10.4.22",
+    "@nestjs/config": "^3.3.0",
+    "@nestjs/core": "^10.4.22",
+    "@nestjs/platform-express": "^10.4.22",
+    "antd": "^6.3.2",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.15.1",
+    "cors": "^2.8.5",
+    "dayjs": "^1.11.20",
+    "dotenv": "^17.3.1",
+    "express": "^4.21.2",
+    "express-rate-limit": "^8.3.1",
+    "helmet": "^8.1.0",
+    "mysql2": "^3.19.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.5.0",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "@vitejs/plugin-react": "^5.0.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.8.2",
+    "vite": "^6.2.0"
+  }
+}

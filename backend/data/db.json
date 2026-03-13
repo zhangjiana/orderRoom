@@ -1,0 +1,119 @@
+{
+  "merchantApplications": [
+    {
+      "id": "apply_001",
+      "merchantName": "望江楼宴会",
+      "applicantName": "赵经理",
+      "phone": "13800138010",
+      "address": "上海市浦东新区滨江大道 88 号",
+      "province": "上海市",
+      "city": "上海市",
+      "district": "浦东新区",
+      "latitude": 31.23615,
+      "longitude": 121.49947,
+      "businessHours": "10:00-22:00",
+      "contactPhone": "021-58886688",
+      "coverImage": "",
+      "status": "pending",
+      "createdAt": "2026-03-12 10:20:00",
+      "reviewedAt": "",
+      "reviewRemark": ""
+    },
+    {
+      "id": "apply_002",
+      "merchantName": "锦园私宴",
+      "applicantName": "林店长",
+      "phone": "13800138011",
+      "address": "上海市徐汇区天钥桥路 266 号",
+      "province": "上海市",
+      "city": "上海市",
+      "district": "徐汇区",
+      "latitude": 31.18856,
+      "longitude": 121.43723,
+      "businessHours": "09:30-21:30",
+      "contactPhone": "021-64445566",
+      "coverImage": "",
+      "status": "approved",
+      "createdAt": "2026-03-11 15:36:00",
+      "reviewedAt": "2026-03-12 09:10:00",
+      "reviewRemark": "资料完整，允许开通"
+    }
+  ],
+  "merchants": [
+    {
+      "id": "merchant_001",
+      "applicationId": "apply_002",
+      "name": "锦园私宴",
+      "ownerName": "林店长",
+      "phone": "13800138011",
+      "contactPhone": "021-64445566",
+      "address": "上海市徐汇区天钥桥路 266 号",
+      "province": "上海市",
+      "city": "上海市",
+      "district": "徐汇区",
+      "latitude": 31.18856,
+      "longitude": 121.43723,
+      "businessHours": "09:30-21:30",
+      "status": "active",
+      "createdAt": "2026-03-12 09:10:00"
+    }
+  ],
+  "rooms": [
+    {
+      "id": "room_001",
+      "merchantId": "merchant_001",
+      "name": "听雨阁",
+      "capacityMin": 6,
+      "capacityMax": 10,
+      "minSpend": 2288,
+      "description": "适合商务接待与家庭宴请，带独立备餐台。",
+      "tags": [
+        "新中式",
+        "独立茶台",
+        "临窗"
+      ],
+      "status": "available",
+      "createdAt": "2026-03-12 09:20:00"
+    },
+    {
+      "id": "room_002",
+      "merchantId": "merchant_001",
+      "name": "云汀厅",
+      "capacityMin": 10,
+      "capacityMax": 16,
+      "minSpend": 3688,
+      "description": "适合团队聚餐和庆功宴，支持欢迎屏。",
+      "tags": [
+        "轻奢",
+        "欢迎屏",
+        "长桌"
+      ],
+      "status": "available",
+      "createdAt": "2026-03-12 09:24:00"
+    }
+  ],
+  "bookings": [
+    {
+      "id": "booking_e0359d9c58",
+      "merchantId": "merchant_001",
+      "merchantName": "锦园私宴",
+      "merchantAddress": "上海市徐汇区天钥桥路 266 号",
+      "merchantLatitude": 31.18856,
+      "merchantLongitude": 121.43723,
+      "roomId": "room_001",
+      "roomName": "听雨阁",
+      "minSpend": 2288,
+      "diningDate": "2026-03-20",
+      "diningTime": "18:30",
+      "guestCount": 8,
+      "contactName": "王先生",
+      "contactPhone": "13800138088",
+      "remarks": "需要安静包间",
+      "occasion": "商务宴请",
+      "budget": 3200,
+      "status": "confirmed",
+      "createdAt": "2026-03-12 15:36:02",
+      "updatedAt": "2026-03-12 15:36:23"
+    }
+  ]
+}

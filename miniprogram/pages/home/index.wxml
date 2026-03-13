@@ -1,0 +1,97 @@
+<view class="page">
+  <view class="hero-card">
+    <view class="hero-glow hero-glow--one"></view>
+    <view class="hero-glow hero-glow--two"></view>
+    <view class="hero-topline">
+      <view class="brand-pill brand-pill--hero">宴请宾朋</view>
+      <view class="hero-badge">游客模式可先浏览</view>
+    </view>
+    <view class="hero-title">先找到附近餐厅，再挑合适包间，最后一键提交预订</view>
+    <view class="hero-subtitle">
+      第一次进入不用急着登录。可以先看商家、看包间、看距离，确认想订哪一家之后再填写手机号和联系人。
+    </view>
+    <view class="hero-stat-row">
+      <view class="hero-stat">
+        <view class="hero-stat-value">{{stats.merchantCount}}</view>
+        <view class="hero-stat-label">商家</view>
+      </view>
+      <view class="hero-stat">
+        <view class="hero-stat-value">{{stats.roomCount}}</view>
+        <view class="hero-stat-label">包间</view>
+      </view>
+      <view class="hero-stat">
+        <view class="hero-stat-value">{{stats.nearbyCount}}</view>
+        <view class="hero-stat-label">附近可看</view>
+      </view>
+    </view>
+    <view class="hero-actions">
+      <button class="primary-button button-flex" bindtap="goDiscover">查找附近商家</button>
+      <button class="secondary-button button-flex" bindtap="goBookings">查看我的订单</button>
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-header">
+      <view>
+        <view class="section-kicker">FIRST USE</view>
+        <view class="section-title">首次使用说明</view>
+      </view>
+    </view>
+    <view class="guide-grid">
+      <block wx:for="{{welcomeSteps}}" wx:key="title">
+        <view class="guide-card">
+          <view class="guide-title">{{item.title}}</view>
+          <view class="guide-desc">{{item.desc}}</view>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-header">
+      <view>
+        <view class="section-kicker">LOCATION</view>
+        <view class="section-title">定位与权限</view>
+      </view>
+    </view>
+    <view class="section-card">
+      <view class="inline-status inline-status--{{locationMode}}">{{locationLabel}}</view>
+      <view class="helper-text">{{permissionHint}}</view>
+      <view class="helper-text" wx:if="{{loading}}">正在刷新商家数据...</view>
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-header">
+      <view>
+        <view class="section-kicker">MERCHANTS</view>
+        <view class="section-title">推荐商家</view>
+      </view>
+      <view class="section-link" bindtap="goDiscover">查看全部</view>
+    </view>
+
+    <block wx:if="{{featuredMerchants.length}}">
+      <block wx:for="{{featuredMerchants}}" wx:key="id">
+        <view class="merchant-card-mini" data-id="{{item.id}}" bindtap="openMerchant">
+          <view class="pill-row">
+            <view class="ghost-pill">{{item.distanceText}}</view>
+            <view class="ghost-pill">{{item.roomSummary}}</view>
+          </view>
+          <view class="card-head">
+            <view>
+              <view class="card-title">{{item.name}}</view>
+              <view class="card-subtitle">{{item.city}} · {{item.district}} · {{item.businessHours}}</view>
+            </view>
+          </view>
+          <view class="helper-text">{{item.address}}</view>
+          <view class="feature-row">
+            <block wx:for="{{item.featuredTags}}" wx:key="*this">
+              <view class="tag">{{item}}</view>
+            </block>
+          </view>
+        </view>
+      </block>
+    </block>
+    <view wx:else class="empty-card">当前没有商家数据，请先在 admin 端通过商家入驻审核。</view>
+  </view>
+</view>

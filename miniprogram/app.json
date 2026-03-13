@@ -1,0 +1,44 @@
+{
+  "pages": [
+    "pages/home/index",
+    "pages/rooms/index",
+    "pages/merchant/index",
+    "pages/reserve/index",
+    "pages/bookings/index"
+  ],
+  "window": {
+    "navigationBarTitleText": "宴请宾朋",
+    "navigationBarBackgroundColor": "#f7f3ed",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f4efe7",
+    "backgroundTextStyle": "dark"
+  },
+  "tabBar": {
+    "color": "#7d6f60",
+    "selectedColor": "#9c6b36",
+    "backgroundColor": "#fffdf9",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/home/index",
+        "text": "首页",
+        "iconPath": "assets/tab/home.png",
+        "selectedIconPath": "assets/tab/home-active.png"
+      },
+      {
+        "pagePath": "pages/rooms/index",
+        "text": "找店",
+        "iconPath": "assets/tab/rooms.png",
+        "selectedIconPath": "assets/tab/rooms-active.png"
+      },
+      {
+        "pagePath": "pages/bookings/index",
+        "text": "订单",
+        "iconPath": "assets/tab/bookings.png",
+        "selectedIconPath": "assets/tab/bookings-active.png"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

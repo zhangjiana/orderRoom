@@ -1,0 +1,76 @@
+<view class="page">
+  <view wx:if="{{loading}}" class="empty-card">正在加载商家详情...</view>
+
+  <view wx:if="{{merchant}}" class="section-card banner-card">
+    <view class="section-kicker">MERCHANT</view>
+    <view class="banner-title">{{merchant.name}}</view>
+    <view class="banner-copy">{{merchant.address}}</view>
+    <view class="banner-stats">
+      <view class="banner-stat">
+        <view class="banner-stat-value">{{merchant.roomCount}}</view>
+        <view class="banner-stat-label">包间数</view>
+      </view>
+      <view class="banner-stat">
+        <view class="banner-stat-value">{{merchant.distanceText}}</view>
+        <view class="banner-stat-label">距离</view>
+      </view>
+      <view class="banner-stat">
+        <view class="banner-stat-value">{{merchant.businessHours}}</view>
+        <view class="banner-stat-label">营业时间</view>
+      </view>
+    </view>
+    <view class="button-row">
+      <button class="secondary-button button-flex" bindtap="openLocation">地图导航</button>
+    </view>
+  </view>
+
+  <view wx:if="{{merchant}}" class="section">
+    <view class="section-header">
+      <view>
+        <view class="section-kicker">MAP</view>
+        <view class="section-title">门店位置</view>
+      </view>
+    </view>
+    <view class="map-card">
+      <map
+        class="map-view"
+        longitude="{{merchant.longitude}}"
+        latitude="{{merchant.latitude}}"
+        scale="15"
+        markers="{{markers}}"
+      ></map>
+    </view>
+  </view>
+
+  <view wx:if="{{merchant}}" class="section">
+    <view class="section-header">
+      <view>
+        <view class="section-kicker">ROOMS</view>
+        <view class="section-title">包间列表</view>
+      </view>
+    </view>
+    <block wx:for="{{merchant.rooms}}" wx:key="id">
+      <view class="room-card">
+        <view class="pill-row">
+          <view class="ghost-pill">{{item.capacityMin}}-{{item.capacityMax}} 位</view>
+          <view class="ghost-pill">¥{{item.minSpend}} 起</view>
+        </view>
+        <view class="card-head">
+          <view>
+            <view class="card-title">{{item.name}}</view>
+            <view class="card-subtitle">{{item.recommendedFor}}</view>
+          </view>
+          <view class="status-pill {{item.levelClass}}">{{item.availability}}</view>
+        </view>
+        <view class="feature-row">
+          <block wx:for="{{item.features}}" wx:key="*this">
+            <view class="tag">{{item}}</view>
+          </block>
+        </view>
+        <view class="card-actions">
+          <button class="primary-button button-flex" data-room-id="{{item.id}}" bindtap="goReserve">预订这个包间</button>
+        </view>
+      </view>
+    </block>
+  </view>
+</view>

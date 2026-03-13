@@ -1,0 +1,4 @@
+.room-card {
+  margin-top: 16rpx;
+  margin-bottom: 0;
+}
