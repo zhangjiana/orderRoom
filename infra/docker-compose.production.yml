@@ -1,18 +1,18 @@
 services:
   server:
     build:
-      context: .
-      dockerfile: Dockerfile.backend
+      context: ..
+      dockerfile: infra/Dockerfile.server
     env_file:
-      - .env
+      - ../.env
     ports:
       - "3001:3001"
     restart: unless-stopped
 
   admin:
     build:
-      context: .
-      dockerfile: Dockerfile.admin
+      context: ..
+      dockerfile: infra/Dockerfile.admin
       args:
         VITE_API_BASE_URL: ${VITE_API_BASE_URL}
     ports:

@@ -41,6 +41,11 @@
   - 全局样式：[admin/src/index.css](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/admin/src/index.css)
 - `miniprogram/`
   - 微信小程序业务页面和配置
+- `infra/`
+  - Server 镜像：[infra/Dockerfile.server](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/infra/Dockerfile.server)
+  - Admin 镜像：[infra/Dockerfile.admin](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/infra/Dockerfile.admin)
+  - Nginx 配置：[infra/nginx/nginx.admin.conf](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/infra/nginx/nginx.admin.conf)
+  - Docker Compose：[infra/docker-compose.production.yml](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/infra/docker-compose.production.yml)
 
 ## 本地开发
 
@@ -138,10 +143,10 @@ npm run build
 
 ## 生产部署
 
-- 后端镜像：[Dockerfile.backend](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/Dockerfile.backend)
-- Admin 镜像：[Dockerfile.admin](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/Dockerfile.admin)
-- Nginx 配置：[deploy/nginx.admin.conf](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/deploy/nginx.admin.conf)
-- Docker Compose：[docker-compose.production.yml](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/docker-compose.production.yml)
+- Server 镜像：[infra/Dockerfile.server](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/infra/Dockerfile.server)
+- Admin 镜像：[infra/Dockerfile.admin](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/infra/Dockerfile.admin)
+- Nginx 配置：[infra/nginx/nginx.admin.conf](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/infra/nginx/nginx.admin.conf)
+- Docker Compose：[infra/docker-compose.production.yml](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/infra/docker-compose.production.yml)
 
 ## 小程序注意事项
 
