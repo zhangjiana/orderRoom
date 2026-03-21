@@ -32,7 +32,7 @@
     }
   },
   "simulatorType": "wechat",
-  "libVersion": "3.6.0",
+  "libVersion": "3.14.3",
   "condition": {},
   "simulatorPluginLibVersion": {},
   "packOptions": {
