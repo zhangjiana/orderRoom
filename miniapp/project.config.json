@@ -2,8 +2,8 @@
   "appid": "wx69bf2e1d2929f9cc",
   "projectname": "宴请宾朋",
   "compileType": "miniprogram",
-  "miniprogramRoot": "miniprogram/",
-  "srcMiniprogramRoot": "miniprogram/",
+  "miniprogramRoot": "./",
+  "srcMiniprogramRoot": "./",
   "description": "餐厅包间预订微信小程序",
   "setting": {
     "urlCheck": false,

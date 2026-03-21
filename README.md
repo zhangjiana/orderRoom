@@ -2,7 +2,7 @@
 
 餐厅包间预订平台，当前采用：
 
-- 微信小程序客户端：[`miniprogram/`](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/miniprogram)
+- 微信小程序客户端：[`miniapp/`](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/miniapp)
 - `NestJS` 后端：[`server/`](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/server)
 - `Ant Design` Admin 管理台：[`admin/`](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/admin)
 - `MySQL` 数据库
@@ -39,7 +39,7 @@
 - `admin/`
   - 入口页面：[admin/src/App.tsx](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/admin/src/App.tsx)
   - 全局样式：[admin/src/index.css](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/admin/src/index.css)
-- `miniprogram/`
+- `miniapp/`
   - 微信小程序业务页面和配置
 - `infra/`
   - Server 镜像：[infra/Dockerfile.server](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/infra/Dockerfile.server)
@@ -150,6 +150,6 @@ npm run build
 
 ## 小程序注意事项
 
-把 [miniprogram/config.js](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/miniprogram/config.js) 的 `apiBaseUrl` 改成正式 HTTPS 域名，再去微信公众平台配置合法服务器域名。
+把 [miniapp/config.js](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/miniapp/config.js) 的 `apiBaseUrl` 改成正式 HTTPS 域名，再去微信公众平台配置合法服务器域名。
 
 # orderRoom
