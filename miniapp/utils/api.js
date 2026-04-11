@@ -5,12 +5,17 @@ function getBaseUrl() {
   return app.globalData.apiBaseUrl;
 }
 
-function request({ url, method = "GET", data }) {
+function request({ url, method = "GET", data, token }) {
   return new Promise((resolve, reject) => {
     wx.request({
       url: `${getBaseUrl()}${url}`,
       method,
       data,
+      header: token
+        ? {
+            Authorization: `Bearer ${token}`,
+          }
+        : {},
       success(response) {
         if (response.statusCode >= 200 && response.statusCode < 300) {
           resolve(response.data);
@@ -86,6 +91,63 @@ async function getBookingsByPhone(phone) {
   return (result.items || []).map(store.mapBooking);
 }
 
+async function merchantWxLogin(payload) {
+  const result = await request({
+    url: "/api/merchant/auth/wx-login",
+    method: "POST",
+    data: payload,
+  });
+
+  store.saveMerchantToken(result.token);
+  return result;
+}
+
+async function getMerchantSession(token = store.getMerchantToken()) {
+  return request({
+    url: "/api/merchant/auth/me",
+    token,
+  });
+}
+
+async function getMerchantBookings(token = store.getMerchantToken()) {
+  const result = await request({
+    url: "/api/merchant/bookings",
+    token,
+  });
+
+  return (result.items || []).map(store.mapBooking);
+}
+
+async function updateMerchantBookingStatus(id, status, token = store.getMerchantToken()) {
+  const result = await request({
+    url: `/api/merchant/bookings/${id}/status`,
+    method: "PATCH",
+    data: { status },
+    token,
+  });
+
+  return store.mapBooking(result);
+}
+
+async function merchantLogout(token = store.getMerchantToken()) {
+  const result = await request({
+    url: "/api/merchant/auth/logout",
+    method: "POST",
+    token,
+  });
+
+  store.clearMerchantToken();
+  return result;
+}
+
+async function createMerchantApplication(payload) {
+  return request({
+    url: "/api/public/merchant-applications",
+    method: "POST",
+    data: payload,
+  });
+}
+
 module.exports = {
   request,
   getLocation,
@@ -93,4 +155,10 @@ module.exports = {
   getMerchantDetail,
   createBooking,
   getBookingsByPhone,
+  merchantWxLogin,
+  getMerchantSession,
+  getMerchantBookings,
+  updateMerchantBookingStatus,
+  merchantLogout,
+  createMerchantApplication,
 };

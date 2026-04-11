@@ -18,6 +18,7 @@
   - `admin`
   - `public`
   - `merchants`
+  - `merchant`（商家端鉴权 + 订单管理）
   - `bookings`
   - `database`
 
@@ -39,8 +40,11 @@
 - `admin/`
   - 入口页面：[admin/src/App.tsx](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/admin/src/App.tsx)
   - 全局样式：[admin/src/index.css](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/admin/src/index.css)
+  - 支持两种角色切换：平台管理员 / 商家
 - `miniapp/`
   - 微信小程序业务页面和配置
+  - 小程序页面：发现（rooms）、我的订单（bookings）、商户中心（merchant-center）
+  - 商家入驻申请：`pages/apply/index`
 - `infra/`
   - Server 镜像：[infra/Dockerfile.server](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/infra/Dockerfile.server)
   - Admin 镜像：[infra/Dockerfile.admin](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/infra/Dockerfile.admin)
@@ -63,10 +67,28 @@
 npm install
 ```
 
+### 启动本地 MySQL
+
+```bash
+docker compose -f infra/docker-compose.local.yml up -d
+```
+
+### 初始化环境变量
+
+```bash
+cp .env.example .env
+```
+
 ### 启动 Nest 后端
 
 ```bash
 npm run dev:server
+```
+
+如需 watch 模式：
+
+```bash
+npm run dev:server:watch
 ```
 
 ### 启动 Ant Design Admin
@@ -108,13 +130,12 @@ npm run build
 
 - 创建数据库 `yanqing_binpeng`
 - 创建核心表
-- 从 [server/data/db.json](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/server/data/db.json) 导入种子数据
-- 初始化默认管理员账号
+- 不再自动插入任何演示数据、测试账号或默认业务记录
 
-默认后台账号：
+如需初始化后台管理员，可在 `.env` 中显式填写：
 
-- 用户名：`admin`
-- 密码：`Admin@123456`
+- `ADMIN_BOOTSTRAP_USERNAME`
+- `ADMIN_BOOTSTRAP_PASSWORD`
 
 ## 接口
 
@@ -131,6 +152,16 @@ npm run build
 - `POST /api/admin/merchants/:id/rooms`
 - `GET /api/admin/bookings`
 - `PATCH /api/admin/bookings/:id/status`
+
+### Merchant
+
+- `POST /api/merchant/auth/web-login`
+- `POST /api/merchant/auth/wx-login`
+- `GET /api/merchant/auth/me`
+- `POST /api/merchant/auth/logout`
+- `GET /api/merchant/bookings`
+- `GET /api/merchant/bookings/:id`
+- `PATCH /api/merchant/bookings/:id/status`
 
 ### Public
 
@@ -151,5 +182,7 @@ npm run build
 ## 小程序注意事项
 
 把 [miniapp/config.js](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/miniapp/config.js) 的 `apiBaseUrl` 改成正式 HTTPS 域名，再去微信公众平台配置合法服务器域名。
+
+商家端小程序入口在首页的“商家入口”。当前不再提供测试账号兜底登录，商家需使用已开通权限的微信手机号登录。
 
 # orderRoom

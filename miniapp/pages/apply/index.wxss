@@ -1,0 +1,29 @@
+.submit-section {
+  margin-top: 40rpx;
+}
+
+.helper-text {
+  font-size: 24rpx;
+  color: #8a7b6d;
+  line-height: 1.6;
+}
+
+.success-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100rpx;
+  height: 100rpx;
+  margin: 24rpx auto;
+  border-radius: 50%;
+  background: #e7f4eb;
+  color: #2d7c4e;
+  font-size: 48rpx;
+  font-weight: 700;
+}
+
+.field-control--tap {
+  display: flex;
+  align-items: center;
+  min-height: 88rpx;
+}

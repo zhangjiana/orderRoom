@@ -21,12 +21,19 @@ export default () => ({
     database: process.env.MYSQL_DATABASE || "yanqing_binpeng",
     connectionLimit: Number(process.env.MYSQL_CONNECTION_LIMIT || 10),
   },
-  seed: {
-    adminUsername: process.env.ADMIN_SEED_USERNAME || "admin",
-    adminPassword: process.env.ADMIN_SEED_PASSWORD || "Admin@123456",
+  bootstrap: {
+    adminUsername: process.env.ADMIN_BOOTSTRAP_USERNAME || "",
+    adminPassword: process.env.ADMIN_BOOTSTRAP_PASSWORD || "",
   },
   rateLimit: {
     windowMs: Number(process.env.RATE_LIMIT_WINDOW_MS || 15 * 60 * 1000),
     max: Number(process.env.RATE_LIMIT_MAX || 300),
+  },
+  merchantAuth: {
+    sessionDurationMs: Number(process.env.MERCHANT_SESSION_DURATION_MS || 7 * 24 * 60 * 60 * 1000),
+  },
+  wechatMiniapp: {
+    appId: process.env.WECHAT_MINIAPP_APPID || "",
+    appSecret: process.env.WECHAT_MINIAPP_SECRET || "",
   },
 });

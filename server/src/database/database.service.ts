@@ -1,7 +1,5 @@
 import { Injectable, OnApplicationShutdown, OnModuleInit } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { readFileSync, existsSync } from "node:fs";
-import { join } from "node:path";
 import mysql, { Pool, PoolConnection } from "mysql2/promise";
 import { createId } from "../common/utils/id.util";
 import { nowString } from "../common/utils/time.util";
@@ -19,7 +17,6 @@ type MysqlConfig = {
 @Injectable()
 export class DatabaseService implements OnModuleInit, OnApplicationShutdown {
   private pool: Pool | null = null;
-  private readonly legacyDbPath = join(process.cwd(), "server", "data", "db.json");
 
   constructor(private readonly configService: ConfigService) {}
 
@@ -35,7 +32,18 @@ export class DatabaseService implements OnModuleInit, OnApplicationShutdown {
   }
 
   get mysqlConfig(): MysqlConfig {
-    return this.configService.getOrThrow<MysqlConfig>("mysql");
+    const mysqlConfig = this.configService?.get<MysqlConfig>("mysql");
+
+    return (
+      mysqlConfig || {
+        host: process.env.MYSQL_HOST || "127.0.0.1",
+        port: Number(process.env.MYSQL_PORT || 3306),
+        user: process.env.MYSQL_USER || "root",
+        password: process.env.MYSQL_PASSWORD || "",
+        database: process.env.MYSQL_DATABASE || "yanqing_binpeng",
+        connectionLimit: Number(process.env.MYSQL_CONNECTION_LIMIT || 10),
+      }
+    );
   }
 
   async queryRows<T = unknown[]>(
@@ -104,8 +112,7 @@ export class DatabaseService implements OnModuleInit, OnApplicationShutdown {
     });
 
     await this.createSchema();
-    await this.seedAdminIfNeeded();
-    await this.seedBusinessDataIfNeeded();
+    await this.bootstrapAdminIfConfigured();
   }
 
   private async createDatabaseIfNeeded(): Promise<void> {
@@ -244,16 +251,56 @@ export class DatabaseService implements OnModuleInit, OnApplicationShutdown {
         INDEX idx_session_expires_at (expires_at)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
     `);
+
+    await this.execute(`
+      CREATE TABLE IF NOT EXISTS merchant_staff (
+        id VARCHAR(40) PRIMARY KEY,
+        merchant_id VARCHAR(40) NOT NULL,
+        username VARCHAR(60) NOT NULL UNIQUE,
+        password_hash VARCHAR(255) NOT NULL,
+        display_name VARCHAR(80) NOT NULL,
+        phone VARCHAR(32) NOT NULL,
+        wx_openid VARCHAR(100) NULL DEFAULT NULL,
+        status VARCHAR(24) NOT NULL,
+        created_at DATETIME NOT NULL,
+        last_login_at VARCHAR(32) NOT NULL DEFAULT '',
+        INDEX idx_merchant_staff_merchant_id (merchant_id),
+        INDEX idx_merchant_staff_phone (phone),
+        UNIQUE KEY uk_merchant_staff_wx_openid (wx_openid)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    `);
+
+    await this.execute(`
+      CREATE TABLE IF NOT EXISTS merchant_sessions (
+        id VARCHAR(40) PRIMARY KEY,
+        staff_id VARCHAR(40) NOT NULL,
+        token_hash VARCHAR(64) NOT NULL UNIQUE,
+        client_type VARCHAR(24) NOT NULL,
+        created_at DATETIME NOT NULL,
+        last_active_at DATETIME NOT NULL,
+        expires_at DATETIME NOT NULL,
+        INDEX idx_merchant_session_staff_id (staff_id),
+        INDEX idx_merchant_session_expires_at (expires_at)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    `);
   }
 
-  private async seedAdminIfNeeded(): Promise<void> {
-    const row = await this.queryOne<{ total: number }>("SELECT COUNT(*) AS total FROM admin_users");
-    if (row && row.total > 0) {
+  private async bootstrapAdminIfConfigured(): Promise<void> {
+    const adminUsername = this.configService?.get<string>("bootstrap.adminUsername", "").trim() || "";
+    const adminPassword = this.configService?.get<string>("bootstrap.adminPassword", "").trim() || "";
+
+    if (!adminUsername || !adminPassword) {
       return;
     }
 
-    const adminUsername = this.configService.get<string>("seed.adminUsername", "admin");
-    const adminPassword = this.configService.get<string>("seed.adminPassword", "Admin@123456");
+    const row = await this.queryOne<{ id: string }>(
+      "SELECT id FROM admin_users WHERE username = ? LIMIT 1",
+      [adminUsername],
+    );
+
+    if (row) {
+      return;
+    }
 
     await this.execute(
       `INSERT INTO admin_users (
@@ -263,159 +310,11 @@ export class DatabaseService implements OnModuleInit, OnApplicationShutdown {
         createId("admin"),
         adminUsername,
         hashPassword(adminPassword),
-        "平台管理员",
+        "系统管理员",
         "super_admin",
         nowString(),
         "",
       ],
     );
-  }
-
-  private async seedBusinessDataIfNeeded(): Promise<void> {
-    const row = await this.queryOne<{
-      applicationCount: number;
-      merchantCount: number;
-      roomCount: number;
-      bookingCount: number;
-    }>(
-      `SELECT
-        (SELECT COUNT(*) FROM merchant_applications) AS applicationCount,
-        (SELECT COUNT(*) FROM merchants) AS merchantCount,
-        (SELECT COUNT(*) FROM rooms) AS roomCount,
-        (SELECT COUNT(*) FROM bookings) AS bookingCount`,
-    );
-
-    if (
-      row &&
-      (row.applicationCount > 0 || row.merchantCount > 0 || row.roomCount > 0 || row.bookingCount > 0)
-    ) {
-      return;
-    }
-
-    if (!existsSync(this.legacyDbPath)) {
-      return;
-    }
-
-    const snapshot = JSON.parse(readFileSync(this.legacyDbPath, "utf8")) as {
-      merchantApplications?: Array<Record<string, unknown>>;
-      merchants?: Array<Record<string, unknown>>;
-      rooms?: Array<Record<string, unknown>>;
-      bookings?: Array<Record<string, unknown>>;
-    };
-
-    await this.withTransaction(async (connection) => {
-      for (const item of snapshot.merchantApplications || []) {
-        await this.execute(
-          `INSERT INTO merchant_applications (
-            id, merchant_name, applicant_name, phone, address, province, city, district,
-            latitude, longitude, business_hours, contact_phone, cover_image, status,
-            created_at, reviewed_at, review_remark
-          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-          [
-            item.id,
-            item.merchantName,
-            item.applicantName,
-            item.phone,
-            item.address,
-            item.province,
-            item.city,
-            item.district,
-            item.latitude,
-            item.longitude,
-            item.businessHours,
-            item.contactPhone,
-            item.coverImage || "",
-            item.status,
-            item.createdAt,
-            item.reviewedAt || "",
-            item.reviewRemark || "",
-          ],
-          connection,
-        );
-      }
-
-      for (const item of snapshot.merchants || []) {
-        await this.execute(
-          `INSERT INTO merchants (
-            id, application_id, name, owner_name, phone, contact_phone, address, province,
-            city, district, latitude, longitude, business_hours, status, created_at
-          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-          [
-            item.id,
-            item.applicationId,
-            item.name,
-            item.ownerName,
-            item.phone,
-            item.contactPhone,
-            item.address,
-            item.province,
-            item.city,
-            item.district,
-            item.latitude,
-            item.longitude,
-            item.businessHours,
-            item.status,
-            item.createdAt,
-          ],
-          connection,
-        );
-      }
-
-      for (const item of snapshot.rooms || []) {
-        await this.execute(
-          `INSERT INTO rooms (
-            id, merchant_id, name, capacity_min, capacity_max, min_spend, description,
-            tags_json, status, created_at
-          ) VALUES (?, ?, ?, ?, ?, ?, ?, CAST(? AS JSON), ?, ?)`,
-          [
-            item.id,
-            item.merchantId,
-            item.name,
-            item.capacityMin,
-            item.capacityMax,
-            item.minSpend,
-            item.description || "",
-            JSON.stringify(item.tags || []),
-            item.status,
-            item.createdAt,
-          ],
-          connection,
-        );
-      }
-
-      for (const item of snapshot.bookings || []) {
-        await this.execute(
-          `INSERT INTO bookings (
-            id, merchant_id, merchant_name, merchant_address, merchant_latitude,
-            merchant_longitude, room_id, room_name, min_spend, dining_date, dining_time,
-            guest_count, contact_name, contact_phone, remarks, occasion, budget, status,
-            created_at, updated_at
-          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-          [
-            item.id,
-            item.merchantId,
-            item.merchantName,
-            item.merchantAddress,
-            item.merchantLatitude,
-            item.merchantLongitude,
-            item.roomId,
-            item.roomName,
-            item.minSpend,
-            item.diningDate,
-            item.diningTime,
-            item.guestCount,
-            item.contactName,
-            item.contactPhone,
-            item.remarks || "",
-            item.occasion || "",
-            item.budget || 0,
-            item.status,
-            item.createdAt,
-            item.updatedAt,
-          ],
-          connection,
-        );
-      }
-    });
   }
 }

@@ -1,0 +1,145 @@
+<view class="page">
+  <block wx:if="{{authLoading}}">
+    <view class="empty-card">正在恢复商家会话...</view>
+  </block>
+
+  <block wx:elif="{{!loggedIn}}">
+    <view class="section-card banner-card">
+      <view class="section-kicker">MERCHANT MINIAPP</view>
+      <view class="banner-title">商家订单台</view>
+      <view class="banner-copy">
+        用商家登记手机号登录后，你可以在小程序里查看自己门店的订单，并直接确认或拒绝待处理预订。
+      </view>
+      <view class="helper-text">请使用门店负责人手机号登录。当前 MVP 只开放已开通商家。</view>
+      <button
+        class="primary-button merchant-login-button"
+        open-type="getPhoneNumber"
+        bindgetphonenumber="handleMerchantLogin"
+        loading="{{loggingIn}}"
+      >
+        微信手机号登录
+      </button>
+      <view class="apply-link" bindtap="goApply">还没有商家账号？申请入驻</view>
+    </view>
+  </block>
+
+  <block wx:else>
+    <view class="section-card banner-card">
+      <view class="section-kicker">MERCHANT DASHBOARD</view>
+      <view class="banner-title">{{merchant.name}}</view>
+      <view class="banner-copy">{{staff.displayName}} · {{merchant.address}}</view>
+      <view class="helper-text">营业时间：{{merchant.businessHours}} · 联系电话：{{merchant.contactPhone}}</view>
+
+      <view class="banner-stats">
+        <view class="banner-stat">
+          <view class="banner-stat-value">{{summary.total}}</view>
+          <view class="banner-stat-label">订单总数</view>
+        </view>
+        <view class="banner-stat">
+          <view class="banner-stat-value">{{summary.pending}}</view>
+          <view class="banner-stat-label">待确认</view>
+        </view>
+        <view class="banner-stat">
+          <view class="banner-stat-value">{{summary.confirmed}}</view>
+          <view class="banner-stat-label">已确认</view>
+        </view>
+        <view class="banner-stat">
+          <view class="banner-stat-value">{{summary.rejected}}</view>
+          <view class="banner-stat-label">已拒绝</view>
+        </view>
+      </view>
+
+      <view class="button-row">
+        <button class="secondary-button button-flex" bindtap="logout">退出商家登录</button>
+      </view>
+    </view>
+
+    <view class="section">
+      <view class="section-header">
+        <view>
+          <view class="section-kicker">BOOKINGS</view>
+          <view class="section-title">门店订单</view>
+        </view>
+      </view>
+
+      <view class="filter-row">
+        <block wx:for="{{filters}}" wx:key="key">
+          <view
+            class="filter-pill {{activeFilter === item.key ? 'filter-pill--active' : ''}}"
+            data-filter="{{item.key}}"
+            bindtap="changeFilter"
+          >
+            {{item.label}}
+          </view>
+        </block>
+      </view>
+
+      <view wx:if="{{loadingBookings}}" class="empty-card">正在加载订单...</view>
+
+      <block wx:if="{{!loadingBookings && bookings.length}}">
+        <block wx:for="{{bookings}}" wx:key="id">
+          <view class="booking-card">
+            <view class="pill-row">
+              <view class="ghost-pill">{{item.createdAt}}</view>
+              <view class="ghost-pill">{{item.roomName}}</view>
+            </view>
+
+            <view class="card-head">
+              <view>
+                <view class="card-title">{{item.contactName}} · {{item.status}}</view>
+                <view class="card-subtitle">{{item.date}} {{item.time}} · {{item.guests}} 位 · {{item.occasion}}</view>
+              </view>
+              <view class="status-pill {{item.statusClass}}">{{item.status}}</view>
+            </view>
+
+            <view class="meta-grid">
+              <view class="meta-item">
+                <view class="meta-label">联系人</view>
+                <view class="meta-value">{{item.phone}}</view>
+              </view>
+              <view class="meta-item">
+                <view class="meta-label">预算</view>
+                <view class="meta-value">¥{{item.budget}}</view>
+              </view>
+            </view>
+
+            <view class="helper-text">{{item.merchantAddress}}</view>
+            <view class="helper-text" wx:if="{{item.remarks}}">备注：{{item.remarks}}</view>
+
+            <view class="card-actions">
+              <button
+                class="secondary-button button-flex"
+                data-phone="{{item.phone}}"
+                bindtap="callCustomer"
+              >
+                联系客户
+              </button>
+              <button
+                class="primary-button button-flex"
+                wx:if="{{item.rawStatus === 'pending'}}"
+                data-id="{{item.id}}"
+                data-status="confirmed"
+                loading="{{actionLoading === item.id}}"
+                bindtap="updateStatus"
+              >
+                确认订单
+              </button>
+              <button
+                class="secondary-button button-flex danger-button"
+                wx:if="{{item.rawStatus === 'pending'}}"
+                data-id="{{item.id}}"
+                data-status="rejected"
+                loading="{{actionLoading === item.id}}"
+                bindtap="updateStatus"
+              >
+                拒绝订单
+              </button>
+            </view>
+          </view>
+        </block>
+      </block>
+
+      <view wx:if="{{!loadingBookings && !bookings.length}}" class="empty-card">当前筛选下没有订单。</view>
+    </view>
+  </block>
+</view>

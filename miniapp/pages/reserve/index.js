@@ -13,13 +13,9 @@ Page({
   data: {
     loading: true,
     occasions: OCCASIONS,
+    occasionIndex: 0,
     merchant: null,
-    rooms: [],
-    suitableRooms: [],
-    roomOptions: [],
-    selectedRoomText: "",
     selectedRoom: null,
-    roomIndex: 0,
     form: {
       merchantId: "",
       contactName: "",
@@ -50,23 +46,14 @@ Page({
     try {
       const merchant = await api.getMerchantDetail(merchantId);
       const rooms = merchant.rooms || [];
-      const roomOptions = rooms.map((item) => `${item.name} · ${item.capacityMax}位 · ¥${item.minSpend}起`);
-      const selectedIndex = Math.max(
-        rooms.findIndex((item) => item.id === preferredRoomId),
-        0,
-      );
+      const selectedRoom = rooms.find((item) => item.id === preferredRoomId) || rooms[0] || null;
 
       this.setData({
         loading: false,
         merchant,
-        rooms,
-        roomOptions,
-        suitableRooms: this.getSuitableRooms(Number(this.data.form.guests), rooms),
-        roomIndex: selectedIndex,
-        selectedRoom: rooms[selectedIndex] || null,
-        selectedRoomText: roomOptions[selectedIndex] || "请选择包间",
+        selectedRoom,
         "form.merchantId": merchant.id,
-        "form.roomId": rooms[selectedIndex] ? rooms[selectedIndex].id : "",
+        "form.roomId": selectedRoom ? selectedRoom.id : "",
         "form.phone": store.getLastPhone(),
       });
     } catch (_error) {
@@ -78,33 +65,12 @@ Page({
     }
   },
 
-  getSuitableRooms(guestCount, rooms) {
-    if (!guestCount) {
-      return rooms.slice(0, 3);
-    }
-
-    const matched = rooms.filter((item) => item.capacityMax >= guestCount);
-    return (matched.length ? matched : rooms).slice(0, 3);
-  },
-
   handleInput(event) {
     const { field } = event.currentTarget.dataset;
     const value = event.detail.value;
 
     this.setData({
       [`form.${field}`]: value,
-    });
-
-    if (field === "guests") {
-      this.setData({
-        suitableRooms: this.getSuitableRooms(Number(value), this.data.rooms),
-      });
-    }
-  },
-
-  chooseOccasion(event) {
-    this.setData({
-      "form.occasion": event.currentTarget.dataset.value,
     });
   },
 
@@ -120,30 +86,11 @@ Page({
     });
   },
 
-  handleRoomChange(event) {
-    const roomIndex = Number(event.detail.value);
-    const room = this.data.rooms[roomIndex];
-
+  handleOccasionChange(event) {
+    const index = Number(event.detail.value);
     this.setData({
-      roomIndex,
-      selectedRoom: room || null,
-      selectedRoomText: this.data.roomOptions[roomIndex] || "请选择包间",
-      "form.roomId": room ? room.id : "",
-    });
-  },
-
-  selectRecommendedRoom(event) {
-    const roomIndex = this.data.rooms.findIndex((item) => item.id === event.currentTarget.dataset.roomId);
-
-    if (roomIndex === -1) {
-      return;
-    }
-
-    this.setData({
-      roomIndex,
-      selectedRoom: this.data.rooms[roomIndex],
-      selectedRoomText: this.data.roomOptions[roomIndex] || "请选择包间",
-      "form.roomId": this.data.rooms[roomIndex].id,
+      occasionIndex: index,
+      "form.occasion": OCCASIONS[index],
     });
   },
 

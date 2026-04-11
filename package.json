@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "npm run dev:admin",
     "dev:admin": "vite --config ./admin/vite.config.ts",
-    "dev:server": "tsx watch --tsconfig ./server/tsconfig.json ./server/src/main.ts",
+    "dev:server": "npm run build:server && node ./server/dist/main.js",
+    "dev:server:watch": "node ./server/scripts/dev-watch.js",
     "dev:backend": "npm run dev:server",
     "build:admin": "tsc -p ./admin/tsconfig.json && vite build --config ./admin/vite.config.ts",
     "build:server": "tsc -p ./server/tsconfig.json",

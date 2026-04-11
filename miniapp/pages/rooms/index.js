@@ -6,10 +6,17 @@ Page({
     merchants: [],
     loading: true,
     location: null,
+    cityName: "",
   },
 
   onShow() {
     this.loadMerchants();
+  },
+
+  onPullDownRefresh() {
+    this.loadMerchants().then(() => {
+      wx.stopPullDownRefresh();
+    });
   },
 
   async loadMerchants(keyword = this.data.keyword) {
@@ -22,6 +29,7 @@ Page({
       this.setData({
         merchants,
         location,
+        cityName: location ? (merchants[0] && merchants[0].city) || "当前城市" : "",
         loading: false,
       });
     } catch (_error) {

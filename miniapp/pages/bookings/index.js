@@ -5,13 +5,8 @@ Page({
   data: {
     phone: "",
     loading: false,
+    searched: false,
     bookings: [],
-    summary: {
-      total: 0,
-      pending: 0,
-      active: 0,
-      today: 0,
-    },
   },
 
   onShow() {
@@ -41,17 +36,11 @@ Page({
     try {
       this.setData({ loading: true });
       const bookings = await api.getBookingsByPhone(phone);
-      const today = store.formatDate(new Date());
 
       this.setData({
         loading: false,
+        searched: true,
         bookings,
-        summary: {
-          total: bookings.length,
-          pending: bookings.filter((item) => item.status === "待确认").length,
-          active: bookings.filter((item) => item.status === "已确认").length,
-          today: bookings.filter((item) => item.date === today).length,
-        },
       });
     } catch (_error) {
       this.setData({ loading: false });

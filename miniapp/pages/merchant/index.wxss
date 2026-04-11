@@ -1,10 +1,126 @@
+.merchant-header {
+  padding: 28rpx;
+  border-radius: 28rpx;
+  background: linear-gradient(180deg, #fffdfa 0%, #faf4ec 100%);
+  border: 1rpx solid rgba(115, 91, 61, 0.08);
+  box-shadow: 0 12rpx 32rpx rgba(80, 56, 31, 0.06);
+  margin-bottom: 28rpx;
+}
+
+.merchant-header__name {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #2c241d;
+}
+
+.merchant-header__address {
+  margin-top: 12rpx;
+  font-size: 26rpx;
+  color: #6f6052;
+  line-height: 1.6;
+}
+
+.merchant-header__meta {
+  margin-top: 10rpx;
+  font-size: 24rpx;
+  color: #8b7865;
+}
+
+.merchant-header__phone {
+  margin-top: 8rpx;
+  font-size: 24rpx;
+  color: #8e5d2a;
+}
+
+.nav-button {
+  margin-top: 20rpx;
+  padding: 20rpx 0;
+  border-radius: 22rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+  background: transparent;
+  color: #8e5d2a;
+  border: 1rpx solid #dbcbb8;
+}
+
+.nav-button::after {
+  border: none;
+}
+
+.room-list-title {
+  margin-bottom: 18rpx;
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #2c241d;
+}
+
+.room-card {
+  margin-bottom: 16rpx;
+  padding: 24rpx;
+  border-radius: 24rpx;
+  border: 1rpx solid rgba(98, 76, 52, 0.08);
+  background: linear-gradient(180deg, #fffdfa 0%, #faf5ee 100%);
+  box-shadow: 0 10rpx 28rpx rgba(80, 56, 31, 0.06);
+}
+
+.room-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.room-card__name {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #29241e;
+}
+
+.room-card__info {
+  margin-top: 10rpx;
+  font-size: 24rpx;
+  color: #857768;
+}
+
+.room-card__dot {
+  margin: 0 8rpx;
+}
+
+.room-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 12rpx;
+}
+
+.room-card__tag {
+  margin-right: 10rpx;
+  margin-bottom: 8rpx;
+  padding: 8rpx 16rpx;
+  border-radius: 999rpx;
+  background: #efe3d2;
+  color: #825f3c;
+  font-size: 22rpx;
+}
+
+.map-section {
+  margin-top: 28rpx;
+}
+
+.map-section__toggle {
+  text-align: center;
+  padding: 20rpx;
+  font-size: 26rpx;
+  color: #8e5d2a;
+  font-weight: 600;
+}
+
 .map-card {
   overflow: hidden;
-  border-radius: 28rpx;
+  border-radius: 24rpx;
   border: 1rpx solid rgba(115, 91, 61, 0.08);
+  margin-top: 12rpx;
 }
 
 .map-view {
   width: 100%;
-  height: 320rpx;
+  height: 280rpx;
 }

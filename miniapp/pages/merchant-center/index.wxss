@@ -1,0 +1,33 @@
+.merchant-login-button {
+  margin-top: 28rpx;
+}
+
+.filter-pill {
+  margin-right: 16rpx;
+  margin-bottom: 16rpx;
+  padding: 14rpx 24rpx;
+  border-radius: 999rpx;
+  border: 1rpx solid #dfcfbc;
+  background: rgba(255, 253, 249, 0.9);
+  color: #826f5e;
+  font-size: 24rpx;
+}
+
+.filter-pill--active {
+  border-color: rgba(156, 107, 54, 0.32);
+  background: #f0e1d1;
+  color: #8b5926;
+  font-weight: 600;
+}
+
+.danger-button {
+  border-color: rgba(181, 77, 50, 0.16);
+  color: #a7472f;
+}
+
+.apply-link {
+  margin-top: 20rpx;
+  text-align: center;
+  font-size: 24rpx;
+  color: #9c6b36;
+}

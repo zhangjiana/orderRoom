@@ -1,4 +1,5 @@
 const LAST_PHONE_KEY = "yanqing_last_phone";
+const MERCHANT_TOKEN_KEY = "yanqing_merchant_token";
 
 function pad(value) {
   return String(value).padStart(2, "0");
@@ -16,6 +17,20 @@ function saveLastPhone(phone) {
   if (phone) {
     wx.setStorageSync(LAST_PHONE_KEY, phone);
   }
+}
+
+function getMerchantToken() {
+  return wx.getStorageSync(MERCHANT_TOKEN_KEY) || "";
+}
+
+function saveMerchantToken(token) {
+  if (token) {
+    wx.setStorageSync(MERCHANT_TOKEN_KEY, token);
+  }
+}
+
+function clearMerchantToken() {
+  wx.removeStorageSync(MERCHANT_TOKEN_KEY);
 }
 
 function getBookingStatusClass(status) {
@@ -102,6 +117,9 @@ module.exports = {
   formatDate,
   getLastPhone,
   saveLastPhone,
+  getMerchantToken,
+  saveMerchantToken,
+  clearMerchantToken,
   getBookingStatusClass,
   mapRoom,
   mapMerchant,

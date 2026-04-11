@@ -66,10 +66,38 @@ export class BookingsService {
     return { items: rows.map((row) => this.mapBooking(row)) };
   }
 
+  async listMerchantBookings(merchantId: string, status = "all") {
+    return this.listAdminBookings(status, merchantId);
+  }
+
+  async getMerchantBooking(merchantId: string, id: string) {
+    const booking = await this.findBookingById(id, merchantId);
+    if (!booking) {
+      throw new NotFoundException("订单不存在");
+    }
+
+    return this.mapBooking(booking);
+  }
+
   async updateBookingStatus(id: string, payload: Record<string, unknown>) {
     const status = String(payload.status || "");
     if (!["confirmed", "rejected", "cancelled", "completed"].includes(status)) {
       throw new BadRequestException("不支持的订单状态");
+    }
+
+    const booking = await this.findBookingById(id);
+    if (!booking) {
+      throw new NotFoundException("订单不存在");
+    }
+
+    const validTransitions: Record<string, string[]> = {
+      pending: ["confirmed", "rejected", "cancelled"],
+      confirmed: ["completed", "cancelled"],
+    };
+
+    const allowed = validTransitions[booking.status] || [];
+    if (!allowed.includes(status)) {
+      throw new BadRequestException(`订单当前状态「${mapStatusLabel(booking.status)}」不允许变更为「${mapStatusLabel(status)}」`);
     }
 
     await this.databaseService.execute("UPDATE bookings SET status = ?, updated_at = ? WHERE id = ?", [
@@ -78,12 +106,32 @@ export class BookingsService {
       id,
     ]);
 
-    const booking = await this.findBookingById(id);
+    const updated = await this.findBookingById(id);
+    return this.mapBooking(updated!);
+  }
+
+  async updateMerchantBookingStatus(merchantId: string, id: string, payload: Record<string, unknown>) {
+    const status = String(payload.status || "");
+    if (!["confirmed", "rejected"].includes(status)) {
+      throw new BadRequestException("商家仅支持确认或拒绝订单");
+    }
+
+    const booking = await this.findBookingById(id, merchantId);
     if (!booking) {
       throw new NotFoundException("订单不存在");
     }
 
-    return this.mapBooking(booking);
+    await this.databaseService.execute(
+      "UPDATE bookings SET status = ?, updated_at = ? WHERE id = ? AND merchant_id = ?",
+      [status, nowString(), id, merchantId],
+    );
+
+    const updated = await this.findBookingById(id, merchantId);
+    if (!updated) {
+      throw new NotFoundException("订单不存在");
+    }
+
+    return this.mapBooking(updated);
   }
 
   async createBooking(payload: Record<string, unknown>) {
@@ -225,7 +273,7 @@ export class BookingsService {
     return { items: rows.map((row) => this.mapBooking(row)) };
   }
 
-  private async findBookingById(id: string) {
+  private async findBookingById(id: string, merchantId = "") {
     return this.databaseService.queryOne<any>(
       `SELECT
         id,
@@ -250,8 +298,9 @@ export class BookingsService {
         updated_at AS updatedAt
       FROM bookings
       WHERE id = ?
+      ${merchantId ? "AND merchant_id = ?" : ""}
       LIMIT 1`,
-      [id],
+      merchantId ? [id, merchantId] : [id],
     );
   }
 

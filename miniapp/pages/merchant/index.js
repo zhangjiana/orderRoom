@@ -5,6 +5,7 @@ Page({
     loading: true,
     merchant: null,
     markers: [],
+    showMap: false,
   },
 
   onLoad(options) {
@@ -43,6 +44,10 @@ Page({
         icon: "none",
       });
     }
+  },
+
+  toggleMap() {
+    this.setData({ showMap: !this.data.showMap });
   },
 
   openLocation() {

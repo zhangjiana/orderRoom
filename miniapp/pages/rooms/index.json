@@ -1,3 +1,5 @@
 {
-  "navigationBarTitleText": "查找商家"
+  "navigationBarTitleText": "查找商家",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark"
 }

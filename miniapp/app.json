@@ -1,10 +1,12 @@
 {
   "pages": [
-    "pages/home/index",
     "pages/rooms/index",
+    "pages/bookings/index",
+    "pages/merchant-center/index",
     "pages/merchant/index",
     "pages/reserve/index",
-    "pages/bookings/index"
+    "pages/apply/index",
+    "pages/home/index"
   ],
   "window": {
     "navigationBarTitleText": "宴请宾朋",
@@ -20,22 +22,22 @@
     "borderStyle": "black",
     "list": [
       {
-        "pagePath": "pages/home/index",
-        "text": "首页",
-        "iconPath": "assets/tab/home.png",
-        "selectedIconPath": "assets/tab/home-active.png"
-      },
-      {
         "pagePath": "pages/rooms/index",
-        "text": "找店",
+        "text": "发现",
         "iconPath": "assets/tab/rooms.png",
         "selectedIconPath": "assets/tab/rooms-active.png"
       },
       {
         "pagePath": "pages/bookings/index",
-        "text": "订单",
+        "text": "我的订单",
         "iconPath": "assets/tab/bookings.png",
         "selectedIconPath": "assets/tab/bookings-active.png"
+      },
+      {
+        "pagePath": "pages/merchant-center/index",
+        "text": "商户中心",
+        "iconPath": "assets/tab/home.png",
+        "selectedIconPath": "assets/tab/home-active.png"
       }
     ]
   },

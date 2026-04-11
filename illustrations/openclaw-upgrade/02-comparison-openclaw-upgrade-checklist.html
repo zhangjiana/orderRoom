@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OpenClaw 升级清单</title>
+    <style>
+      :root {
+        --bg: #f5f9fd;
+        --panel: #ffffff;
+        --text: #0f1728;
+        --muted: #475467;
+        --line: rgba(15, 23, 40, 0.08);
+        --cyan: #1a84cf;
+        --teal: #0f9a8a;
+        --amber: #d08a10;
+        --slate: #64748b;
+        --red: #c2414f;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        width: 900px;
+        height: 540px;
+        overflow: hidden;
+        font-family: "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
+        background:
+          radial-gradient(circle at 12% 18%, rgba(26, 132, 207, 0.08), transparent 22%),
+          radial-gradient(circle at 86% 14%, rgba(15, 154, 138, 0.08), transparent 24%),
+          linear-gradient(180deg, #fbfdff 0%, var(--bg) 100%);
+        color: var(--text);
+      }
+
+      .wrap {
+        width: 100%;
+        height: 100%;
+        padding: 28px 30px;
+        background-image:
+          linear-gradient(to right, rgba(26, 132, 207, 0.05) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(26, 132, 207, 0.05) 1px, transparent 1px);
+        background-size: 34px 34px;
+      }
+
+      h1 {
+        margin: 6px 0 8px;
+        font-size: 36px;
+        line-height: 1.22;
+      }
+
+      .sub {
+        margin: 0 0 18px;
+        font-size: 19px;
+        line-height: 1.5;
+        color: var(--muted);
+      }
+
+      .board {
+        display: grid;
+        grid-template-columns: 1.08fr 0.92fr;
+        gap: 14px;
+      }
+
+      .col {
+        display: grid;
+        gap: 12px;
+      }
+
+      .card {
+        display: grid;
+        grid-template-columns: 110px 1fr;
+        align-items: center;
+        min-height: 84px;
+        padding: 14px 16px;
+        border-radius: 18px;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        box-shadow: 0 10px 24px rgba(15, 23, 40, 0.06);
+      }
+
+      .tag {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        width: 92px;
+        padding: 10px 8px;
+        border-radius: 14px;
+        color: white;
+        font-size: 18px;
+        font-weight: 700;
+      }
+
+      .t1 { background: linear-gradient(135deg, var(--cyan), #33a2ef); }
+      .t2 { background: linear-gradient(135deg, var(--teal), #28b9a9); }
+      .t3 { background: linear-gradient(135deg, #4d6b8a, #6d88a3); }
+      .t4 { background: linear-gradient(135deg, var(--amber), #e3aa2b); }
+      .a1 { background: linear-gradient(135deg, #126e50, #1e9d72); }
+      .a2 { background: linear-gradient(135deg, var(--cyan), #5ea8e1); }
+      .a3 { background: linear-gradient(135deg, var(--slate), #7c8ca1); }
+      .a4 { background: linear-gradient(135deg, var(--red), #d85b68); }
+
+      .card strong {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 22px;
+      }
+
+      .card p {
+        margin: 0;
+        font-size: 16px;
+        line-height: 1.5;
+        color: #344054;
+      }
+
+      .footer {
+        margin-top: 14px;
+        padding: 12px 14px;
+        border-radius: 16px;
+        border: 1px dashed rgba(26, 132, 207, 0.22);
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.55;
+        background: rgba(255, 255, 255, 0.72);
+      }
+
+      code {
+        padding: 2px 5px;
+        border-radius: 8px;
+        background: rgba(15, 23, 40, 0.06);
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+        font-size: 0.92em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>OpenClaw 升级前，先按场景做判断</h1>
+      <p class="sub">同样是“升级”，不同用户的优先级完全不一样。先看自己属于哪类，再决定是马上升、排期升，还是继续观察。</p>
+
+      <div class="board">
+        <div class="col">
+          <section class="card">
+            <div class="tag t1">场景 1</div>
+            <div>
+              <strong>Qwen 旧认证</strong>
+              <p>还在用旧 portal 方式接 Qwen，需要迁移到 Model Studio API key。</p>
+            </div>
+          </section>
+          <section class="card">
+            <div class="tag t2">场景 2</div>
+            <div>
+              <strong>多 provider / gateway</strong>
+              <p>依赖 OpenAI-compatible、embeddings、tool calling 兼容性，且会频繁切 provider。</p>
+            </div>
+          </section>
+          <section class="card">
+            <div class="tag t3">场景 3</div>
+            <div>
+              <strong>插件 / MCP / memory</strong>
+              <p>已经在重度使用插件运行时、MCP bridge、memory 搜索或 channel 集成。</p>
+            </div>
+          </section>
+          <section class="card">
+            <div class="tag t4">场景 4</div>
+            <div>
+              <strong>稳定单机场景</strong>
+              <p>本地环境很稳，不依赖上述高级能力，也没有明确兼容性痛点。</p>
+            </div>
+          </section>
+        </div>
+
+        <div class="col">
+          <section class="card">
+            <div class="tag a1">动作 1</div>
+            <div>
+              <strong>马上升到 v2026.3.28</strong>
+              <p>Qwen 迁移已经不是“优化项”，而是接入路径调整。</p>
+            </div>
+          </section>
+          <section class="card">
+            <div class="tag a2">动作 2</div>
+            <div>
+              <strong>维护窗口升级</strong>
+              <p>有明显收益，尤其是 provider 兼容、失败回退和网关链路。</p>
+            </div>
+          </section>
+          <section class="card">
+            <div class="tag a2">动作 3</div>
+            <div>
+              <strong>近期值得升级</strong>
+              <p>如果你靠这些能力吃饭，稳定性补丁比表面功能更重要。</p>
+            </div>
+          </section>
+          <section class="card">
+            <div class="tag a3">动作 4</div>
+            <div>
+              <strong>继续观察 stable tag</strong>
+              <p>没有明确痛点时，优先等下一个正式 release。</p>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <div class="footer">底线判断：优先追 <code>tagged stable</code>，不要把 <code>main 2026.3.30</code> 当成生产环境的默认升级目标。</div>
+    </div>
+  </body>
+</html>

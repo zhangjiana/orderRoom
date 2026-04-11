@@ -1,3 +1,103 @@
-.section-card {
-  margin-bottom: 22rpx;
+.location-bar {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.location-text {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #2b241d;
+}
+
+.location-text--hint {
+  font-weight: 400;
+  color: #8a7b6d;
+}
+
+.search-bar {
+  display: flex;
+  gap: 16rpx;
+  margin-bottom: 28rpx;
+}
+
+.search-input {
+  flex: 1;
+  padding: 20rpx 24rpx;
+  border-radius: 22rpx;
+  border: 1rpx solid rgba(160, 136, 112, 0.16);
+  background: #fffdfa;
+  font-size: 28rpx;
+  color: #2f2b27;
+}
+
+.search-btn {
+  width: 140rpx;
+  border-radius: 22rpx;
+  font-size: 28rpx;
+  line-height: 1;
+  padding: 22rpx 0;
+  font-weight: 600;
+  background: linear-gradient(135deg, #b68148 0%, #8e5d2a 100%);
+  color: #ffffff;
+}
+
+.search-btn::after {
+  border: none;
+}
+
+.merchant-card {
+  margin-bottom: 18rpx;
+  padding: 28rpx;
+  border-radius: 28rpx;
+  border: 1rpx solid rgba(115, 91, 61, 0.08);
+  background: linear-gradient(180deg, #fffdfa 0%, #faf4ec 100%);
+  box-shadow: 0 12rpx 32rpx rgba(80, 56, 31, 0.06);
+}
+
+.merchant-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.merchant-card__name {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #29241e;
+}
+
+.merchant-card__distance {
+  flex-shrink: 0;
+  margin-left: 16rpx;
+  font-size: 24rpx;
+  color: #8e5d2a;
+  font-weight: 600;
+}
+
+.merchant-card__info {
+  margin-top: 12rpx;
+  font-size: 24rpx;
+  color: #857768;
+  line-height: 1.6;
+}
+
+.merchant-card__dot {
+  margin: 0 8rpx;
+}
+
+.merchant-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 14rpx;
+}
+
+.merchant-card__tag {
+  margin-right: 12rpx;
+  margin-bottom: 8rpx;
+  padding: 8rpx 16rpx;
+  border-radius: 999rpx;
+  background: #efe3d2;
+  color: #825f3c;
+  font-size: 22rpx;
 }

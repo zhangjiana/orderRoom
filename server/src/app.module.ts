@@ -8,6 +8,7 @@ import { PublicModule } from "./public/public.module";
 import { HealthModule } from "./health/health.module";
 import { MerchantsModule } from "./merchants/merchants.module";
 import { BookingsModule } from "./bookings/bookings.module";
+import { MerchantModule } from "./merchant/merchant.module";
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { BookingsModule } from "./bookings/bookings.module";
     MerchantsModule,
     BookingsModule,
     AdminModule,
+    MerchantModule,
     PublicModule,
     HealthModule,
   ],

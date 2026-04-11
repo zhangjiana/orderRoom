@@ -1,3 +1,98 @@
-.toolbar {
-  white-space: nowrap;
+.search-section {
+  margin-bottom: 28rpx;
+}
+
+.search-section__title {
+  font-size: 38rpx;
+  font-weight: 700;
+  color: #2b241d;
+}
+
+.search-section__hint {
+  margin-top: 8rpx;
+  font-size: 24rpx;
+  color: #8a7b6d;
+}
+
+.search-bar {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 20rpx;
+}
+
+.search-input {
+  flex: 1;
+  padding: 20rpx 24rpx;
+  border-radius: 22rpx;
+  border: 1rpx solid rgba(160, 136, 112, 0.16);
+  background: #fffdfa;
+  font-size: 28rpx;
+  color: #2f2b27;
+}
+
+.search-btn {
+  width: 140rpx;
+  border-radius: 22rpx;
+  font-size: 28rpx;
+  line-height: 1;
+  padding: 22rpx 0;
+  font-weight: 600;
+  background: linear-gradient(135deg, #b68148 0%, #8e5d2a 100%);
+  color: #ffffff;
+}
+
+.search-btn::after {
+  border: none;
+}
+
+.booking-card {
+  margin-bottom: 18rpx;
+  padding: 24rpx;
+  border-radius: 24rpx;
+  border: 1rpx solid rgba(98, 76, 52, 0.08);
+  background: linear-gradient(180deg, #fffdfa 0%, #faf5ee 100%);
+  box-shadow: 0 10rpx 28rpx rgba(80, 56, 31, 0.06);
+}
+
+.booking-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.booking-card__title {
+  flex: 1;
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #29241e;
+  margin-right: 16rpx;
+}
+
+.booking-card__detail {
+  margin-top: 10rpx;
+  font-size: 26rpx;
+  color: #6f6052;
+}
+
+.booking-card__contact {
+  margin-top: 10rpx;
+  font-size: 24rpx;
+  color: #8b7865;
+}
+
+.booking-card__actions {
+  margin-top: 16rpx;
+}
+
+.booking-card__nav-btn {
+  font-size: 24rpx;
+  padding: 16rpx 0;
+  border-radius: 18rpx;
+  background: transparent;
+  color: #8e5d2a;
+  border: 1rpx solid #dbcbb8;
+}
+
+.booking-card__nav-btn::after {
+  border: none;
 }

@@ -1,4 +1,5 @@
 import "reflect-metadata";
+import "dotenv/config";
 import express from "express";
 import { NestFactory } from "@nestjs/core";
 import helmet from "helmet";

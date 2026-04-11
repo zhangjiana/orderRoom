@@ -1,61 +1,55 @@
 <view class="page">
-  <view class="section-card banner-card">
-    <view class="section-kicker">DISCOVER</view>
-    <view class="banner-title">附近商家</view>
-    <view class="banner-copy">这里可以先游客浏览。允许定位后排序会更准确；不允许也没关系，仍然可以按商家名搜索并查看包间。</view>
-
-    <view class="search-card">
-      <input
-        class="field-control"
-        placeholder-class="field-placeholder"
-        placeholder="搜索商家名称"
-        value="{{keyword}}"
-        bindinput="handleKeyword"
-        confirm-type="search"
-        bindconfirm="searchMerchants"
-      />
-      <button class="primary-button search-button" bindtap="searchMerchants">搜索</button>
-    </view>
-    <view class="helper-text">只有在真正提交预订时，才需要填写联系人和手机号。</view>
+  <!-- 顶部定位 + 搜索 -->
+  <view class="location-bar">
+    <view class="location-text" wx:if="{{cityName}}">{{cityName}}</view>
+    <view class="location-text location-text--hint" wx:else>开启定位查看附近餐厅</view>
   </view>
 
-  <view class="section">
-    <view class="section-header">
-      <view>
-        <view class="section-kicker">LIST</view>
-        <view class="section-title">商家列表</view>
+  <view class="search-bar">
+    <input
+      class="search-input"
+      placeholder-class="field-placeholder"
+      placeholder="搜索餐厅名称"
+      value="{{keyword}}"
+      bindinput="handleKeyword"
+      confirm-type="search"
+      bindconfirm="searchMerchants"
+    />
+    <button class="search-btn" bindtap="searchMerchants">搜索</button>
+  </view>
+
+  <!-- 商户卡片列表 -->
+  <view wx:if="{{loading}}" class="empty-card">正在获取商家...</view>
+
+  <block wx:if="{{!loading && merchants.length}}">
+    <view
+      class="merchant-card"
+      wx:for="{{merchants}}"
+      wx:key="id"
+      data-id="{{item.id}}"
+      bindtap="openMerchant"
+    >
+      <view class="merchant-card__header">
+        <view class="merchant-card__name">{{item.name}}</view>
+        <view class="merchant-card__distance" wx:if="{{item.distanceText}}">{{item.distanceText}}</view>
+      </view>
+      <view class="merchant-card__info">
+        <text>{{item.roomSummary}}</text>
+        <text class="merchant-card__dot">·</text>
+        <text>{{item.businessHours}}</text>
+      </view>
+      <view class="merchant-card__tags" wx:if="{{item.featuredTags.length}}">
+        <view
+          class="merchant-card__tag"
+          wx:for="{{item.featuredTags}}"
+          wx:for-item="tag"
+          wx:key="*this"
+        >{{tag}}</view>
       </view>
     </view>
+  </block>
 
-    <view wx:if="{{loading}}" class="empty-card">正在获取商家...</view>
-
-    <block wx:if="{{!loading && merchants.length}}">
-      <block wx:for="{{merchants}}" wx:key="id">
-        <view class="merchant-card-mini" data-id="{{item.id}}" bindtap="openMerchant">
-          <view class="pill-row">
-            <view class="ghost-pill">{{item.distanceText}}</view>
-            <view class="ghost-pill">{{item.roomSummary}}</view>
-            <view class="ghost-pill">{{item.businessHours}}</view>
-          </view>
-          <view class="card-head">
-            <view>
-              <view class="card-title">{{item.name}}</view>
-              <view class="card-subtitle">{{item.city}} · {{item.district}}</view>
-            </view>
-          </view>
-          <view class="helper-text">{{item.address}}</view>
-          <view class="feature-row">
-            <block wx:for="{{item.featuredTags}}" wx:key="*this">
-              <view class="tag">{{item}}</view>
-            </block>
-          </view>
-          <view class="card-actions">
-            <button class="primary-button button-flex" data-id="{{item.id}}" catchtap="openMerchant">查看包间</button>
-          </view>
-        </view>
-      </block>
-    </block>
-
-    <view wx:if="{{!loading && !merchants.length}}" class="empty-card">暂时没有找到符合条件的商家。可以换个关键词，或者直接浏览全部商家。</view>
+  <view wx:if="{{!loading && !merchants.length}}" class="empty-card">
+    暂无符合条件的商家，试试换个关键词
   </view>
 </view>

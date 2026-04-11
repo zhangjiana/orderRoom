@@ -1,91 +1,55 @@
 <view class="page">
-  <view class="section-card banner-card">
-    <view class="section-kicker">MY BOOKINGS</view>
-    <view class="banner-title">我的订单</view>
-    <view class="banner-copy">这里不需要登录账号。只要输入下单时填写的手机号，就能查到你的预订记录。</view>
-    <view class="search-card">
+  <!-- 手机号查询 -->
+  <view class="search-section">
+    <view class="search-section__title">我的订单</view>
+    <view class="search-section__hint">输入下单时填写的手机号查询</view>
+    <view class="search-bar">
       <input
-        class="field-control"
+        class="search-input"
         type="number"
         maxlength="11"
         placeholder-class="field-placeholder"
-        placeholder="输入联系人手机号"
+        placeholder="输入手机号"
         value="{{phone}}"
         bindinput="handlePhone"
         confirm-type="search"
         bindconfirm="searchBookings"
       />
-      <button class="primary-button search-button" bindtap="searchBookings">查询</button>
-    </view>
-    <view class="helper-text">手机号只用于查找你自己的订单记录和接收商家联系。</view>
-    <view class="banner-stats">
-      <view class="banner-stat">
-        <view class="banner-stat-value">{{summary.total}}</view>
-        <view class="banner-stat-label">订单总数</view>
-      </view>
-      <view class="banner-stat">
-        <view class="banner-stat-value">{{summary.pending}}</view>
-        <view class="banner-stat-label">待确认</view>
-      </view>
-      <view class="banner-stat">
-        <view class="banner-stat-value">{{summary.active}}</view>
-        <view class="banner-stat-label">已确认</view>
-      </view>
-      <view class="banner-stat">
-        <view class="banner-stat-value">{{summary.today}}</view>
-        <view class="banner-stat-label">今日用餐</view>
-      </view>
+      <button class="search-btn" bindtap="searchBookings">查询</button>
     </view>
   </view>
 
-  <view class="section">
-    <view wx:if="{{loading}}" class="empty-card">正在加载订单...</view>
+  <!-- 订单列表 -->
+  <view wx:if="{{loading}}" class="empty-card">正在加载订单...</view>
 
-    <block wx:if="{{!loading && bookings.length}}">
-      <block wx:for="{{bookings}}" wx:key="id">
-        <view class="booking-card">
-          <view class="pill-row">
-            <view class="ghost-pill">{{item.merchantName}}</view>
-            <view class="ghost-pill">{{item.createdAt}}</view>
-          </view>
-          <view class="card-head">
-            <view>
-              <view class="card-title">{{item.roomName}} · {{item.status}}</view>
-              <view class="card-subtitle">{{item.date}} {{item.time}} · {{item.guests}} 位 · {{item.occasion}}</view>
-            </view>
-            <view class="status-pill {{item.statusClass}}">{{item.status}}</view>
-          </view>
+  <block wx:if="{{!loading && bookings.length}}">
+    <view class="booking-card" wx:for="{{bookings}}" wx:key="id">
+      <view class="booking-card__header">
+        <view class="booking-card__title">{{item.merchantName}} · {{item.roomName}}</view>
+        <view class="status-pill {{item.statusClass}}">{{item.status}}</view>
+      </view>
+      <view class="booking-card__detail">
+        <text>{{item.date}} {{item.time}}</text>
+        <text> · {{item.guests}} 位</text>
+      </view>
+      <view class="booking-card__detail" wx:if="{{item.occasion}}">
+        <text>{{item.occasion}}</text>
+      </view>
+      <view class="booking-card__contact">联系人：{{item.contactName}}</view>
+      <view class="booking-card__actions" wx:if="{{item.merchantLatitude && item.merchantLongitude}}">
+        <button
+          class="booking-card__nav-btn"
+          data-latitude="{{item.merchantLatitude}}"
+          data-longitude="{{item.merchantLongitude}}"
+          data-name="{{item.merchantName}}"
+          data-address="{{item.merchantAddress}}"
+          bindtap="openLocation"
+        >导航到门店</button>
+      </view>
+    </view>
+  </block>
 
-          <view class="meta-grid">
-            <view class="meta-item">
-              <view class="meta-label">联系人</view>
-              <view class="meta-value">{{item.contactName}} / {{item.phone}}</view>
-            </view>
-            <view class="meta-item">
-              <view class="meta-label">预算参考</view>
-              <view class="meta-value">¥{{item.budget}}</view>
-            </view>
-          </view>
-
-          <view class="helper-text">{{item.merchantAddress}}</view>
-          <view class="helper-text" wx:if="{{item.remarks}}">备注：{{item.remarks}}</view>
-
-          <view class="card-actions" wx:if="{{item.merchantLatitude && item.merchantLongitude}}">
-            <button
-              class="secondary-button button-flex"
-              data-latitude="{{item.merchantLatitude}}"
-              data-longitude="{{item.merchantLongitude}}"
-              data-name="{{item.merchantName}}"
-              data-address="{{item.merchantAddress}}"
-              bindtap="openLocation"
-            >
-              导航到门店
-            </button>
-          </view>
-        </view>
-      </block>
-    </block>
-
-    <view wx:if="{{!loading && !bookings.length}}" class="empty-card">还没有查到订单。请确认手机号是否与下单时填写的一致。</view>
+  <view wx:if="{{searched && !loading && !bookings.length}}" class="empty-card">
+    没有查到订单，请确认手机号是否正确
   </view>
 </view>

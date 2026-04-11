@@ -1,68 +1,135 @@
-export type AppView = "student" | "teacher";
+export type BookingFilter = "all" | "pending" | "confirmed" | "rejected";
 
-export type TaskCategory = "morning" | "focus" | "reading" | "exercise" | "kindness";
+// --- Merchant ---
 
-export type AccentTone = "sunrise" | "lagoon" | "peach" | "mint" | "ember";
-
-export type PetStyleKey = "cute" | "fantasy" | "pixel" | "scifi" | "china";
-
-export type Task = {
+export type MerchantInfo = {
   id: string;
-  title: string;
+  name: string;
+  address: string;
+  contactPhone: string;
+  businessHours: string;
+};
+
+export type MerchantStaff = {
+  id: string;
+  username: string;
+  displayName: string;
+  phone: string;
+};
+
+export type MerchantSession = {
+  expiresAt: string;
+  merchant: MerchantInfo;
+  staff: MerchantStaff;
+};
+
+export type MerchantAuthResponse = MerchantSession & {
+  token: string;
+};
+
+export type MerchantBooking = {
+  id: string;
+  merchantId: string;
+  merchantName: string;
+  merchantAddress: string;
+  merchantLatitude: number | null;
+  merchantLongitude: number | null;
+  roomId: string;
+  roomName: string;
+  minSpend: number;
+  diningDate: string;
+  diningTime: string;
+  guestCount: number;
+  contactName: string;
+  contactPhone: string;
+  remarks: string;
+  occasion: string;
+  budget: number;
+  rawStatus: string;
+  statusLabel: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+// --- Admin ---
+
+export type AdminUser = {
+  id: string;
+  username: string;
+  displayName: string;
+  role: string;
+};
+
+export type AdminSession = {
+  admin: AdminUser;
+  expiresAt: string;
+};
+
+export type AdminAuthResponse = AdminSession & {
+  token: string;
+};
+
+export type AdminDashboard = {
+  summary: {
+    totalApplications: number;
+    pendingApplications: number;
+    approvedApplications: number;
+    activeMerchants: number;
+    totalRooms: number;
+    totalBookings: number;
+    pendingBookings: number;
+  };
+};
+
+export type MerchantApplication = {
+  id: string;
+  merchantName: string;
+  applicantName: string;
+  phone: string;
+  address: string;
+  province: string;
+  city: string;
+  district: string;
+  latitude: number;
+  longitude: number;
+  businessHours: string;
+  contactPhone: string;
+  coverImage: string;
+  status: string;
+  createdAt: string;
+  reviewedAt: string;
+  reviewRemark: string;
+};
+
+export type AdminRoom = {
+  id: string;
+  merchantId: string;
+  name: string;
+  capacityMin: number;
+  capacityMax: number;
+  minSpend: number;
   description: string;
-  category: TaskCategory;
-  duration: number;
-  rewardXp: number;
-  rewardHearts: number;
-  accent: AccentTone;
-};
-
-export type CheckinRecord = {
-  taskId: string;
-  completedAt: string;
-};
-
-export type FeedEntry = {
-  id: string;
-  type: "checkin" | "reward" | "teacher";
-  title: string;
-  detail: string;
+  tags: string[];
+  status: string;
   createdAt: string;
 };
 
-export type Classmate = {
+export type AdminMerchant = {
   id: string;
+  applicationId: string;
   name: string;
-  petName: string;
-  completionRate: number;
-  streak: number;
-  glow: number;
-};
-
-export type Profile = {
-  studentName: string;
-  className: string;
-  teacherName: string;
-  schoolName: string;
-};
-
-export type PetState = {
-  name: string;
-  species: string;
-  style: PetStyleKey;
-  xp: number;
-  mood: number;
-  energy: number;
-  hearts: number;
-  lastInteractionAt: string;
-};
-
-export type AppState = {
-  profile: Profile;
-  pet: PetState;
-  tasks: Task[];
-  checkinsByDate: Record<string, CheckinRecord[]>;
-  classmates: Classmate[];
-  feed: FeedEntry[];
-  teacherTheme: string;
+  ownerName: string;
+  phone: string;
+  contactPhone: string;
+  address: string;
+  province: string;
+  city: string;
+  district: string;
+  latitude: number;
+  longitude: number;
+  businessHours: string;
+  status: string;
+  createdAt: string;
+  roomCount: number;
+  rooms: AdminRoom[];
 };

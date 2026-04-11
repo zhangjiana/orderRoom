@@ -48,13 +48,17 @@ export class MerchantsService {
       approvedApplications: number;
       activeMerchants: number;
       totalRooms: number;
+      totalBookings: number;
+      pendingBookings: number;
     }>(
       `SELECT
         (SELECT COUNT(*) FROM merchant_applications) AS totalApplications,
         (SELECT COUNT(*) FROM merchant_applications WHERE status = 'pending') AS pendingApplications,
         (SELECT COUNT(*) FROM merchant_applications WHERE status = 'approved') AS approvedApplications,
         (SELECT COUNT(*) FROM merchants WHERE status = 'active') AS activeMerchants,
-        (SELECT COUNT(*) FROM rooms) AS totalRooms`,
+        (SELECT COUNT(*) FROM rooms) AS totalRooms,
+        (SELECT COUNT(*) FROM bookings) AS totalBookings,
+        (SELECT COUNT(*) FROM bookings WHERE status = 'pending') AS pendingBookings`,
     );
 
     return { summary };
