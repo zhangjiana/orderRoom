@@ -31,3 +31,71 @@
   font-size: 24rpx;
   color: #9c6b36;
 }
+
+.mini-button {
+  width: 120rpx;
+  padding: 14rpx 0;
+  border-radius: 18rpx;
+  background: #8e5d2a;
+  color: #ffffff;
+  font-size: 24rpx;
+  line-height: 1;
+}
+
+.mini-button::after {
+  border: none;
+}
+
+.room-stats {
+  display: flex;
+  gap: 12rpx;
+  margin-bottom: 18rpx;
+}
+
+.room-stat {
+  flex: 1;
+  padding: 18rpx 8rpx;
+  border-radius: 18rpx;
+  background: rgba(156, 107, 54, 0.06);
+  text-align: center;
+}
+
+.room-stat-value {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #8e5d2a;
+}
+
+.room-stat-label {
+  margin-top: 4rpx;
+  font-size: 22rpx;
+  color: #8a7b6d;
+}
+
+.room-card {
+  margin-bottom: 18rpx;
+  padding: 24rpx;
+  border-radius: 24rpx;
+  border: 1rpx solid rgba(98, 76, 52, 0.08);
+  background: #fffdfa;
+  box-shadow: 0 10rpx 28rpx rgba(80, 56, 31, 0.06);
+}
+
+.room-card__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18rpx;
+}
+
+.room-card__title {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #29241e;
+}
+
+.room-card__meta {
+  margin-top: 8rpx;
+  font-size: 24rpx;
+  color: #6f6052;
+}

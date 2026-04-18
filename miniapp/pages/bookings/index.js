@@ -55,6 +55,20 @@ Page({
     this.loadBookings(this.data.phone.trim());
   },
 
+  viewBooking(event) {
+    const { id } = event.currentTarget.dataset;
+    wx.navigateTo({
+      url: `/pages/booking-detail/index?id=${id}&phone=${encodeURIComponent(this.data.phone.trim())}`,
+    });
+  },
+
+  openInvitation(event) {
+    const { id } = event.currentTarget.dataset;
+    wx.navigateTo({
+      url: `/pages/invitation/index?id=${id}`,
+    });
+  },
+
   openLocation(event) {
     const { latitude, longitude, name, address } = event.currentTarget.dataset;
 

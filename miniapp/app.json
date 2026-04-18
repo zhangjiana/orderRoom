@@ -2,7 +2,10 @@
   "pages": [
     "pages/rooms/index",
     "pages/bookings/index",
+    "pages/booking-detail/index",
+    "pages/invitation/index",
     "pages/merchant-center/index",
+    "pages/merchant-room-form/index",
     "pages/merchant/index",
     "pages/reserve/index",
     "pages/apply/index",

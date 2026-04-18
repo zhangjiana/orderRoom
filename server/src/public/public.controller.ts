@@ -37,4 +37,14 @@ export class PublicController {
   async bookings(@Query("contactPhone") contactPhone = "") {
     return this.bookingsService.listPublicBookings(contactPhone);
   }
+
+  @Get("bookings/:id")
+  async booking(@Param("id") id: string, @Query("contactPhone") contactPhone = "") {
+    return this.bookingsService.getPublicBooking(id, contactPhone);
+  }
+
+  @Get("bookings/:id/invitation")
+  async invitation(@Param("id") id: string) {
+    return this.bookingsService.getPublicInvitation(id);
+  }
 }

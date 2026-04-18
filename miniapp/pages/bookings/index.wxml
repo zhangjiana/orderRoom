@@ -36,9 +36,21 @@
         <text>{{item.occasion}}</text>
       </view>
       <view class="booking-card__contact">联系人：{{item.contactName}}</view>
-      <view class="booking-card__actions" wx:if="{{item.merchantLatitude && item.merchantLongitude}}">
+      <view class="booking-card__actions">
         <button
           class="booking-card__nav-btn"
+          data-id="{{item.id}}"
+          bindtap="viewBooking"
+        >查看详情</button>
+        <button
+          class="booking-card__nav-btn"
+          wx:if="{{item.rawStatus === 'confirmed' || item.rawStatus === 'completed'}}"
+          data-id="{{item.id}}"
+          bindtap="openInvitation"
+        >邀请函</button>
+        <button
+          class="booking-card__nav-btn"
+          wx:if="{{item.merchantLatitude && item.merchantLongitude}}"
           data-latitude="{{item.merchantLatitude}}"
           data-longitude="{{item.merchantLongitude}}"
           data-name="{{item.merchantName}}"

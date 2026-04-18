@@ -118,7 +118,8 @@ Page({
     }
 
     try {
-      await api.createBooking({
+      await api.requestBookingSubscription();
+      const booking = await api.createBooking({
         merchantId: form.merchantId,
         roomId: form.roomId,
         diningDate: form.date,
@@ -137,8 +138,8 @@ Page({
       });
 
       setTimeout(() => {
-        wx.switchTab({
-          url: "/pages/bookings/index",
+        wx.redirectTo({
+          url: `/pages/booking-detail/index?id=${booking.id}&phone=${encodeURIComponent(form.phone)}`,
         });
       }, 500);
     } catch (error) {

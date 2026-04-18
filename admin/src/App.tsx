@@ -26,6 +26,7 @@ import {
   adminLogin,
   clearAdminToken,
   clearMerchantToken,
+  createMerchantRoom,
   createRoom,
   getAdminDashboard,
   getAdminToken,
@@ -35,6 +36,7 @@ import {
   listAdminMerchants,
   listApplications,
   listMerchantBookings,
+  listMerchantRooms,
   loadAdminSession,
   loadMerchantSession,
   logoutAdmin,
@@ -44,11 +46,13 @@ import {
   setStoredRole,
   updateAdminBookingStatus,
   updateMerchantBookingStatus,
+  updateMerchantRoom,
   type WebRole,
 } from "./api";
 import type {
   AdminDashboard,
   AdminMerchant,
+  AdminRoom,
   AdminSession,
   AdminUser,
   BookingFilter,
@@ -80,14 +84,20 @@ function canReview(booking: MerchantBooking) {
 
 function MerchantPanel() {
   const [form] = Form.useForm<{ username: string; password: string }>();
+  const [roomForm] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const [token, setToken] = useState(() => getMerchantToken());
   const [session, setSession] = useState<MerchantSession | null>(null);
   const [bookings, setBookings] = useState<MerchantBooking[]>([]);
+  const [rooms, setRooms] = useState<AdminRoom[]>([]);
   const [loadingSession, setLoadingSession] = useState(Boolean(token));
   const [loadingBookings, setLoadingBookings] = useState(false);
+  const [loadingRooms, setLoadingRooms] = useState(false);
   const [submittingLogin, setSubmittingLogin] = useState(false);
   const [actingBookingId, setActingBookingId] = useState("");
+  const [actingRoomId, setActingRoomId] = useState("");
+  const [roomModalOpen, setRoomModalOpen] = useState(false);
+  const [savingRoom, setSavingRoom] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState<MerchantBooking | null>(null);
   const [statusFilter, setStatusFilter] = useState<BookingFilter>("all");
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -116,6 +126,17 @@ function MerchantPanel() {
       .finally(() => { if (!cancelled) setLoadingBookings(false); });
     return () => { cancelled = true; };
   }, [messageApi, session, statusFilter, token]);
+
+  useEffect(() => {
+    if (!token || !session) { setRooms([]); return; }
+    let cancelled = false;
+    setLoadingRooms(true);
+    listMerchantRooms(token)
+      .then((r) => { if (!cancelled) setRooms(r.items); })
+      .catch((e) => { if (!cancelled) messageApi.error(e.message || "包间加载失败"); })
+      .finally(() => { if (!cancelled) setLoadingRooms(false); });
+    return () => { cancelled = true; };
+  }, [messageApi, session, token]);
 
   const filteredBookings = useMemo(() => {
     const kw = deferredKeyword.trim().toLowerCase();
@@ -155,6 +176,24 @@ function MerchantPanel() {
     },
   ], [actingBookingId]);
 
+  const roomColumns = useMemo<ColumnsType<AdminRoom>>(() => [
+    { title: "包间", key: "name", render: (_, r) => <div><div className="table-title">{r.name}</div><div className="table-meta">{r.tags?.join(", ") || "无标签"}</div></div> },
+    { title: "容量", key: "capacity", width: 120, render: (_, r) => `${r.capacityMin}-${r.capacityMax} 位` },
+    { title: "最低消费", key: "minSpend", width: 120, render: (_, r) => <span>¥{r.minSpend}</span> },
+    { title: "状态", key: "status", width: 100, render: (_, r) => <Tag color={r.status === "available" ? "green" : "gold"}>{r.status === "available" ? "可预订" : "已下架"}</Tag> },
+    {
+      title: "操作", key: "actions", width: 130, render: (_, r) => (
+        <Button
+          size="small"
+          loading={actingRoomId === r.id}
+          onClick={() => void handleToggleRoom(r)}
+        >
+          {r.status === "available" ? "下架" : "上架"}
+        </Button>
+      ),
+    },
+  ], [actingRoomId, messageApi, token]);
+
   async function handleLogin(values: { username: string; password: string }) {
     setSubmittingLogin(true);
     try {
@@ -179,9 +218,43 @@ function MerchantPanel() {
     finally { setActingBookingId(""); }
   }
 
+  async function handleAddMerchantRoom() {
+    if (!token) return;
+    try {
+      const values = await roomForm.validateFields();
+      setSavingRoom(true);
+      const room = await createMerchantRoom(token, {
+        name: values.name,
+        capacityMin: values.capacityMin,
+        capacityMax: values.capacityMax,
+        minSpend: values.minSpend,
+        description: values.description || "",
+        tags: values.tags ? String(values.tags).split(",").map((item) => item.trim()).filter(Boolean) : [],
+      });
+      setRooms((current) => [room, ...current]);
+      setRoomModalOpen(false);
+      roomForm.resetFields();
+      messageApi.success("包间已创建");
+    } catch (e) { if (e instanceof Error) messageApi.error(e.message); }
+    finally { setSavingRoom(false); }
+  }
+
+  async function handleToggleRoom(room: AdminRoom) {
+    if (!token) return;
+    setActingRoomId(room.id);
+    try {
+      const updated = await updateMerchantRoom(token, room.id, {
+        status: room.status === "available" ? "paused" : "available",
+      });
+      setRooms((current) => current.map((item) => item.id === updated.id ? updated : item));
+      messageApi.success(updated.status === "available" ? "包间已上架" : "包间已下架");
+    } catch (e) { messageApi.error(e instanceof Error ? e.message : "操作失败"); }
+    finally { setActingRoomId(""); }
+  }
+
   async function handleLogout() {
     if (token) { try { await logoutMerchant(token); } catch { clearMerchantToken(); } }
-    clearMerchantToken(); setToken(""); setSession(null); setBookings([]); setSelectedBooking(null); form.resetFields();
+    clearMerchantToken(); setToken(""); setSession(null); setBookings([]); setRooms([]); setSelectedBooking(null); form.resetFields();
   }
 
   if (loadingSession) return <div className="shell shell--center">{contextHolder}<Spin size="large" tip="正在恢复商家会话..." /></div>;
@@ -232,6 +305,14 @@ function MerchantPanel() {
 
         <Card bordered={false} className="panel-card">
           <div className="toolbar">
+            <Typography.Title level={4} style={{ margin: 0 }}>包间管理</Typography.Title>
+            <Button type="primary" onClick={() => setRoomModalOpen(true)}>新建包间</Button>
+          </div>
+          <Table rowKey="id" columns={roomColumns} dataSource={rooms} loading={loadingRooms} locale={{ emptyText: <Empty description="还没有包间" /> }} pagination={{ pageSize: 6, showSizeChanger: false }} />
+        </Card>
+
+        <Card bordered={false} className="panel-card">
+          <div className="toolbar">
             <Segmented options={statusOptions} value={statusFilter} onChange={(v) => setStatusFilter(v as BookingFilter)} />
             <Input className="search-input" placeholder="搜索联系人、手机号、包间" value={searchKeyword} onChange={(e) => setSearchKeyword(e.target.value)} />
           </div>
@@ -255,6 +336,31 @@ function MerchantPanel() {
           </Descriptions>
         ) : null}
       </Drawer>
+
+      <Modal title="新建包间" open={roomModalOpen} onCancel={() => { setRoomModalOpen(false); roomForm.resetFields(); }} onOk={() => void handleAddMerchantRoom()} confirmLoading={savingRoom} okText="创建">
+        <Form form={roomForm} layout="vertical">
+          <Form.Item label="包间名称" name="name" rules={[{ required: true, message: "请输入包间名称" }]}>
+            <Input placeholder="如：牡丹厅" />
+          </Form.Item>
+          <Space style={{ width: "100%" }}>
+            <Form.Item label="最少人数" name="capacityMin" rules={[{ required: true, message: "必填" }]}>
+              <InputNumber min={1} placeholder="4" style={{ width: 120 }} />
+            </Form.Item>
+            <Form.Item label="最多人数" name="capacityMax" rules={[{ required: true, message: "必填" }]}>
+              <InputNumber min={1} placeholder="12" style={{ width: 120 }} />
+            </Form.Item>
+            <Form.Item label="最低消费" name="minSpend" rules={[{ required: true, message: "必填" }]}>
+              <InputNumber min={0} placeholder="1000" style={{ width: 120 }} />
+            </Form.Item>
+          </Space>
+          <Form.Item label="描述" name="description">
+            <Input.TextArea placeholder="包间特色描述（选填）" rows={2} />
+          </Form.Item>
+          <Form.Item label="标签" name="tags">
+            <Input placeholder="中式,商务,圆桌（英文逗号分隔）" />
+          </Form.Item>
+        </Form>
+      </Modal>
     </Layout>
   );
 }
@@ -340,8 +446,25 @@ function AdminPanel() {
     if (!token) return;
     setActingId(`${id}:${status}`);
     try {
-      await reviewApplication(token, id, status);
-      messageApi.success(status === "approved" ? "已通过" : "已拒绝");
+      const result = await reviewApplication(token, id, status);
+      if (status === "approved" && result.merchantStaff) {
+        Modal.success({
+          title: "已通过并开通商家账号",
+          content: (
+            <Descriptions column={1} size="small" bordered>
+              <Descriptions.Item label="登录账号">{result.merchantStaff.username}</Descriptions.Item>
+              <Descriptions.Item label="绑定手机号">{result.merchantStaff.phone}</Descriptions.Item>
+              <Descriptions.Item label="显示名称">{result.merchantStaff.displayName}</Descriptions.Item>
+              <Descriptions.Item label="初始密码">
+                {result.merchantStaff.initialPassword || "已存在账号，请使用原密码登录"}
+              </Descriptions.Item>
+            </Descriptions>
+          ),
+          okText: "知道了",
+        });
+      } else {
+        messageApi.success(status === "approved" ? "已通过" : "已拒绝");
+      }
       await loadTabData("applications");
     } catch (e) { messageApi.error(e instanceof Error ? e.message : "操作失败"); }
     finally { setActingId(""); }

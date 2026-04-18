@@ -1,0 +1,56 @@
+<view class="page">
+  <view wx:if="{{loading}}" class="empty-card">正在加载订单...</view>
+
+  <block wx:if="{{!loading && booking}}">
+    <view class="detail-hero">
+      <view class="section-kicker">BOOKING</view>
+      <view class="detail-title">{{booking.merchantName}}</view>
+      <view class="detail-subtitle">{{booking.roomName}} · {{booking.status}}</view>
+      <view class="status-pill {{booking.statusClass}}">{{booking.status}}</view>
+    </view>
+
+    <view class="form-card">
+      <view class="info-row">
+        <view class="info-label">用餐时间</view>
+        <view class="info-value">{{booking.date}} {{booking.time}}</view>
+      </view>
+      <view class="info-row">
+        <view class="info-label">用餐人数</view>
+        <view class="info-value">{{booking.guests}} 位</view>
+      </view>
+      <view class="info-row">
+        <view class="info-label">宴请场合</view>
+        <view class="info-value">{{booking.occasion}}</view>
+      </view>
+      <view class="info-row">
+        <view class="info-label">联系人</view>
+        <view class="info-value">{{booking.contactName}} · {{booking.phone}}</view>
+      </view>
+      <view class="info-row">
+        <view class="info-label">预算</view>
+        <view class="info-value">¥{{booking.budget}}</view>
+      </view>
+      <view class="info-row">
+        <view class="info-label">门店地址</view>
+        <view class="info-value">{{booking.merchantAddress}}</view>
+      </view>
+      <view class="info-row" wx:if="{{booking.remarks}}">
+        <view class="info-label">备注</view>
+        <view class="info-value">{{booking.remarks}}</view>
+      </view>
+    </view>
+
+    <view class="detail-actions">
+      <button
+        class="primary-button action-button"
+        wx:if="{{booking.rawStatus === 'confirmed' || booking.rawStatus === 'completed'}}"
+        bindtap="openInvitation"
+      >生成邀请函</button>
+      <button
+        class="secondary-button action-button"
+        wx:if="{{booking.merchantLatitude && booking.merchantLongitude}}"
+        bindtap="openLocation"
+      >导航到门店</button>
+    </view>
+  </block>
+</view>

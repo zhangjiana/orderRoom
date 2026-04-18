@@ -1,0 +1,27 @@
+<view class="page invitation-page">
+  <view wx:if="{{loading}}" class="empty-card">正在加载邀请函...</view>
+
+  <block wx:if="{{!loading && invitation}}">
+    <view class="invitation-card">
+      <view class="invite-kicker">INVITATION</view>
+      <view class="invite-title">{{invitation.occasion || '宴请'}}</view>
+      <view class="invite-host">{{invitation.hostName}} 邀请你赴宴</view>
+
+      <view class="invite-divider"></view>
+
+      <view class="invite-main">{{invitation.merchantName}}</view>
+      <view class="invite-room">{{invitation.roomName}} · {{invitation.guestCount}} 位</view>
+      <view class="invite-time">{{invitation.diningDate}} {{invitation.diningTime}}</view>
+      <view class="invite-address">{{invitation.merchantAddress}}</view>
+    </view>
+
+    <view class="invite-actions">
+      <button open-type="share" class="primary-button action-button">转发邀请函</button>
+      <button
+        class="secondary-button action-button"
+        wx:if="{{invitation.merchantLatitude && invitation.merchantLongitude}}"
+        bindtap="openLocation"
+      >导航到门店</button>
+    </view>
+  </block>
+</view>

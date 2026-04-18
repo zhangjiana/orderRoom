@@ -31,6 +31,7 @@ export default () => ({
   },
   merchantAuth: {
     sessionDurationMs: Number(process.env.MERCHANT_SESSION_DURATION_MS || 7 * 24 * 60 * 60 * 1000),
+    initialPassword: process.env.MERCHANT_INITIAL_PASSWORD || "",
   },
   wechatMiniapp: {
     appId: process.env.WECHAT_MINIAPP_APPID || "",

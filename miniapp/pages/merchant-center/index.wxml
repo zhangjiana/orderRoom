@@ -57,6 +57,61 @@
     <view class="section">
       <view class="section-header">
         <view>
+          <view class="section-kicker">ROOMS</view>
+          <view class="section-title">包间管理</view>
+        </view>
+        <button class="mini-button" bindtap="goCreateRoom">新建</button>
+      </view>
+
+      <view class="room-stats">
+        <view class="room-stat">
+          <view class="room-stat-value">{{roomSummary.total}}</view>
+          <view class="room-stat-label">全部</view>
+        </view>
+        <view class="room-stat">
+          <view class="room-stat-value">{{roomSummary.available}}</view>
+          <view class="room-stat-label">可预订</view>
+        </view>
+        <view class="room-stat">
+          <view class="room-stat-value">{{roomSummary.paused}}</view>
+          <view class="room-stat-label">已下架</view>
+        </view>
+      </view>
+
+      <view wx:if="{{loadingRooms}}" class="empty-card">正在加载包间...</view>
+
+      <block wx:if="{{!loadingRooms && rooms.length}}">
+        <view class="room-card" wx:for="{{rooms}}" wx:key="id">
+          <view class="room-card__head">
+            <view>
+              <view class="room-card__title">{{item.name}}</view>
+              <view class="room-card__meta">{{item.capacityMin}}-{{item.capacityMax}} 位 · ¥{{item.minSpend}} 起</view>
+            </view>
+            <view class="status-pill {{item.levelClass}}">{{item.availability}}</view>
+          </view>
+          <view class="helper-text" wx:if="{{item.recommendedFor}}">{{item.recommendedFor}}</view>
+          <view class="pill-row" wx:if="{{item.features.length}}">
+            <view class="ghost-pill" wx:for="{{item.features}}" wx:key="*this">{{item}}</view>
+          </view>
+          <view class="card-actions">
+            <button
+              class="secondary-button button-flex"
+              data-id="{{item.id}}"
+              data-status="{{item.status}}"
+              bindtap="toggleRoomStatus"
+            >
+              {{item.status === 'available' ? '下架包间' : '上架包间'}}
+            </button>
+          </view>
+        </view>
+      </block>
+
+      <view wx:if="{{!loadingRooms && !rooms.length}}" class="empty-card">还没有包间，先新建一个可预订包间。</view>
+    </view>
+
+    <view class="section">
+      <view class="section-header">
+        <view>
           <view class="section-kicker">BOOKINGS</view>
           <view class="section-title">门店订单</view>
         </view>

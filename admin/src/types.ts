@@ -99,6 +99,12 @@ export type MerchantApplication = {
   createdAt: string;
   reviewedAt: string;
   reviewRemark: string;
+  merchantStaff?: {
+    username: string;
+    phone: string;
+    displayName: string;
+    initialPassword?: string;
+  };
 };
 
 export type AdminRoom = {

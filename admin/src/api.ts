@@ -3,6 +3,7 @@ import type {
   AdminSession,
   AdminDashboard,
   MerchantApplication,
+  AdminRoom,
   AdminMerchant,
   MerchantAuthResponse,
   MerchantBooking,
@@ -103,6 +104,26 @@ export async function updateMerchantBookingStatus(
     method: "PATCH",
     token,
     data: { status },
+  });
+}
+
+export async function listMerchantRooms(token: string) {
+  return request<{ items: AdminRoom[] }>("/api/merchant/rooms", { token });
+}
+
+export async function createMerchantRoom(token: string, data: Record<string, unknown>) {
+  return request<AdminRoom>("/api/merchant/rooms", {
+    method: "POST",
+    token,
+    data,
+  });
+}
+
+export async function updateMerchantRoom(token: string, roomId: string, data: Record<string, unknown>) {
+  return request<AdminRoom>(`/api/merchant/rooms/${roomId}`, {
+    method: "PATCH",
+    token,
+    data,
   });
 }
 

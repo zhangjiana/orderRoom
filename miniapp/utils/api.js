@@ -1,4 +1,5 @@
 const store = require("./store");
+const config = require("../config");
 
 function getBaseUrl() {
   const app = getApp();
@@ -91,6 +92,36 @@ async function getBookingsByPhone(phone) {
   return (result.items || []).map(store.mapBooking);
 }
 
+async function getBookingDetail(id, phone) {
+  const result = await request({
+    url: `/api/public/bookings/${id}?contactPhone=${encodeURIComponent(phone)}`,
+  });
+
+  return store.mapBooking(result);
+}
+
+async function getBookingInvitation(id) {
+  return request({
+    url: `/api/public/bookings/${id}/invitation`,
+  });
+}
+
+function requestBookingSubscription() {
+  const tmplIds = (config.subscriptionTemplates && config.subscriptionTemplates.bookingStatus) || [];
+
+  if (!tmplIds.length || !wx.requestSubscribeMessage) {
+    return Promise.resolve({ skipped: true });
+  }
+
+  return new Promise((resolve) => {
+    wx.requestSubscribeMessage({
+      tmplIds,
+      success: resolve,
+      fail: resolve,
+    });
+  });
+}
+
 async function merchantWxLogin(payload) {
   const result = await request({
     url: "/api/merchant/auth/wx-login",
@@ -116,6 +147,37 @@ async function getMerchantBookings(token = store.getMerchantToken()) {
   });
 
   return (result.items || []).map(store.mapBooking);
+}
+
+async function getMerchantRooms(token = store.getMerchantToken()) {
+  const result = await request({
+    url: "/api/merchant/rooms",
+    token,
+  });
+
+  return (result.items || []).map(store.mapRoom);
+}
+
+async function createMerchantRoom(payload, token = store.getMerchantToken()) {
+  const result = await request({
+    url: "/api/merchant/rooms",
+    method: "POST",
+    data: payload,
+    token,
+  });
+
+  return store.mapRoom(result);
+}
+
+async function updateMerchantRoom(id, payload, token = store.getMerchantToken()) {
+  const result = await request({
+    url: `/api/merchant/rooms/${id}`,
+    method: "PATCH",
+    data: payload,
+    token,
+  });
+
+  return store.mapRoom(result);
 }
 
 async function updateMerchantBookingStatus(id, status, token = store.getMerchantToken()) {
@@ -155,9 +217,15 @@ module.exports = {
   getMerchantDetail,
   createBooking,
   getBookingsByPhone,
+  getBookingDetail,
+  getBookingInvitation,
+  requestBookingSubscription,
   merchantWxLogin,
   getMerchantSession,
   getMerchantBookings,
+  getMerchantRooms,
+  createMerchantRoom,
+  updateMerchantRoom,
   updateMerchantBookingStatus,
   merchantLogout,
   createMerchantApplication,

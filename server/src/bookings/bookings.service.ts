@@ -3,7 +3,14 @@ import { DatabaseService } from "../database/database.service";
 import { createId } from "../common/utils/id.util";
 import { formatDate, formatDateTime, formatTime, nowString } from "../common/utils/time.util";
 import { toNumber } from "../common/utils/number.util";
-import { validateRequired } from "../common/utils/validation.util";
+import {
+  isIsoDate,
+  isMainlandMobile,
+  isTimeOfDay,
+  normalizeText,
+  todayString,
+  validateRequired,
+} from "../common/utils/validation.util";
 
 function mapStatusLabel(status: string): string {
   const labels: Record<string, string> = {
@@ -15,6 +22,20 @@ function mapStatusLabel(status: string): string {
   };
 
   return labels[status] || status;
+}
+
+function assertBookingDateTime(diningDate: string, diningTime: string) {
+  if (!isIsoDate(diningDate)) {
+    throw new BadRequestException("用餐日期格式不正确");
+  }
+
+  if (!isTimeOfDay(diningTime)) {
+    throw new BadRequestException("用餐时间格式不正确");
+  }
+
+  if (diningDate < todayString()) {
+    throw new BadRequestException("不能预订过去日期");
+  }
 }
 
 @Injectable()
@@ -121,6 +142,10 @@ export class BookingsService {
       throw new NotFoundException("订单不存在");
     }
 
+    if (booking.status !== "pending") {
+      throw new BadRequestException(`订单当前状态「${mapStatusLabel(booking.status)}」不能由商家再次处理`);
+    }
+
     await this.databaseService.execute(
       "UPDATE bookings SET status = ?, updated_at = ? WHERE id = ? AND merchant_id = ?",
       [status, nowString(), id, merchantId],
@@ -146,20 +171,34 @@ export class BookingsService {
 
     const booking = {
       id: createId("booking"),
-      merchantId: String(payload.merchantId),
-      roomId: String(payload.roomId),
-      diningDate: String(payload.diningDate),
-      diningTime: String(payload.diningTime),
+      merchantId: normalizeText(payload.merchantId),
+      roomId: normalizeText(payload.roomId),
+      diningDate: normalizeText(payload.diningDate),
+      diningTime: normalizeText(payload.diningTime),
       guestCount: toNumber(payload.guestCount),
-      contactName: String(payload.contactName).trim(),
-      contactPhone: String(payload.contactPhone).trim(),
-      remarks: payload.remarks ? String(payload.remarks) : "",
-      occasion: payload.occasion ? String(payload.occasion) : "",
+      contactName: normalizeText(payload.contactName),
+      contactPhone: normalizeText(payload.contactPhone),
+      remarks: payload.remarks ? normalizeText(payload.remarks) : "",
+      occasion: payload.occasion ? normalizeText(payload.occasion) : "",
       budget: toNumber(payload.budget),
       status: "pending",
       createdAt: nowString(),
       updatedAt: nowString(),
     };
+
+    if (!isMainlandMobile(booking.contactPhone)) {
+      throw new BadRequestException("联系电话格式不正确");
+    }
+
+    if (!Number.isInteger(booking.guestCount) || booking.guestCount < 1 || booking.guestCount > 1000) {
+      throw new BadRequestException("用餐人数不合法");
+    }
+
+    if (!Number.isInteger(booking.budget) || booking.budget < 0) {
+      throw new BadRequestException("预算金额不合法");
+    }
+
+    assertBookingDateTime(booking.diningDate, booking.diningTime);
 
     return this.databaseService.withTransaction(async (connection) => {
       const room = await this.databaseService.queryOne<any>(
@@ -167,15 +206,19 @@ export class BookingsService {
           rooms.id,
           rooms.merchant_id AS merchantId,
           rooms.name,
+          rooms.capacity_min AS capacityMin,
+          rooms.capacity_max AS capacityMax,
           rooms.min_spend AS minSpend,
+          rooms.status AS roomStatus,
           merchants.name AS merchantName,
           merchants.address AS merchantAddress,
           merchants.latitude AS merchantLatitude,
           merchants.longitude AS merchantLongitude
         FROM rooms
         INNER JOIN merchants ON merchants.id = rooms.merchant_id
-        WHERE rooms.id = ? AND rooms.merchant_id = ? AND merchants.status = 'active'
-        LIMIT 1`,
+        WHERE rooms.id = ? AND rooms.merchant_id = ? AND rooms.status = 'available' AND merchants.status = 'active'
+        LIMIT 1
+        FOR UPDATE`,
         [booking.roomId, booking.merchantId],
         connection,
       );
@@ -184,11 +227,16 @@ export class BookingsService {
         throw new NotFoundException("商家或包间不存在");
       }
 
+      if (booking.guestCount < Number(room.capacityMin) || booking.guestCount > Number(room.capacityMax)) {
+        throw new BadRequestException(`用餐人数需在 ${room.capacityMin}-${room.capacityMax} 位之间`);
+      }
+
       const conflict = await this.databaseService.queryOne<{ id: string }>(
         `SELECT id
         FROM bookings
         WHERE room_id = ? AND dining_date = ? AND dining_time = ? AND status IN ('pending', 'confirmed')
-        LIMIT 1`,
+        LIMIT 1
+        FOR UPDATE`,
         [booking.roomId, booking.diningDate, booking.diningTime],
         connection,
       );
@@ -242,6 +290,11 @@ export class BookingsService {
   }
 
   async listPublicBookings(contactPhone = "") {
+    const phone = normalizeText(contactPhone);
+    if (!isMainlandMobile(phone)) {
+      throw new BadRequestException("请提供正确手机号查询订单");
+    }
+
     const rows = await this.databaseService.queryRows<any[]>(
       `SELECT
         id,
@@ -265,12 +318,53 @@ export class BookingsService {
         created_at AS createdAt,
         updated_at AS updatedAt
       FROM bookings
-      ${contactPhone ? "WHERE contact_phone = ?" : ""}
+      WHERE contact_phone = ?
       ORDER BY dining_date DESC, dining_time DESC, created_at DESC`,
-      contactPhone ? [contactPhone] : [],
+      [phone],
     );
 
     return { items: rows.map((row) => this.mapBooking(row)) };
+  }
+
+  async getPublicBooking(id: string, contactPhone = "") {
+    const phone = normalizeText(contactPhone);
+    if (!isMainlandMobile(phone)) {
+      throw new BadRequestException("请提供正确手机号查看订单");
+    }
+
+    const booking = await this.findBookingById(id);
+    if (!booking || booking.contactPhone !== phone) {
+      throw new NotFoundException("订单不存在");
+    }
+
+    return this.mapBooking(booking);
+  }
+
+  async getPublicInvitation(id: string) {
+    const booking = await this.findBookingById(id);
+    if (!booking) {
+      throw new NotFoundException("邀请函不存在");
+    }
+
+    if (!["confirmed", "completed"].includes(booking.status)) {
+      throw new BadRequestException("订单确认后才能生成邀请函");
+    }
+
+    const mapped = this.mapBooking(booking);
+    return {
+      id: mapped.id,
+      merchantName: mapped.merchantName,
+      merchantAddress: mapped.merchantAddress,
+      merchantLatitude: mapped.merchantLatitude,
+      merchantLongitude: mapped.merchantLongitude,
+      roomName: mapped.roomName,
+      diningDate: mapped.diningDate,
+      diningTime: mapped.diningTime,
+      guestCount: mapped.guestCount,
+      occasion: mapped.occasion,
+      hostName: mapped.contactName,
+      statusLabel: mapped.statusLabel,
+    };
   }
 
   private async findBookingById(id: string, merchantId = "") {
@@ -324,6 +418,7 @@ export class BookingsService {
       occasion: row.occasion || "",
       budget: Number(row.budget || 0),
       status: row.status,
+      rawStatus: row.status,
       statusLabel: mapStatusLabel(row.status),
       createdAt: formatDateTime(row.createdAt),
       updatedAt: formatDateTime(row.updatedAt),

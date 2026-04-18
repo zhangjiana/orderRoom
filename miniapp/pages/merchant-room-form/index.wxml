@@ -1,0 +1,45 @@
+<view class="page">
+  <view class="form-card">
+    <view class="form-title">新建包间</view>
+
+    <view class="form-block">
+      <view class="form-block-title">基础信息</view>
+      <view class="form-field">
+        <view class="field-label">包间名称</view>
+        <input class="field-control" placeholder-class="field-placeholder" placeholder="例如 牡丹厅" data-field="name" value="{{form.name}}" bindinput="handleInput" />
+      </view>
+
+      <view class="field-row">
+        <view class="field-col">
+          <view class="field-label">最少人数</view>
+          <input class="field-control" type="number" placeholder-class="field-placeholder" placeholder="4" data-field="capacityMin" value="{{form.capacityMin}}" bindinput="handleInput" />
+        </view>
+        <view class="field-col">
+          <view class="field-label">最多人数</view>
+          <input class="field-control" type="number" placeholder-class="field-placeholder" placeholder="12" data-field="capacityMax" value="{{form.capacityMax}}" bindinput="handleInput" />
+        </view>
+      </view>
+
+      <view class="form-field">
+        <view class="field-label">最低消费</view>
+        <input class="field-control" type="number" placeholder-class="field-placeholder" placeholder="例如 1000" data-field="minSpend" value="{{form.minSpend}}" bindinput="handleInput" />
+      </view>
+    </view>
+
+    <view class="form-block">
+      <view class="form-block-title">展示信息</view>
+      <view class="form-field">
+        <view class="field-label">标签</view>
+        <input class="field-control" placeholder-class="field-placeholder" placeholder="中式,商务,圆桌" data-field="tags" value="{{form.tags}}" bindinput="handleInput" />
+      </view>
+      <view class="form-field">
+        <view class="field-label">描述</view>
+        <textarea class="field-textarea" placeholder-class="field-placeholder" placeholder="包间特色、适用场景等" data-field="description" value="{{form.description}}" bindinput="handleInput" />
+      </view>
+    </view>
+
+    <view class="submit-section">
+      <button class="primary-button" loading="{{submitting}}" bindtap="submitRoom">创建包间</button>
+    </view>
+  </view>
+</view>

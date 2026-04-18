@@ -39,15 +39,22 @@ Page({
     token: "",
     merchant: null,
     staff: null,
+    rooms: [],
     allBookings: [],
     bookings: [],
     filters: FILTERS,
     activeFilter: "all",
+    loadingRooms: false,
     summary: {
       total: 0,
       pending: 0,
       confirmed: 0,
       rejected: 0,
+    },
+    roomSummary: {
+      total: 0,
+      available: 0,
+      paused: 0,
     },
   },
 
@@ -57,7 +64,10 @@ Page({
 
   onPullDownRefresh() {
     if (this.data.loggedIn && this.data.token) {
-      this.loadBookings(this.data.token).then(() => {
+      Promise.all([
+        this.loadBookings(this.data.token),
+        this.loadRooms(this.data.token),
+      ]).then(() => {
         wx.stopPullDownRefresh();
       });
     } else {
@@ -83,7 +93,10 @@ Page({
         merchant: session.merchant,
         staff: session.staff,
       });
-      await this.loadBookings(token);
+      await Promise.all([
+        this.loadBookings(token),
+        this.loadRooms(token),
+      ]);
     } catch (error) {
       this.resetMerchantState();
       wx.showToast({
@@ -104,14 +117,21 @@ Page({
       token: "",
       merchant: null,
       staff: null,
+      rooms: [],
       allBookings: [],
       bookings: [],
       activeFilter: "all",
+      loadingRooms: false,
       summary: {
         total: 0,
         pending: 0,
         confirmed: 0,
         rejected: 0,
+      },
+      roomSummary: {
+        total: 0,
+        available: 0,
+        paused: 0,
       },
     });
   },
@@ -148,7 +168,10 @@ Page({
         staff: session.staff,
       });
 
-      await this.loadBookings(session.token);
+      await Promise.all([
+        this.loadBookings(session.token),
+        this.loadRooms(session.token),
+      ]);
       wx.showToast({
         title: "商家登录成功",
         icon: "success",
@@ -207,6 +230,58 @@ Page({
 
   changeFilter(event) {
     this.applyFilter(event.currentTarget.dataset.filter);
+  },
+
+  async loadRooms(token = this.data.token) {
+    if (!token) {
+      return;
+    }
+
+    this.setData({ loadingRooms: true });
+
+    try {
+      const rooms = await api.getMerchantRooms(token);
+      this.setData({
+        loadingRooms: false,
+        rooms,
+        roomSummary: {
+          total: rooms.length,
+          available: rooms.filter((item) => item.level === "available").length,
+          paused: rooms.filter((item) => item.level !== "available").length,
+        },
+      });
+    } catch (error) {
+      this.setData({ loadingRooms: false });
+      wx.showToast({
+        title: error.message || "包间加载失败",
+        icon: "none",
+      });
+    }
+  },
+
+  goCreateRoom() {
+    wx.navigateTo({
+      url: "/pages/merchant-room-form/index",
+    });
+  },
+
+  async toggleRoomStatus(event) {
+    const { id, status } = event.currentTarget.dataset;
+    const nextStatus = status === "available" ? "paused" : "available";
+
+    try {
+      await api.updateMerchantRoom(id, { status: nextStatus }, this.data.token);
+      await this.loadRooms(this.data.token);
+      wx.showToast({
+        title: nextStatus === "available" ? "已上架" : "已下架",
+        icon: "success",
+      });
+    } catch (error) {
+      wx.showToast({
+        title: error.message || "操作失败",
+        icon: "none",
+      });
+    }
   },
 
   async updateStatus(event) {
