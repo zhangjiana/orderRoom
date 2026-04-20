@@ -179,6 +179,53 @@ npm run build
 - Nginx 配置：[infra/nginx/nginx.admin.conf](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/infra/nginx/nginx.admin.conf)
 - Docker Compose：[infra/docker-compose.production.yml](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/infra/docker-compose.production.yml)
 
+### PM2 部署 Server
+
+Server 支持通过 PM2 部署，配置入口为 [ecosystem.config.cjs](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/ecosystem.config.cjs)。
+
+1. 安装依赖和 PM2：
+
+```bash
+npm ci
+npm install -g pm2
+```
+
+2. 创建 PM2 环境文件：
+
+```bash
+cp .env.pm2.example .env.pm2
+```
+
+3. 创建 MySQL 容器后，填写 `.env.pm2` 中的连接信息：
+
+```env
+MYSQL_HOST=
+MYSQL_PORT=
+MYSQL_USER=
+MYSQL_PASSWORD=
+MYSQL_DATABASE=
+```
+
+4. 构建并启动 Server：
+
+```bash
+npm run pm2:start:server
+```
+
+5. 更新代码后重载：
+
+```bash
+npm run pm2:reload:server
+```
+
+6. 查看日志：
+
+```bash
+npm run pm2:logs:server
+```
+
+PM2 会通过 `APP_ENV_FILE=.env.pm2` 读取生产环境变量。`.env.pm2.example` 中的 MySQL 配置默认留空，等数据库容器创建后再填写容器网络可访问的 host、port、user、password 和 database。
+
 ## 小程序注意事项
 
 把 [miniapp/config.js](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/miniapp/config.js) 的 `apiBaseUrl` 改成正式 HTTPS 域名，再去微信公众平台配置合法服务器域名。

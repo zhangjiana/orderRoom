@@ -15,7 +15,12 @@
     "build": "npm run build:server && npm run build:admin",
     "preview": "vite preview --config ./admin/vite.config.ts",
     "start:server": "node ./server/dist/main.js",
-    "start:backend": "npm run start:server"
+    "start:backend": "npm run start:server",
+    "pm2:start:server": "npm run build:server && pm2 start ecosystem.config.cjs",
+    "pm2:reload:server": "npm run build:server && pm2 reload ecosystem.config.cjs --update-env",
+    "pm2:stop:server": "pm2 stop yanqing-server",
+    "pm2:delete:server": "pm2 delete yanqing-server",
+    "pm2:logs:server": "pm2 logs yanqing-server"
   },
   "dependencies": {
     "@ant-design/icons": "^6.1.0",

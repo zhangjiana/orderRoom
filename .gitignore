@@ -1,5 +1,6 @@
 .env
 .env.*
+!.env.pm2.example
 node_modules/
 admin/dist/
 server/dist/
