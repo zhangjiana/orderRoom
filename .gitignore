@@ -1,6 +1,7 @@
 .env
 .env.*
 !.env.pm2.example
+!.env.deploy.example
 node_modules/
 admin/dist/
 server/dist/

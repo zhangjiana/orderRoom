@@ -1,0 +1,16 @@
+services:
+  server:
+    image: ${DOCKERHUB_NAMESPACE:-youhebukeer}/yanqing-binpeng-server:${IMAGE_TAG:-latest}
+    env_file:
+      - ../.env.deploy
+    ports:
+      - "3001:3001"
+    restart: unless-stopped
+
+  admin:
+    image: ${DOCKERHUB_NAMESPACE:-youhebukeer}/yanqing-binpeng-admin:${IMAGE_TAG:-latest}
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+    depends_on:
+      - server

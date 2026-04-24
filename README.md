@@ -178,6 +178,96 @@ npm run build
 - Admin 镜像：[infra/Dockerfile.admin](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/infra/Dockerfile.admin)
 - Nginx 配置：[infra/nginx/nginx.admin.conf](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/infra/nginx/nginx.admin.conf)
 - Docker Compose：[infra/docker-compose.production.yml](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/infra/docker-compose.production.yml)
+- 镜像部署 Compose：[infra/docker-compose.images.yml](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/infra/docker-compose.images.yml)
+
+### GitHub Actions 自动构建镜像
+
+仓库已提供 GitHub Actions 工作流：[.github/workflows/docker-publish.yml](/Users/zhangjohn/Documents/yanqing-binpeng-miniprogram/.github/workflows/docker-publish.yml)。
+
+- 触发条件：`push` 到 `main` 或手动触发 `workflow_dispatch`
+- 目标镜像：
+  - `youhebukeer/yanqing-binpeng-server`
+  - `youhebukeer/yanqing-binpeng-admin`
+- 推送标签：
+  - `latest`
+  - `sha-<commit>`
+
+首次启用前，请在 GitHub 仓库 `Settings -> Secrets and variables -> Actions` 中配置：
+
+- `DOCKERHUB_USERNAME`
+- `DOCKERHUB_TOKEN`
+
+其中 `DOCKERHUB_TOKEN` 建议使用 Docker Hub Access Token，不要直接使用密码。
+
+### 服务器拉镜像部署
+
+1. 复制部署环境变量模板：
+
+```bash
+cp .env.deploy.example .env.deploy
+```
+
+2. 填写数据库、跨域和初始化管理员配置：
+
+```env
+MYSQL_HOST=
+MYSQL_PORT=3306
+MYSQL_USER=
+MYSQL_PASSWORD=
+MYSQL_DATABASE=yanqing_binpeng
+ALLOWED_ORIGINS=https://your-domain.com
+ADMIN_BOOTSTRAP_USERNAME=admin
+ADMIN_BOOTSTRAP_PASSWORD=change-me
+WECHAT_MINIAPP_APPID=
+WECHAT_MINIAPP_SECRET=
+```
+
+3. 拉取最新镜像并启动：
+
+```bash
+docker compose -f infra/docker-compose.images.yml pull
+docker compose -f infra/docker-compose.images.yml up -d
+```
+
+4. 更新代码后重复执行：
+
+```bash
+docker compose -f infra/docker-compose.images.yml pull
+docker compose -f infra/docker-compose.images.yml up -d
+```
+
+如果需要固定到某个镜像版本，可通过环境变量指定 tag：
+
+```bash
+IMAGE_TAG=sha-<commit> docker compose -f infra/docker-compose.images.yml pull
+IMAGE_TAG=sha-<commit> docker compose -f infra/docker-compose.images.yml up -d
+```
+
+### Caddy 接入示例
+
+如果服务器上使用 `Caddy` 统一对外提供访问，推荐：
+
+- 将 `admin` 容器暴露到 `8080`
+- 将 `server` 容器暴露到 `3001`
+- 由 `Caddy` 处理 HTTPS 和反向代理
+
+参考配置：
+
+```caddy
+your-domain.com {
+    encode gzip zstd
+
+    handle /api/* {
+        reverse_proxy 127.0.0.1:3001
+    }
+
+    handle {
+        reverse_proxy 127.0.0.1:8080
+    }
+}
+```
+
+Admin 镜像默认按相对路径请求 `/api`，因此适合配合 `Caddy` 用同域名转发前台和后台接口。
 
 ### PM2 部署 Server
 

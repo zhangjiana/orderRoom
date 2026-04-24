@@ -1,7 +1,13 @@
+.git
+.github
 node_modules
+admin/node_modules
+server/node_modules
 admin/dist
 server/dist
-.git
-.gitignore
-*.log
-tmp
+npm-debug.log
+.DS_Store
+.env
+.env.*
+!.env.pm2.example
+!.env.example
