@@ -210,26 +210,41 @@ cp .env.deploy.example .env.deploy
 2. 填写数据库、跨域和初始化管理员配置：
 
 ```env
-MYSQL_HOST=
+MYSQL_ROOT_PASSWORD=change-me-root-password
+MYSQL_HOST=mysql
 MYSQL_PORT=3306
-MYSQL_USER=
-MYSQL_PASSWORD=
+MYSQL_USER=yanqing_app
+MYSQL_PASSWORD=change-me-app-password
 MYSQL_DATABASE=yanqing_binpeng
 ALLOWED_ORIGINS=https://your-domain.com
 ADMIN_BOOTSTRAP_USERNAME=admin
-ADMIN_BOOTSTRAP_PASSWORD=change-me
+ADMIN_BOOTSTRAP_PASSWORD=change-me-admin-password
 WECHAT_MINIAPP_APPID=
 WECHAT_MINIAPP_SECRET=
 ```
 
-3. 拉取最新镜像并启动：
+其中：
+
+- `mysql` 容器会使用 `MYSQL_ROOT_PASSWORD` 初始化 root 账号
+- `server` 容器会通过 `MYSQL_HOST=mysql` 自动连接同一个 Compose 网络中的 MySQL 容器
+- 首次启动时，后端会自动建库建表；如果数据库还是空库，并且配置了 `ADMIN_BOOTSTRAP_*`，也会自动创建管理员
+
+3. 首次部署时拉取最新镜像并启动整套服务：
 
 ```bash
 docker compose -f infra/docker-compose.images.yml pull
 docker compose -f infra/docker-compose.images.yml up -d
 ```
 
-4. 更新代码后重复执行：
+4. 查看服务状态：
+
+```bash
+docker compose -f infra/docker-compose.images.yml ps
+docker compose -f infra/docker-compose.images.yml logs -f mysql
+docker compose -f infra/docker-compose.images.yml logs -f server
+```
+
+5. 更新代码后重复执行：
 
 ```bash
 docker compose -f infra/docker-compose.images.yml pull
@@ -243,12 +258,15 @@ IMAGE_TAG=sha-<commit> docker compose -f infra/docker-compose.images.yml pull
 IMAGE_TAG=sha-<commit> docker compose -f infra/docker-compose.images.yml up -d
 ```
 
+`mysql` 数据会保存在 Docker volume `yanqing_mysql_data` 中，重建 `admin` 或 `server` 容器不会清空数据库数据。
+
 ### Caddy 接入示例
 
 如果服务器上使用 `Caddy` 统一对外提供访问，推荐：
 
 - 将 `admin` 容器暴露到 `8080`
 - 将 `server` 容器暴露到 `3001`
+- `mysql` 仅在 Docker 内网中使用，不对外暴露端口
 - 由 `Caddy` 处理 HTTPS 和反向代理
 
 参考配置：
