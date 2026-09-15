@@ -1,7 +1,7 @@
 {
-  "appid": "wx69bf2e1d2929f9cc",
+  "appid": "wx08dba1a6023369bd",
   "projectname": "宴请宾朋",
-  "compileType": "miniprogram",
+  "compileType": "game",
   "miniprogramRoot": "./",
   "srcMiniprogramRoot": "./",
   "description": "餐厅包间预订微信小程序",

@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>智维云 - 工单中心</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter,+PingFang+SC:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed-dim": "#afc6ff",
+                        "secondary": "#266d00",
+                        "on-secondary": "#ffffff",
+                        "on-primary-container": "#fefcff",
+                        "surface-container-highest": "#e0e3e6",
+                        "inverse-surface": "#2d3133",
+                        "surface-container": "#eceef1",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-dim": "#d8dadd",
+                        "on-surface-variant": "#414755",
+                        "on-tertiary-container": "#fffbff",
+                        "on-tertiary-fixed-variant": "#614000",
+                        "surface-bright": "#f7f9fc",
+                        "on-error": "#ffffff",
+                        "surface-container-high": "#e6e8eb",
+                        "surface": "#f7f9fc",
+                        "on-secondary-fixed": "#062100",
+                        "surface-container-low": "#f2f4f7",
+                        "on-primary-fixed-variant": "#004398",
+                        "inverse-on-surface": "#eff1f4",
+                        "tertiary-fixed-dim": "#ffba45",
+                        "on-primary-fixed": "#001a43",
+                        "error-container": "#ffdad6",
+                        "tertiary": "#7d5400",
+                        "on-secondary-fixed-variant": "#1a5200",
+                        "on-secondary-container": "#287100",
+                        "error": "#ba1a1a",
+                        "background": "#f7f9fc",
+                        "on-background": "#191c1e",
+                        "primary-container": "#006ef2",
+                        "on-error-container": "#93000a",
+                        "tertiary-container": "#9d6a00",
+                        "tertiary-fixed": "#ffddb0",
+                        "primary-fixed": "#d9e2ff",
+                        "primary": "#0057c2",
+                        "outline-variant": "#c1c6d7",
+                        "secondary-container": "#85fa51",
+                        "inverse-primary": "#afc6ff",
+                        "on-surface": "#191c1e",
+                        "surface-tint": "#0059c7",
+                        "on-primary": "#ffffff",
+                        "outline": "#727786",
+                        "surface-variant": "#e0e3e6",
+                        "secondary-fixed": "#88fd54",
+                        "secondary-fixed-dim": "#6de039",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-fixed": "#281800"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "gutter": "16px",
+                        "xl": "32px",
+                        "base": "8px",
+                        "sm": "8px",
+                        "md": "16px",
+                        "lg": "24px",
+                        "container-margin": "24px",
+                        "xs": "4px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Inter, PingFang SC"],
+                        "label-sm": ["Inter, PingFang SC"],
+                        "body-md": ["Inter, PingFang SC"],
+                        "title-lg": ["Inter, PingFang SC"],
+                        "body-lg": ["Inter, PingFang SC"],
+                        "label-md": ["Inter, PingFang SC"],
+                        "headline-md": ["Inter, PingFang SC"],
+                        "title-md": ["Inter, PingFang SC"],
+                        "headline-sm": ["Inter, PingFang SC"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["30px", {"lineHeight": "38px", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "18px", "fontWeight": "400"}],
+                        "body-md": ["14px", {"lineHeight": "22px", "fontWeight": "400"}],
+                        "title-lg": ["18px", {"lineHeight": "26px", "fontWeight": "500"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "title-md": ["16px", {"lineHeight": "24px", "fontWeight": "500"}],
+                        "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body {
+            background-color: #F5F7FA;
+            color: #191c1e;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #e0e3e6;
+            border-radius: 10px;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(229, 231, 235, 0.5);
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md">
+<!-- Sidebar Wrapper -->
+<aside class="fixed left-0 top-0 h-full w-[240px] bg-surface-container-lowest border-r border-outline-variant shadow-sm flex flex-col h-screen overflow-y-auto z-50 transition-all duration-200 ease-in-out">
+<div class="p-lg flex flex-col gap-xs">
+<div class="flex items-center gap-md mb-xl">
+<div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white">
+<span class="material-symbols-outlined">cloud_done</span>
+</div>
+<div>
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary">智维云</h1>
+<p class="text-[10px] text-on-surface-variant opacity-70">社区物业巡检平台</p>
+</div>
+</div>
+<nav class="space-y-1">
+<!-- Navigation Items -->
+<a class="flex items-center gap-md px-md py-3 text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>驾驶舱</span>
+</a>
+<a class="flex items-center gap-md px-md py-3 text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">precision_manufacturing</span>
+<span>设备管理</span>
+</a>
+<a class="flex items-center gap-md px-md py-3 text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">event_note</span>
+<span>巡检计划</span>
+</a>
+<a class="flex items-center gap-md px-md py-3 text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">assignment</span>
+<span>任务管理</span>
+</a>
+<!-- Active State -->
+<a class="flex items-center gap-md px-md py-3 bg-secondary-container text-on-secondary-container border-r-[3px] border-primary font-title-md text-title-md rounded-l-lg" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">engineering</span>
+<span>工单中心</span>
+</a>
+<a class="flex items-center gap-md px-md py-3 text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">map</span>
+<span>空间地图</span>
+</a>
+<a class="flex items-center gap-md px-md py-3 text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span>统计报表</span>
+</a>
+<a class="flex items-center gap-md px-md py-3 text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>系统设置</span>
+</a>
+</nav>
+<div class="mt-auto pt-xl">
+<button class="w-full bg-primary text-on-primary py-3 rounded-xl font-title-md flex items-center justify-center gap-sm active:scale-95 transition-transform">
+<span class="material-symbols-outlined">add_circle</span>
+<span>发起巡检</span>
+</button>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="ml-[240px] min-h-screen flex flex-col">
+<!-- Top Bar -->
+<header class="sticky top-0 z-40 w-full bg-surface flex justify-between items-center h-16 px-lg border-b border-outline-variant">
+<div class="flex items-center gap-lg">
+<span class="font-title-md text-on-surface font-bold">工单中心 - 社区物业设备巡检与工单协同平台</span>
+<div class="hidden md:flex items-center bg-surface-container-high rounded-full px-md py-1.5 w-80">
+<span class="material-symbols-outlined text-outline">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md w-full" placeholder="搜索工单ID、设备..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="flex items-center gap-xs">
+<button class="p-2 text-outline hover:bg-surface-container-high rounded-full transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-outline hover:bg-surface-container-high rounded-full transition-colors">
+<span class="material-symbols-outlined">help_outline</span>
+</button>
+<button class="p-2 text-outline hover:bg-surface-container-high rounded-full transition-colors">
+<span class="material-symbols-outlined">dark_mode</span>
+</button>
+</div>
+<div class="h-8 w-[1px] bg-outline-variant mx-sm"></div>
+<div class="flex items-center gap-sm cursor-pointer">
+<img alt="管理员头像" class="w-8 h-8 rounded-full bg-primary-fixed" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDHSTni6YddJPz4-ZjdPDuDa6gSnTZmeJgLglD7rRbyANl5wpIcn_svD6Q7Hvp4ZYuN0-atTVxa5QxjeREt0vEEK_9pYOvTo0r2pVbUGKs8z30WktvA3GJoMaZx_f9YU_55zFPWF9meY5Nu3LGnoq9EioHRqtKKSmUtRqiLrpu-QxilmTmefYB4e1zfj-qQ2_1rzgGEuuLcVj88qxVp42nG5a4qAdlj2Hb5IJ5tiWwTNC3hX0Ymw2vAZnhNvXG4l_c9fOfU2l4rN7g"/>
+<span class="font-label-md">系统管理员</span>
+</div>
+</div>
+</header>
+<!-- Canvas -->
+<div class="p-lg space-y-lg">
+<!-- Stats Summary -->
+<div class="grid grid-cols-4 gap-lg">
+<div class="bg-white p-lg rounded-xl border border-outline-variant shadow-sm flex flex-col">
+<span class="text-on-surface-variant font-label-md">待接单工单</span>
+<div class="flex items-end gap-sm mt-sm">
+<span class="text-display-lg font-display-lg text-primary">12</span>
+<span class="text-error font-label-sm mb-1.5 flex items-center"><span class="material-symbols-outlined text-sm">trending_up</span>+3</span>
+</div>
+</div>
+<div class="bg-white p-lg rounded-xl border border-outline-variant shadow-sm flex flex-col">
+<span class="text-on-surface-variant font-label-md">处理中</span>
+<div class="flex items-end gap-sm mt-sm">
+<span class="text-display-lg font-display-lg text-secondary">24</span>
+<span class="text-on-surface-variant opacity-50 font-label-sm mb-1.5">当前负荷: 85%</span>
+</div>
+</div>
+<div class="bg-white p-lg rounded-xl border border-outline-variant shadow-sm flex flex-col">
+<span class="text-on-surface-variant font-label-md">今日已结案</span>
+<div class="flex items-end gap-sm mt-sm">
+<span class="text-display-lg font-display-lg">48</span>
+<span class="text-secondary font-label-sm mb-1.5 flex items-center"><span class="material-symbols-outlined text-sm">check_circle</span>达标</span>
+</div>
+</div>
+<div class="bg-white p-lg rounded-xl border border-outline-variant shadow-sm flex flex-col">
+<span class="text-on-surface-variant font-label-md">SLA 预警</span>
+<div class="flex items-end gap-sm mt-sm">
+<span class="text-display-lg font-display-lg text-error">03</span>
+<span class="text-error font-label-sm mb-1.5">严重超时</span>
+</div>
+</div>
+</div>
+<!-- List Section -->
+<div class="bg-white rounded-xl border border-outline-variant shadow-sm overflow-hidden">
+<div class="px-lg py-md border-b border-outline-variant flex justify-between items-center bg-[#FAFAFA]">
+<div class="flex items-center gap-lg">
+<h2 class="font-title-lg text-title-lg">维修工单列表</h2>
+<div class="flex gap-sm">
+<span class="px-3 py-1 bg-primary-container text-on-primary-container rounded-full text-label-sm cursor-pointer">全部工单</span>
+<span class="px-3 py-1 hover:bg-surface-container-high rounded-full text-label-sm cursor-pointer transition-colors">待我处理</span>
+</div>
+</div>
+<div class="flex gap-md">
+<button class="flex items-center gap-sm border border-outline-variant px-md py-1.5 rounded-lg bg-white hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-md">filter_list</span>
+<span>筛选</span>
+</button>
+<button class="flex items-center gap-sm bg-primary text-white px-md py-1.5 rounded-lg active:scale-95 transition-all">
+<span class="material-symbols-outlined text-md">add</span>
+<span>创建工单</span>
+</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="bg-[#FAFAFA] text-on-surface-variant border-b border-outline-variant">
+<th class="px-lg py-3 font-medium text-label-md">工单ID</th>
+<th class="px-lg py-3 font-medium text-label-md">报修来源</th>
+<th class="px-lg py-3 font-medium text-label-md">关联设备</th>
+<th class="px-lg py-3 font-medium text-label-md">优先级</th>
+<th class="px-lg py-3 font-medium text-label-md">响应人</th>
+<th class="px-lg py-3 font-medium text-label-md">SLA倒计时</th>
+<th class="px-lg py-3 font-medium text-label-md">当前状态</th>
+<th class="px-lg py-3 font-medium text-label-md text-right">操作</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-lg py-4 font-mono text-primary font-medium">WO-20231024-001</td>
+<td class="px-lg py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-error-container text-on-error-container text-xs">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+                                        巡检异常
+                                    </span>
+</td>
+<td class="px-lg py-4">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-outline">elevator</span>
+<span>2号楼东梯 - 牵引机</span>
+</div>
+</td>
+<td class="px-lg py-4">
+<span class="text-error font-bold">特急</span>
+</td>
+<td class="px-lg py-4">
+<div class="flex items-center gap-sm">
+<div class="w-6 h-6 rounded-full bg-surface-container-highest flex items-center justify-center text-[10px]">李</div>
+<span>李德明</span>
+</div>
+</td>
+<td class="px-lg py-4">
+<div class="flex items-center gap-sm text-error font-medium">
+<span class="material-symbols-outlined text-sm">timer</span>
+<span>02h 45m</span>
+</div>
+</td>
+<td class="px-lg py-4">
+<span class="px-2 py-1 bg-surface-container-highest text-on-surface-variant rounded text-xs font-medium">待接单</span>
+</td>
+<td class="px-lg py-4 text-right">
+<div class="flex justify-end gap-sm">
+<button class="text-primary hover:bg-primary/10 px-sm py-1 rounded transition-colors">接单</button>
+<button class="text-outline hover:bg-surface-container-high px-sm py-1 rounded transition-colors">派发</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-lg py-4 font-mono text-primary font-medium">WO-20231024-005</td>
+<td class="px-lg py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-surface-container-highest text-on-surface-variant text-xs">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+                                        手动报修
+                                    </span>
+</td>
+<td class="px-lg py-4">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-outline">water_drop</span>
+<span>地下车库 - 排水泵组</span>
+</div>
+</td>
+<td class="px-lg py-4">
+<span class="text-tertiary font-bold">紧急</span>
+</td>
+<td class="px-lg py-4">
+<div class="flex items-center gap-sm">
+<div class="w-6 h-6 rounded-full bg-surface-container-highest flex items-center justify-center text-[10px]">张</div>
+<span>张晓峰</span>
+</div>
+</td>
+<td class="px-lg py-4 text-on-surface-variant">
+<div class="flex items-center gap-sm font-medium">
+<span class="material-symbols-outlined text-sm">timer</span>
+<span>23h 12m</span>
+</div>
+</td>
+<td class="px-lg py-4">
+<span class="px-2 py-1 bg-primary-container/10 text-primary rounded text-xs font-medium">处理中</span>
+</td>
+<td class="px-lg py-4 text-right text-outline italic text-xs">处理中无法操作</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-lg py-4 font-mono text-primary font-medium">WO-20231024-008</td>
+<td class="px-lg py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-error-container text-on-error-container text-xs">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+                                        巡检异常
+                                    </span>
+</td>
+<td class="px-lg py-4">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-outline">sensors</span>
+<span>安防系统 - 门禁传感器</span>
+</div>
+</td>
+<td class="px-lg py-4">
+<span class="text-on-surface-variant font-medium">普通</span>
+</td>
+<td class="px-lg py-4">
+<span class="text-outline">未分配</span>
+</td>
+<td class="px-lg py-4 text-on-surface-variant">
+<div class="flex items-center gap-sm font-medium">
+<span class="material-symbols-outlined text-sm">timer</span>
+<span>47h 55m</span>
+</div>
+</td>
+<td class="px-lg py-4">
+<span class="px-2 py-1 bg-surface-container-highest text-on-surface-variant rounded text-xs font-medium">待接单</span>
+</td>
+<td class="px-lg py-4 text-right">
+<div class="flex justify-end gap-sm">
+<button class="text-primary hover:bg-primary/10 px-sm py-1 rounded transition-colors">接单</button>
+<button class="text-primary font-bold hover:bg-primary/10 px-sm py-1 rounded transition-colors">派发</button>
+</div>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-lg py-4 font-mono text-primary font-medium">WO-20231024-012</td>
+<td class="px-lg py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-surface-container-highest text-on-surface-variant text-xs">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+                                        手动报修
+                                    </span>
+</td>
+<td class="px-lg py-4">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-outline">lightbulb</span>
+<span>公共照明 - 5F走廊灯</span>
+</div>
+</td>
+<td class="px-lg py-4">
+<span class="text-on-surface-variant font-medium">普通</span>
+</td>
+<td class="px-lg py-4">
+<div class="flex items-center gap-sm">
+<div class="w-6 h-6 rounded-full bg-surface-container-highest flex items-center justify-center text-[10px]">王</div>
+<span>王明哲</span>
+</div>
+</td>
+<td class="px-lg py-4">
+<span class="text-secondary font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">check_circle</span>
+                                        已响应
+                                    </span>
+</td>
+<td class="px-lg py-4">
+<span class="px-2 py-1 bg-secondary-container text-on-secondary-container rounded text-xs font-medium">待验收</span>
+</td>
+<td class="px-lg py-4 text-right">
+<button class="text-secondary hover:bg-secondary/10 px-sm py-1 rounded transition-colors">验收确认</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="px-lg py-md border-t border-outline-variant flex justify-between items-center text-label-sm text-on-surface-variant">
+<span>共 124 条记录，当前显示 1-10 条</span>
+<div class="flex gap-xs">
+<button class="w-8 h-8 flex items-center justify-center border border-outline-variant rounded hover:bg-surface-container-low transition-colors"><span class="material-symbols-outlined text-md">chevron_left</span></button>
+<button class="w-8 h-8 flex items-center justify-center bg-primary text-white rounded">1</button>
+<button class="w-8 h-8 flex items-center justify-center border border-outline-variant rounded hover:bg-surface-container-low">2</button>
+<button class="w-8 h-8 flex items-center justify-center border border-outline-variant rounded hover:bg-surface-container-low">3</button>
+<button class="w-8 h-8 flex items-center justify-center border border-outline-variant rounded hover:bg-surface-container-low transition-colors"><span class="material-symbols-outlined text-md">chevron_right</span></button>
+</div>
+</div>
+</div>
+<!-- Dashboard Grid Section -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-lg">
+<!-- SLA Distribution Card -->
+<div class="col-span-1 glass-card p-lg rounded-xl shadow-sm">
+<h3 class="font-title-md text-title-md mb-md">SLA 时效分布</h3>
+<div class="h-48 flex items-end justify-between gap-md px-md">
+<div class="flex-1 flex flex-col items-center">
+<div class="w-full bg-primary/20 rounded-t-lg relative" style="height: 40%;">
+<div class="absolute inset-0 bg-primary rounded-t-lg transition-all duration-1000" style="height: 100%;"></div>
+</div>
+<span class="text-[10px] mt-2">正常</span>
+</div>
+<div class="flex-1 flex flex-col items-center">
+<div class="w-full bg-tertiary/20 rounded-t-lg relative" style="height: 70%;">
+<div class="absolute inset-x-0 bottom-0 bg-tertiary rounded-t-lg transition-all duration-1000" style="height: 60%;"></div>
+</div>
+<span class="text-[10px] mt-2">临期</span>
+</div>
+<div class="flex-1 flex flex-col items-center">
+<div class="w-full bg-error/20 rounded-t-lg relative" style="height: 25%;">
+<div class="absolute inset-x-0 bottom-0 bg-error rounded-t-lg transition-all duration-1000" style="height: 80%;"></div>
+</div>
+<span class="text-[10px] mt-2">延期</span>
+</div>
+</div>
+</div>
+<!-- Recent Map Visualization -->
+<div class="col-span-2 glass-card rounded-xl shadow-sm relative overflow-hidden group">
+<img class="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-700" data-alt="A high-tech digital architectural blueprint of a modern residential complex presented in a sci-fi interface style. The map features dark backgrounds with glowing cyan and neon blue grid lines, highlighting building blocks and utility pathways. Multiple pulsating amber icons represent active work orders across the site. The aesthetic is clean, precise, and data-driven, reminiscent of a sophisticated building management system control panel." data-location="Shanghai" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMqIgw7i0fLO46JdiSkZd5PR9pWrKWKtzLGW_lSQqBfXG_7MIjMRaigW9gNrlOUaidgAITK1OBR8GyMBqMFA6Ia9wrjQ_ZFVS9VH9Zmiz3U52nzOxsl-w5IQyrQ-H2riMTiAWHjtvx4BKoLx6Bbzm2TNW7iozSbfa14ZW8r4RLOl1CKhxhCLAB3YpQ9_arkX_XuW4jstFzA2ec3UXL032k2njfs9hLIBtmF3zrStTm1ALA4O-2Tqcj-Pf3f1_OtQZ35HWYyd5nqJY"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-lg">
+<div class="flex justify-between items-center">
+<div>
+<h3 class="text-white font-title-lg mb-1">工单地理分布态势</h3>
+<p class="text-white/70 text-label-sm">实时更新：14:23:05</p>
+</div>
+<button class="bg-white/20 hover:bg-white/30 backdrop-blur-md text-white px-md py-2 rounded-lg text-label-md transition-all">
+                                全屏视图
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script>
+        // Micro-interaction for buttons and cards
+        document.querySelectorAll('.active\\:scale-95').forEach(btn => {
+            btn.addEventListener('mousedown', () => {
+                btn.style.transform = 'scale(0.95)';
+            });
+            btn.addEventListener('mouseup', () => {
+                btn.style.transform = 'scale(1)';
+            });
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = 'scale(1)';
+            });
+        });
+
+        // Simulating SLA countdown refresh
+        setInterval(() => {
+            const timers = document.querySelectorAll('.text-error.font-medium span:last-child');
+            timers.forEach(timer => {
+                let parts = timer.innerText.match(/\d+/g);
+                if(parts) {
+                    let totalSeconds = parseInt(parts[0]) * 3600 + parseInt(parts[1]) * 60;
+                    if(totalSeconds > 0) {
+                        totalSeconds--;
+                        let h = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
+                        let m = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
+                        timer.innerText = `${h}h ${m}m`;
+                    }
+                }
+            });
+        }, 60000);
+    </script>
+</body></html>

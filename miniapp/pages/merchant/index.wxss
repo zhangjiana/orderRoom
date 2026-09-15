@@ -1,35 +1,38 @@
 .merchant-header {
   padding: 28rpx;
-  border-radius: 28rpx;
-  background: linear-gradient(180deg, #fffdfa 0%, #faf4ec 100%);
+  border-radius: 20rpx;
+  background: linear-gradient(145deg, #332a23 0%, #4d3b2d 100%);
   border: 1rpx solid rgba(115, 91, 61, 0.08);
   box-shadow: 0 12rpx 32rpx rgba(80, 56, 31, 0.06);
   margin-bottom: 28rpx;
 }
+.merchant-header__kicker { color: #d6b78f; font-size: 19rpx; font-weight: 700; letter-spacing: .18em; }
 
 .merchant-header__name {
   font-size: 40rpx;
   font-weight: 700;
-  color: #2c241d;
+  margin-top: 10rpx;
+  color: #fffaf2;
+  font-family: "Songti SC", serif;
 }
 
 .merchant-header__address {
   margin-top: 12rpx;
   font-size: 26rpx;
-  color: #6f6052;
+  color: #d5c9bb;
   line-height: 1.6;
 }
 
 .merchant-header__meta {
   margin-top: 10rpx;
   font-size: 24rpx;
-  color: #8b7865;
+  color: #bcae9f;
 }
 
 .merchant-header__phone {
   margin-top: 8rpx;
   font-size: 24rpx;
-  color: #8e5d2a;
+  color: #e3c49d;
 }
 
 .nav-button {
@@ -39,29 +42,32 @@
   font-size: 28rpx;
   font-weight: 600;
   background: transparent;
-  color: #8e5d2a;
-  border: 1rpx solid #dbcbb8;
+  color: #f4dfc4;
+  border: 1rpx solid rgba(244, 223, 196, .32);
 }
 
 .nav-button::after {
   border: none;
 }
 
+.room-list-heading { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 18rpx; }
+.room-list-hint { color: #968777; font-size: 22rpx; }
 .room-list-title {
-  margin-bottom: 18rpx;
   font-size: 32rpx;
   font-weight: 700;
   color: #2c241d;
 }
 
 .room-card {
+  position: relative;
   margin-bottom: 16rpx;
   padding: 24rpx;
-  border-radius: 24rpx;
+  border-radius: 18rpx;
   border: 1rpx solid rgba(98, 76, 52, 0.08);
-  background: linear-gradient(180deg, #fffdfa 0%, #faf5ee 100%);
+  background: #fffefb;
   box-shadow: 0 10rpx 28rpx rgba(80, 56, 31, 0.06);
 }
+.room-card:active { transform: scale(.99); opacity: .92; }
 
 .room-card__header {
   display: flex;
@@ -90,6 +96,8 @@
   flex-wrap: wrap;
   margin-top: 12rpx;
 }
+.room-card__action { margin-top: 16rpx; padding-top: 16rpx; border-top: 1rpx solid rgba(98,76,52,.08); color: #8e5d2a; font-size: 24rpx; font-weight: 600; }
+.room-card__action text { float: right; font-size: 28rpx; }
 
 .room-card__tag {
   margin-right: 10rpx;

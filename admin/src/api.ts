@@ -98,7 +98,7 @@ export async function listMerchantBookings(token: string, status: string) {
 export async function updateMerchantBookingStatus(
   token: string,
   bookingId: string,
-  status: "confirmed" | "rejected",
+  status: "confirmed" | "rejected" | "completed" | "cancelled",
 ) {
   return request<MerchantBooking>(`/api/merchant/bookings/${bookingId}/status`, {
     method: "PATCH",

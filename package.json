@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
+    "test": "tsx --test server/src/**/*.spec.ts",
     "dev": "npm run dev:admin",
     "dev:admin": "vite --config ./admin/vite.config.ts",
     "dev:server": "npm run build:server && node ./server/dist/main.js",

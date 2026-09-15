@@ -1,0 +1,13 @@
+<view class="page" wx:if="{{a}}">
+  <view class="hero"><view class="row"><text class="badge">{{a.category}}</text><text class="badge">{{a.state}}</text></view><view class="big-icon">{{a.symbol}}</view><view class="title">{{a.title}}</view><view class="sub">一起出门，把快乐变成共同的回忆。</view></view>
+  <view class="notice">本地体验活动 · 数据不会同步给其他家长。</view>
+  <view class="card"><view class="section">约玩安排</view><view class="meta">时间　{{a.date}} {{a.time}} 起 · 1 小时</view><view class="meta">地点　{{a.location}}</view><view class="meta">年龄　{{a.minAge}}～{{a.maxAge}} 岁</view><view class="meta">人数　{{a.count}}/{{a.capacity}} 个家庭（含发起人）</view><view class="meta">成行　至少 {{a.minFamilies}} 个家庭，开始时截止报名</view><view class="divider"/><view>{{a.note || '轻松玩一小时，请自带饮水。'}}</view></view>
+  <view class="card"><view class="card-title">让第一次见面安心一点</view><view class="sub">家长全程陪同，在公共场所集合。不填写孩子真实姓名、学校或家庭住址。天气不适合时，请取消活动。</view><text class="link" bindtap="profile">完善家长昵称和孩子年龄 ›</text></view>
+  <checkbox-group wx:if="{{a.canJoin}}" bindchange="agree"><label class="agreement"><checkbox value="yes" checked="{{agreed}}" color="#285b43"/>我会全程陪同，已确认时间、地点和年龄范围</label></checkbox-group>
+  <button wx:if="{{a.canJoin}}" class="primary" bindtap="join">报名 · 1 个家庭</button>
+  <button wx:elif="{{a.canLeave}}" class="secondary" bindtap="leave">{{a.owned?'取消我发起的活动':'已报名 · 退出约玩'}}</button>
+  <view wx:else class="notice">{{a.joined?'你已参加本次约玩':'当前无法报名'}} · {{a.state}}{{a.remaining===0?' · 名额已满':''}}</view>
+  <button wx:if="{{a.joined && a.state==='已结束'}}" class="secondary" bindtap="wish" disabled="{{wished}}">{{wished?'已记录再约意愿':'愿意和这次的家庭再约'}}</button>
+  <button class="secondary" bindtap="again">以此为模板，再发起一次</button>
+</view>
+<view class="page empty" wx:else><view class="card-title">活动不存在或已不可用</view><view class="sub">请返回发现页选择其他活动。</view></view>

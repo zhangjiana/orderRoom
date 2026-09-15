@@ -16,6 +16,7 @@ Page({
     occasionIndex: 0,
     merchant: null,
     selectedRoom: null,
+    submitting: false,
     form: {
       merchantId: "",
       contactName: "",
@@ -95,6 +96,10 @@ Page({
   },
 
   async submitBooking() {
+    if (this.data.submitting) {
+      return;
+    }
+
     const form = this.data.form;
 
     if (!form.contactName.trim()) {
@@ -118,7 +123,9 @@ Page({
     }
 
     try {
-      await api.requestBookingSubscription();
+      this.setData({ submitting: true });
+      await api.ensureUserLogin();
+      const subscription = await api.requestBookingSubscription();
       const booking = await api.createBooking({
         merchantId: form.merchantId,
         roomId: form.roomId,
@@ -130,6 +137,7 @@ Page({
         occasion: form.occasion,
         budget: Number(form.budget || 0),
         remarks: form.remarks,
+        subscriptionTemplateId: subscription.acceptedTemplateId || "",
       });
 
       wx.showToast({
@@ -139,7 +147,7 @@ Page({
 
       setTimeout(() => {
         wx.redirectTo({
-          url: `/pages/booking-detail/index?id=${booking.id}&phone=${encodeURIComponent(form.phone)}`,
+          url: `/pages/booking-detail/index?id=${booking.id}&mode=account`,
         });
       }, 500);
     } catch (error) {
@@ -147,6 +155,8 @@ Page({
         title: error.message || "预订失败",
         icon: "none",
       });
+    } finally {
+      this.setData({ submitting: false });
     }
   },
 });

@@ -189,6 +189,26 @@
               >
                 拒绝订单
               </button>
+              <button
+                class="primary-button button-flex"
+                wx:if="{{item.rawStatus === 'confirmed'}}"
+                data-id="{{item.id}}"
+                data-status="completed"
+                loading="{{actionLoading === item.id}}"
+                bindtap="updateStatus"
+              >
+                完成订单
+              </button>
+              <button
+                class="secondary-button button-flex danger-button"
+                wx:if="{{item.rawStatus === 'confirmed'}}"
+                data-id="{{item.id}}"
+                data-status="cancelled"
+                loading="{{actionLoading === item.id}}"
+                bindtap="updateStatus"
+              >
+                取消订单
+              </button>
             </view>
           </view>
         </block>

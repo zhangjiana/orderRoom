@@ -169,8 +169,14 @@ function MerchantPanel() {
       title: "操作", key: "actions", width: 230, render: (_, b) => (
         <Space wrap>
           <Button onClick={() => setSelectedBooking(b)}>详情</Button>
-          <Button type="primary" disabled={!canReview(b)} loading={actingBookingId === `${b.id}:confirmed`} onClick={() => void handleReview(b, "confirmed")}>确认</Button>
-          <Button danger disabled={!canReview(b)} loading={actingBookingId === `${b.id}:rejected`} onClick={() => void handleReview(b, "rejected")}>拒绝</Button>
+          {b.rawStatus === "pending" ? <>
+            <Button type="primary" loading={actingBookingId === `${b.id}:confirmed`} onClick={() => void handleReview(b, "confirmed")}>确认</Button>
+            <Button danger loading={actingBookingId === `${b.id}:rejected`} onClick={() => void handleReview(b, "rejected")}>拒绝</Button>
+          </> : null}
+          {b.rawStatus === "confirmed" ? <>
+            <Button type="primary" loading={actingBookingId === `${b.id}:completed`} onClick={() => void handleReview(b, "completed")}>完成</Button>
+            <Button danger loading={actingBookingId === `${b.id}:cancelled`} onClick={() => void handleReview(b, "cancelled")}>取消</Button>
+          </> : null}
         </Space>
       ),
     },
@@ -204,7 +210,10 @@ function MerchantPanel() {
     finally { setSubmittingLogin(false); }
   }
 
-  async function handleReview(b: MerchantBooking, status: "confirmed" | "rejected") {
+  async function handleReview(
+    b: MerchantBooking,
+    status: "confirmed" | "rejected" | "completed" | "cancelled",
+  ) {
     if (!token) return;
     setActingBookingId(`${b.id}:${status}`);
     try {
@@ -213,7 +222,8 @@ function MerchantPanel() {
         setBookings((c) => c.map((i) => (i.id === updated.id ? updated : i)));
         setSelectedBooking((c) => (c && c.id === updated.id ? updated : c));
       });
-      messageApi.success(status === "confirmed" ? "订单已确认" : "订单已拒绝");
+      const labels = { confirmed: "订单已确认", rejected: "订单已拒绝", completed: "订单已完成", cancelled: "订单已取消" };
+      messageApi.success(labels[status]);
     } catch (e) { messageApi.error(e instanceof Error ? e.message : "操作失败"); }
     finally { setActingBookingId(""); }
   }
@@ -546,10 +556,15 @@ function AdminPanel() {
     { title: "预算", dataIndex: "budget", key: "budget", width: 100, render: (v: number) => <span>¥{v}</span> },
     { title: "状态", key: "status", width: 100, render: (_, b) => <Tag color={statusColor(b.rawStatus)}>{b.statusLabel}</Tag> },
     {
-      title: "操作", key: "actions", width: 200, render: (_, b) => canReview(b) ? (
+      title: "操作", key: "actions", width: 220, render: (_, b) => canReview(b) ? (
         <Space>
           <Button type="primary" size="small" loading={actingId === `${b.id}:confirmed`} onClick={() => void handleBookingAction(b.id, "confirmed")}>确认</Button>
           <Button danger size="small" loading={actingId === `${b.id}:rejected`} onClick={() => void handleBookingAction(b.id, "rejected")}>拒绝</Button>
+        </Space>
+      ) : b.rawStatus === "confirmed" ? (
+        <Space>
+          <Button type="primary" size="small" loading={actingId === `${b.id}:completed`} onClick={() => void handleBookingAction(b.id, "completed")}>完成</Button>
+          <Button danger size="small" loading={actingId === `${b.id}:cancelled`} onClick={() => void handleBookingAction(b.id, "cancelled")}>取消</Button>
         </Space>
       ) : <span className="table-meta">{b.statusLabel}</span>,
     },

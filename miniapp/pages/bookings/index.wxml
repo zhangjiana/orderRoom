@@ -1,22 +1,12 @@
 <view class="page">
-  <!-- 手机号查询 -->
-  <view class="search-section">
-    <view class="search-section__title">我的订单</view>
-    <view class="search-section__hint">输入下单时填写的手机号查询</view>
-    <view class="search-bar">
-      <input
-        class="search-input"
-        type="number"
-        maxlength="11"
-        placeholder-class="field-placeholder"
-        placeholder="输入手机号"
-        value="{{phone}}"
-        bindinput="handlePhone"
-        confirm-type="search"
-        bindconfirm="searchBookings"
-      />
-      <button class="search-btn" bindtap="searchBookings">查询</button>
-    </view>
+  <view class="account-section">
+    <view class="search-section__kicker">MY RESERVATIONS</view>
+    <view class="search-section__title">我的预订</view>
+    <view class="search-section__hint">登录后查看当前微信账号的预订。历史未绑定账号的订单，请联系商家处理。</view>
+  </view>
+  <view wx:if="{{errorMessage}}" class="empty-card">
+    <view>{{errorMessage}}</view>
+    <button class="primary-button" bindtap="loadMyBookings" loading="{{loading}}" disabled="{{loading}}">重新加载订单</button>
   </view>
 
   <!-- 订单列表 -->
@@ -57,11 +47,17 @@
           data-address="{{item.merchantAddress}}"
           bindtap="openLocation"
         >导航到门店</button>
+        <button
+          class="booking-card__nav-btn booking-card__nav-btn--danger"
+          wx:if="{{item.rawStatus === 'pending' || item.rawStatus === 'confirmed'}}"
+          data-id="{{item.id}}"
+          bindtap="cancelBooking"
+        >取消预订</button>
       </view>
     </view>
   </block>
 
   <view wx:if="{{searched && !loading && !bookings.length}}" class="empty-card">
-    没有查到订单，请确认手机号是否正确
+    还没有预订，去发现适合的包间吧
   </view>
 </view>

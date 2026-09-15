@@ -1,39 +1,36 @@
 const api = require("../../utils/api");
-const store = require("../../utils/store");
 
 Page({
   data: {
     loading: true,
     booking: null,
-    phone: "",
+    bookingId: "",
+    errorMessage: "",
   },
 
   onLoad(options) {
-    const phone = options.phone || store.getLastPhone();
-    this.setData({ phone });
-
-    if (!options.id) {
-      this.setData({ loading: false });
-      wx.showToast({ title: "缺少订单信息", icon: "none" });
-      return;
-    }
-
-    this.loadBooking(options.id, phone);
+    this.setData({ bookingId: options.id || "" });
   },
 
-  async loadBooking(id, phone) {
-    if (!/^1\d{10}$/.test(phone)) {
-      this.setData({ loading: false });
-      wx.showToast({ title: "手机号不正确", icon: "none" });
+  onShow() {
+    return this.loadBooking();
+  },
+
+  async loadBooking() {
+    const id = this.data.bookingId;
+    if (!id) {
+      this.setData({ loading: false, errorMessage: "缺少订单信息" });
       return;
     }
-
+    this.setData({ loading: true, booking: null, errorMessage: "" });
     try {
-      const booking = await api.getBookingDetail(id, phone);
-      this.setData({ loading: false, booking });
+      await api.ensureUserLogin();
+      const booking = await api.getMyBookingDetail(id);
+      this.setData({ booking });
     } catch (error) {
+      this.setData({ errorMessage: error.message || "订单加载失败，请重试" });
+    } finally {
       this.setData({ loading: false });
-      wx.showToast({ title: error.message || "订单加载失败", icon: "none" });
     }
   },
 
@@ -57,7 +54,29 @@ Page({
     if (!booking) return;
 
     wx.navigateTo({
-      url: `/pages/invitation/index?id=${booking.id}`,
+      url: `/pages/invitation/index?id=${booking.id}&token=${encodeURIComponent(booking.invitationToken)}`,
+    });
+  },
+
+  cancelBooking() {
+    const booking = this.data.booking;
+    if (!booking) return;
+
+    wx.showModal({
+      title: "取消预订",
+      content: "确定取消这笔预订吗？",
+      confirmText: "确认取消",
+      confirmColor: "#b05b45",
+      success: async (result) => {
+        if (!result.confirm) return;
+        try {
+          const updated = await api.cancelMyBooking(booking.id);
+          this.setData({ booking: updated });
+          wx.showToast({ title: "预订已取消", icon: "success" });
+        } catch (error) {
+          wx.showToast({ title: error.message || "取消失败", icon: "none" });
+        }
+      },
     });
   },
 });

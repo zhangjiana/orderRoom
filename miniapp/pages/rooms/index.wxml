@@ -1,15 +1,21 @@
 <view class="page">
-  <!-- 顶部定位 + 搜索 -->
-  <view class="location-bar">
-    <view class="location-text" wx:if="{{cityName}}">{{cityName}}</view>
-    <view class="location-text location-text--hint" wx:else>开启定位查看附近餐厅</view>
+  <view class="discovery-hero">
+    <view class="hero-eyebrow">PRIVATE DINING</view>
+    <view class="hero-title">好席，值得提前安排</view>
+    <view class="hero-copy">精选城市包间，为重要的一餐留出体面与从容。</view>
+    <view class="location-bar">
+      <view class="location-dot"></view>
+      <view class="location-text" wx:if="{{cityName}}">{{cityName}} · 附近优选</view>
+      <view class="location-text location-text--hint" wx:else>开启定位，发现附近好店</view>
+    </view>
   </view>
 
   <view class="search-bar">
+    <view class="search-icon">⌕</view>
     <input
       class="search-input"
       placeholder-class="field-placeholder"
-      placeholder="搜索餐厅名称"
+      placeholder="搜索餐厅或商圈"
       value="{{keyword}}"
       bindinput="handleKeyword"
       confirm-type="search"
@@ -18,7 +24,10 @@
     <button class="search-btn" bindtap="searchMerchants">搜索</button>
   </view>
 
-  <!-- 商户卡片列表 -->
+  <view class="list-heading" wx:if="{{!loading}}">
+    <view class="list-title">为你精选</view>
+    <view class="list-count">{{merchants.length}} 家</view>
+  </view>
   <view wx:if="{{loading}}" class="empty-card">正在获取商家...</view>
 
   <block wx:if="{{!loading && merchants.length}}">
@@ -29,8 +38,12 @@
       data-id="{{item.id}}"
       bindtap="openMerchant"
     >
+      <view class="merchant-card__accent"></view>
       <view class="merchant-card__header">
-        <view class="merchant-card__name">{{item.name}}</view>
+        <view>
+          <view class="merchant-card__label">宴请优选</view>
+          <view class="merchant-card__name">{{item.name}}</view>
+        </view>
         <view class="merchant-card__distance" wx:if="{{item.distanceText}}">{{item.distanceText}}</view>
       </view>
       <view class="merchant-card__info">
@@ -45,6 +58,9 @@
           wx:for-item="tag"
           wx:key="*this"
         >{{tag}}</view>
+      </view>
+      <view class="merchant-card__footer">
+        <view>查看包间详情</view><view class="merchant-card__arrow">→</view>
       </view>
     </view>
   </block>

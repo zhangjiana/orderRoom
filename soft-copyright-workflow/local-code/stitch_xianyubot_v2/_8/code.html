@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed-dim": "#afc6ff",
+                    "secondary": "#266d00",
+                    "on-secondary": "#ffffff",
+                    "on-primary-container": "#fefcff",
+                    "surface-container-highest": "#e0e3e6",
+                    "inverse-surface": "#2d3133",
+                    "surface-container": "#eceef1",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-dim": "#d8dadd",
+                    "on-surface-variant": "#414755",
+                    "on-tertiary-container": "#fffbff",
+                    "on-tertiary-fixed-variant": "#614000",
+                    "surface-bright": "#f7f9fc",
+                    "on-error": "#ffffff",
+                    "surface-container-high": "#e6e8eb",
+                    "surface": "#f7f9fc",
+                    "on-secondary-fixed": "#062100",
+                    "surface-container-low": "#f2f4f7",
+                    "on-primary-fixed-variant": "#004398",
+                    "inverse-on-surface": "#eff1f4",
+                    "tertiary-fixed-dim": "#ffba45",
+                    "on-primary-fixed": "#001a43",
+                    "error-container": "#ffdad6",
+                    "tertiary": "#7d5400",
+                    "on-secondary-fixed-variant": "#1a5200",
+                    "on-secondary-container": "#287100",
+                    "error": "#ba1a1a",
+                    "background": "#f7f9fc",
+                    "on-background": "#191c1e",
+                    "primary-container": "#006ef2",
+                    "on-error-container": "#93000a",
+                    "tertiary-container": "#9d6a00",
+                    "tertiary-fixed": "#ffddb0",
+                    "primary-fixed": "#d9e2ff",
+                    "primary": "#0057c2",
+                    "outline-variant": "#c1c6d7",
+                    "secondary-container": "#85fa51",
+                    "inverse-primary": "#afc6ff",
+                    "on-surface": "#191c1e",
+                    "surface-tint": "#0059c7",
+                    "on-primary": "#ffffff",
+                    "outline": "#727786",
+                    "surface-variant": "#e0e3e6",
+                    "secondary-fixed": "#88fd54",
+                    "secondary-fixed-dim": "#6de039",
+                    "on-tertiary": "#ffffff",
+                    "on-tertiary-fixed": "#281800"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "gutter": "16px",
+                    "xl": "32px",
+                    "base": "8px",
+                    "sm": "8px",
+                    "md": "16px",
+                    "lg": "24px",
+                    "container-margin": "24px",
+                    "xs": "4px"
+            },
+            "fontFamily": {
+                    "display-lg": ["Inter", "PingFang SC"],
+                    "label-sm": ["Inter", "PingFang SC"],
+                    "body-md": ["Inter", "PingFang SC"],
+                    "title-lg": ["Inter", "PingFang SC"],
+                    "body-lg": ["Inter", "PingFang SC"],
+                    "label-md": ["Inter", "PingFang SC"],
+                    "headline-md-mobile": ["Inter", "PingFang SC"],
+                    "headline-md": ["Inter", "PingFang SC"],
+                    "title-md": ["Inter", "PingFang SC"],
+                    "headline-sm": ["Inter", "PingFang SC"]
+            },
+            "fontSize": {
+                    "display-lg": ["30px", {"lineHeight": "38px", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "body-md": ["14px", {"lineHeight": "22px", "fontWeight": "400"}],
+                    "title-lg": ["18px", {"lineHeight": "26px", "fontWeight": "500"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                    "headline-md-mobile": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "title-md": ["16px", {"lineHeight": "24px", "fontWeight": "500"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md text-body-md overflow-hidden">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-[240px] bg-surface-container-lowest border-r border-outline-variant shadow-sm flex flex-col h-screen overflow-y-auto transition-all duration-200 ease-in-out z-50">
+<div class="p-lg flex items-center gap-md">
+<div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">cloud_sync</span>
+</div>
+<div>
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary">智维云</h1>
+<p class="text-[10px] text-on-surface-variant leading-none">社区物业巡检平台</p>
+</div>
+</div>
+<nav class="flex-1 px-sm">
+<ul class="space-y-1">
+<li>
+<a class="flex items-center gap-md px-md py-3 text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-title-md">驾驶舱</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-3 text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="precision_manufacturing">precision_manufacturing</span>
+<span class="font-title-md">设备管理</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-3 text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="event_note">event_note</span>
+<span class="font-title-md">巡检计划</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-3 text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="assignment">assignment</span>
+<span class="font-title-md">任务管理</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-3 text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="engineering">engineering</span>
+<span class="font-title-md">工单中心</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-3 bg-secondary-container text-on-secondary-container border-r-[3px] border-primary font-title-md text-title-md rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>系统设置</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-3 text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-title-md">个人中心</span>
+</a>
+</li>
+</ul>
+</nav>
+<div class="p-lg mt-auto">
+<button class="w-full bg-primary text-on-primary py-2 px-md rounded-lg font-label-md flex items-center justify-center gap-sm active:scale-95 transition-all">
+<span class="material-symbols-outlined text-sm">add</span>
+<span>发起巡检</span>
+</button>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-[240px] h-screen flex flex-col overflow-hidden">
+<!-- TopNavBar -->
+<header class="sticky top-0 z-40 w-full bg-surface border-b border-outline-variant flex justify-between items-center h-16 px-lg shrink-0">
+<div class="flex items-center gap-xl">
+<div class="relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-on-surface-variant">search</span>
+<input class="pl-10 pr-md py-1.5 bg-surface-container-low border-none rounded-lg focus:ring-2 focus:ring-primary/20 w-64 text-sm" placeholder="搜索功能或人员..." type="text"/>
+</div>
+<nav class="hidden md:flex gap-lg">
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md" href="#">首页</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md" href="#">运行大盘</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md" href="#">工单追踪</a>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<button class="p-2 hover:bg-surface-container-high rounded-full transition-colors active:scale-95">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 hover:bg-surface-container-high rounded-full transition-colors active:scale-95">
+<span class="material-symbols-outlined">help_outline</span>
+</button>
+<div class="h-8 w-[1px] bg-outline-variant mx-2"></div>
+<div class="flex items-center gap-sm cursor-pointer group">
+<img alt="管理员头像" class="w-8 h-8 rounded-full object-cover border border-outline-variant" data-alt="A professional headshot of a middle-aged male facility manager wearing a clean, modern navy uniform in a brightly lit, high-tech office environment. The lighting is soft and natural, emphasizing a trustworthy and expert demeanor. The background is slightly blurred, showing blurred industrial monitoring screens in cool blue tones, maintaining a corporate and efficient atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1qT17XTxheCpYvcOKrZ-iB9Glh5aNWOw9EQ1QBvlHUtt1_MZlbFaoVCnU_CgtYNARyVxBkYW_QRfIgtpM31-Skh_DO1kVRnFx3HuK0i7C6Vf4DP3n9lpiLQVOM8q5aoYL4oqpPBoaC9_cBImi7YbDgMKflLbFptt2qpx4ona5ZpzCu6kY11LLiRSfmlIVU7BI786d0XDyf6ddii03pOI7IcUKdf5uBtP3RFTps6eWJ5gR-kekepnA4rnjtkF976m66Ukueozwip4"/>
+<span class="font-label-md text-on-surface group-hover:text-primary">张建国</span>
+</div>
+</div>
+</header>
+<!-- Content Area -->
+<div class="flex-1 overflow-y-auto p-lg bg-surface space-y-lg hide-scrollbar">
+<!-- Page Header -->
+<div class="flex flex-col gap-xs">
+<h2 class="font-display-lg text-display-lg text-on-surface">人员与系统设置</h2>
+<p class="text-on-surface-variant">管理平台角色权限、值班安排及全局系统行为。</p>
+</div>
+<div class="grid grid-cols-12 gap-lg">
+<!-- 1. 角色与权限管理 (Bento Left) -->
+<div class="col-span-12 xl:col-span-7 space-y-md">
+<section class="bg-surface-container-lowest rounded-xl border border-outline-variant p-lg shadow-sm">
+<div class="flex justify-between items-center mb-md border-b border-outline-variant pb-md">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">admin_panel_settings</span>
+<h3 class="font-title-lg text-title-lg">角色与权限管理</h3>
+</div>
+<button class="text-primary font-label-md flex items-center gap-xs hover:underline">
+<span class="material-symbols-outlined text-sm">add</span>新增角色
+                            </button>
+</div>
+<div class="space-y-sm">
+<!-- Role Item: Admin -->
+<div class="flex items-center justify-between p-md bg-surface-container-low rounded-lg border border-transparent hover:border-primary/30 transition-all">
+<div class="flex items-center gap-lg">
+<div class="p-3 bg-primary/10 rounded-lg text-primary">
+<span class="material-symbols-outlined">shield_person</span>
+</div>
+<div>
+<p class="font-title-md text-on-surface">管理员 (Administrator)</p>
+<p class="text-xs text-on-surface-variant">拥有平台所有模块的完全访问与编辑权限</p>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<span class="px-3 py-1 bg-primary text-on-primary text-[11px] font-bold rounded-full">系统预设</span>
+<button class="text-on-surface-variant hover:text-primary p-1"><span class="material-symbols-outlined">edit</span></button>
+</div>
+</div>
+<!-- Role Item: Inspector -->
+<div class="flex items-center justify-between p-md bg-surface-container-low rounded-lg border border-transparent hover:border-primary/30 transition-all">
+<div class="flex items-center gap-lg">
+<div class="p-3 bg-secondary-container/20 rounded-lg text-secondary">
+<span class="material-symbols-outlined">qr_code_scanner</span>
+</div>
+<div>
+<p class="font-title-md text-on-surface">巡检员 (Inspector)</p>
+<p class="text-xs text-on-surface-variant">可查看巡检任务、提交巡检报告及异常报修</p>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<span class="px-3 py-1 bg-secondary-container text-on-secondary-container text-[11px] font-bold rounded-full">高频使用</span>
+<button class="text-on-surface-variant hover:text-primary p-1"><span class="material-symbols-outlined">edit</span></button>
+</div>
+</div>
+<!-- Role Item: Dispatcher -->
+<div class="flex items-center justify-between p-md bg-surface-container-low rounded-lg border border-transparent hover:border-primary/30 transition-all">
+<div class="flex items-center gap-lg">
+<div class="p-3 bg-tertiary-container/20 rounded-lg text-tertiary">
+<span class="material-symbols-outlined">support_agent</span>
+</div>
+<div>
+<p class="font-title-md text-on-surface">调度员 (Dispatcher)</p>
+<p class="text-xs text-on-surface-variant">负责巡检计划排程、工单分配及人员调度</p>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<button class="text-on-surface-variant hover:text-primary p-1"><span class="material-symbols-outlined">edit</span></button>
+<button class="text-on-surface-variant hover:text-error p-1"><span class="material-symbols-outlined">delete</span></button>
+</div>
+</div>
+</div>
+</section>
+<!-- 3. 系统配置项 (Notification & Approvals) -->
+<section class="bg-surface-container-lowest rounded-xl border border-outline-variant p-lg shadow-sm">
+<div class="flex items-center gap-sm mb-md border-b border-outline-variant pb-md">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">tune</span>
+<h3 class="font-title-lg text-title-lg">系统配置项</h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+<div class="space-y-md">
+<h4 class="font-label-md text-on-surface-variant uppercase tracking-wider">通知推送配置</h4>
+<div class="flex items-center justify-between">
+<span class="text-sm">巡检超时实时预警</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-sm">每日汇总报告推送 (18:00)</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+</div>
+<div class="space-y-md">
+<h4 class="font-label-md text-on-surface-variant uppercase tracking-wider">审批流配置</h4>
+<div class="flex items-center justify-between p-sm bg-surface-container-low rounded border border-outline-variant">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-sm">account_tree</span>
+<span class="text-sm">报修工单审核</span>
+</div>
+<span class="text-primary font-label-sm cursor-pointer">配置步骤</span>
+</div>
+<div class="flex items-center justify-between p-sm bg-surface-container-low rounded border border-outline-variant">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-sm">assignment_turned_in</span>
+<span class="text-sm">巡检结果抽检</span>
+</div>
+<span class="text-primary font-label-sm cursor-pointer">配置步骤</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- 2. 人员排班表 (Calendar Right) -->
+<div class="col-span-12 xl:col-span-5">
+<section class="bg-surface-container-lowest rounded-xl border border-outline-variant h-full flex flex-col shadow-sm">
+<div class="p-lg border-b border-outline-variant flex justify-between items-center">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">calendar_month</span>
+<h3 class="font-title-lg text-title-lg">人员排班表</h3>
+</div>
+<div class="flex items-center gap-sm bg-surface-container-low p-1 rounded-lg">
+<button class="p-1.5 hover:bg-surface-container-highest rounded transition-colors"><span class="material-symbols-outlined text-sm">chevron_left</span></button>
+<span class="px-2 font-label-md">2024年3月</span>
+<button class="p-1.5 hover:bg-surface-container-highest rounded transition-colors"><span class="material-symbols-outlined text-sm">chevron_right</span></button>
+</div>
+</div>
+<div class="p-lg flex-1">
+<!-- Weekdays Header -->
+<div class="calendar-grid mb-2">
+<div class="text-center text-[11px] font-bold text-on-surface-variant pb-2">一</div>
+<div class="text-center text-[11px] font-bold text-on-surface-variant pb-2">二</div>
+<div class="text-center text-[11px] font-bold text-on-surface-variant pb-2">三</div>
+<div class="text-center text-[11px] font-bold text-on-surface-variant pb-2">四</div>
+<div class="text-center text-[11px] font-bold text-on-surface-variant pb-2">五</div>
+<div class="text-center text-[11px] font-bold text-secondary pb-2">六</div>
+<div class="text-center text-[11px] font-bold text-secondary pb-2">日</div>
+</div>
+<!-- Calendar Days -->
+<div class="calendar-grid gap-1">
+<!-- Placeholders for Feb end -->
+<div class="aspect-square border border-transparent"></div>
+<div class="aspect-square border border-transparent"></div>
+<div class="aspect-square border border-transparent"></div>
+<!-- March Days Loop (Simulated) -->
+<div class="aspect-square border border-outline-variant rounded-lg p-1 hover:bg-surface-container-low cursor-pointer transition-colors relative group">
+<span class="text-xs font-bold">1</span>
+<div class="mt-1 flex flex-col gap-0.5">
+<div class="h-1 w-full bg-primary rounded-full"></div>
+</div>
+<div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 rounded-lg"></div>
+</div>
+<div class="aspect-square border border-outline-variant rounded-lg p-1 hover:bg-surface-container-low cursor-pointer transition-colors relative">
+<span class="text-xs font-bold">2</span>
+<div class="mt-1 flex flex-col gap-0.5"><div class="h-1 w-full bg-secondary rounded-full"></div></div>
+</div>
+<div class="aspect-square border border-outline-variant rounded-lg p-1 hover:bg-surface-container-low cursor-pointer transition-colors relative">
+<span class="text-xs font-bold">3</span>
+<div class="mt-1 flex flex-col gap-0.5"><div class="h-1 w-full bg-secondary rounded-full"></div></div>
+</div>
+<!-- Active Day -->
+<div class="aspect-square border-2 border-primary bg-primary/5 rounded-lg p-1 cursor-pointer relative shadow-md">
+<span class="text-xs font-bold text-primary">4</span>
+<div class="mt-1 flex flex-col gap-0.5">
+<div class="h-1 w-full bg-primary rounded-full"></div>
+<div class="h-1 w-full bg-tertiary rounded-full"></div>
+</div>
+</div>
+<!-- Rest of the month (Condensed representation) -->
+<div class="aspect-square border border-outline-variant rounded-lg p-1 flex items-center justify-center"><span class="text-xs font-bold">5</span></div>
+<div class="aspect-square border border-outline-variant rounded-lg p-1 flex items-center justify-center"><span class="text-xs font-bold">6</span></div>
+<div class="aspect-square border border-outline-variant rounded-lg p-1 flex items-center justify-center"><span class="text-xs font-bold">7</span></div>
+<div class="aspect-square border border-outline-variant rounded-lg p-1 flex items-center justify-center"><span class="text-xs font-bold">8</span></div>
+<div class="aspect-square border border-outline-variant rounded-lg p-1 flex items-center justify-center"><span class="text-xs font-bold">9</span></div>
+<div class="aspect-square border border-outline-variant rounded-lg p-1 flex items-center justify-center"><span class="text-xs font-bold">10</span></div>
+<div class="aspect-square border border-outline-variant rounded-lg p-1 flex items-center justify-center"><span class="text-xs font-bold">11</span></div>
+<div class="aspect-square border border-outline-variant rounded-lg p-1 flex items-center justify-center"><span class="text-xs font-bold">12</span></div>
+<div class="aspect-square border border-outline-variant rounded-lg p-1 flex items-center justify-center"><span class="text-xs font-bold">13</span></div>
+<div class="aspect-square border border-outline-variant rounded-lg p-1 flex items-center justify-center"><span class="text-xs font-bold">14</span></div>
+<div class="aspect-square border border-outline-variant rounded-lg p-1 flex items-center justify-center"><span class="text-xs font-bold">15</span></div>
+<div class="aspect-square border border-outline-variant rounded-lg p-1 flex items-center justify-center"><span class="text-xs font-bold">16</span></div>
+<div class="aspect-square border border-outline-variant rounded-lg p-1 flex items-center justify-center"><span class="text-xs font-bold">17</span></div>
+<div class="aspect-square border border-outline-variant rounded-lg p-1 flex items-center justify-center"><span class="text-xs font-bold">18</span></div>
+<div class="aspect-square border border-outline-variant rounded-lg p-1 flex items-center justify-center"><span class="text-xs font-bold">19</span></div>
+<div class="aspect-square border border-outline-variant rounded-lg p-1 flex items-center justify-center"><span class="text-xs font-bold">20</span></div>
+<div class="aspect-square border border-outline-variant rounded-lg p-1 flex items-center justify-center"><span class="text-xs font-bold">21</span></div>
+</div>
+<!-- Selected Day Personnel List -->
+<div class="mt-lg space-y-md">
+<h4 class="font-title-md text-on-surface flex items-center gap-xs">
+                                    今日值班人员 (3月4日)
+                                </h4>
+<div class="space-y-sm">
+<div class="flex items-center gap-md p-md bg-surface-container rounded-lg">
+<div class="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold">李</div>
+<div class="flex-1">
+<p class="font-label-md">李志强 (白班)</p>
+<p class="text-[10px] text-on-surface-variant">08:00 - 18:00 | 巡检组A</p>
+</div>
+<span class="px-2 py-0.5 bg-secondary-container/30 text-secondary text-[10px] font-bold rounded">巡检员</span>
+</div>
+<div class="flex items-center gap-md p-md bg-surface-container rounded-lg">
+<div class="w-10 h-10 rounded-full bg-tertiary-container text-on-tertiary-container flex items-center justify-center font-bold">王</div>
+<div class="flex-1">
+<p class="font-label-md">王梅 (常驻)</p>
+<p class="text-[10px] text-on-surface-variant">09:00 - 18:00 | 调度中心</p>
+</div>
+<span class="px-2 py-0.5 bg-tertiary-container/30 text-tertiary text-[10px] font-bold rounded">调度员</span>
+</div>
+</div>
+<button class="w-full border-2 border-dashed border-outline-variant rounded-xl py-3 text-on-surface-variant hover:text-primary hover:border-primary transition-colors font-label-md flex items-center justify-center gap-sm">
+<span class="material-symbols-outlined">edit_calendar</span>
+                                    调整本日排班
+                                </button>
+</div>
+</div>
+</section>
+</div>
+</div>
+</div>
+</main>
+<!-- Micro-interaction Scripts -->
+<script>
+        document.querySelectorAll('label input[type="checkbox"]').forEach(toggle => {
+            toggle.addEventListener('change', (e) => {
+                const parent = e.target.closest('div');
+                if (e.target.checked) {
+                    console.log('Setting enabled');
+                } else {
+                    console.log('Setting disabled');
+                }
+            });
+        });
+
+        // Simple scale effect on hover for bento items
+        document.querySelectorAll('section').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.classList.add('transition-transform', 'duration-300');
+            });
+        });
+    </script>
+</body></html>

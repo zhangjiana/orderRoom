@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, ConflictException, UnauthorizedException, Injectable, NotFoundException } from "@nestjs/common";
 import { DatabaseService } from "../database/database.service";
 import { createId } from "../common/utils/id.util";
 import { formatDate, formatDateTime, formatTime, nowString } from "../common/utils/time.util";
@@ -11,6 +11,15 @@ import {
   todayString,
   validateRequired,
 } from "../common/utils/validation.util";
+import {
+  canAccessBooking,
+  createInvitationToken,
+  doBookingSlotsOverlap,
+  isInvitationTokenValid,
+  isBookingDateTimeInFuture,
+  isBookingTransitionAllowed,
+} from "./booking-policy";
+import { BookingNotificationService } from "./booking-notification.service";
 
 function mapStatusLabel(status: string): string {
   const labels: Record<string, string> = {
@@ -33,14 +42,17 @@ function assertBookingDateTime(diningDate: string, diningTime: string) {
     throw new BadRequestException("用餐时间格式不正确");
   }
 
-  if (diningDate < todayString()) {
-    throw new BadRequestException("不能预订过去日期");
+  if (diningDate < todayString() || !isBookingDateTimeInFuture(diningDate, diningTime)) {
+    throw new BadRequestException("请选择尚未开始的用餐时间");
   }
 }
 
 @Injectable()
 export class BookingsService {
-  constructor(private readonly databaseService: DatabaseService) {}
+  constructor(
+    private readonly databaseService: DatabaseService,
+    private readonly bookingNotificationService: BookingNotificationService,
+  ) {}
 
   async listAdminBookings(status = "all", merchantId = "") {
     const filters: string[] = [];
@@ -75,6 +87,7 @@ export class BookingsService {
         remarks,
         occasion,
         budget,
+        invitation_token AS invitationToken,
         status,
         created_at AS createdAt,
         updated_at AS updatedAt
@@ -111,13 +124,7 @@ export class BookingsService {
       throw new NotFoundException("订单不存在");
     }
 
-    const validTransitions: Record<string, string[]> = {
-      pending: ["confirmed", "rejected", "cancelled"],
-      confirmed: ["completed", "cancelled"],
-    };
-
-    const allowed = validTransitions[booking.status] || [];
-    if (!allowed.includes(status)) {
+    if (!isBookingTransitionAllowed("admin", booking.status, status)) {
       throw new BadRequestException(`订单当前状态「${mapStatusLabel(booking.status)}」不允许变更为「${mapStatusLabel(status)}」`);
     }
 
@@ -128,13 +135,15 @@ export class BookingsService {
     ]);
 
     const updated = await this.findBookingById(id);
-    return this.mapBooking(updated!);
+    const mapped = this.mapBooking(updated!);
+    await this.bookingNotificationService.sendStatusUpdate(mapped);
+    return mapped;
   }
 
   async updateMerchantBookingStatus(merchantId: string, id: string, payload: Record<string, unknown>) {
     const status = String(payload.status || "");
-    if (!["confirmed", "rejected"].includes(status)) {
-      throw new BadRequestException("商家仅支持确认或拒绝订单");
+    if (!["confirmed", "rejected", "completed", "cancelled"].includes(status)) {
+      throw new BadRequestException("不支持的商家订单状态");
     }
 
     const booking = await this.findBookingById(id, merchantId);
@@ -142,8 +151,10 @@ export class BookingsService {
       throw new NotFoundException("订单不存在");
     }
 
-    if (booking.status !== "pending") {
-      throw new BadRequestException(`订单当前状态「${mapStatusLabel(booking.status)}」不能由商家再次处理`);
+    if (!isBookingTransitionAllowed("merchant", booking.status, status)) {
+      throw new BadRequestException(
+        `订单当前状态「${mapStatusLabel(booking.status)}」不允许变更为「${mapStatusLabel(status)}」`,
+      );
     }
 
     await this.databaseService.execute(
@@ -156,10 +167,13 @@ export class BookingsService {
       throw new NotFoundException("订单不存在");
     }
 
-    return this.mapBooking(updated);
+    const mapped = this.mapBooking(updated);
+    await this.bookingNotificationService.sendStatusUpdate(mapped);
+    return mapped;
   }
 
-  async createBooking(payload: Record<string, unknown>) {
+  async createBooking(payload: Record<string, unknown>, userId = "") {
+    if (!userId) throw new UnauthorizedException("请先登录后提交预订");
     const missing = validateRequired(
       ["merchantId", "roomId", "diningDate", "diningTime", "guestCount", "contactName", "contactPhone"],
       payload,
@@ -171,6 +185,7 @@ export class BookingsService {
 
     const booking = {
       id: createId("booking"),
+      userId,
       merchantId: normalizeText(payload.merchantId),
       roomId: normalizeText(payload.roomId),
       diningDate: normalizeText(payload.diningDate),
@@ -181,6 +196,8 @@ export class BookingsService {
       remarks: payload.remarks ? normalizeText(payload.remarks) : "",
       occasion: payload.occasion ? normalizeText(payload.occasion) : "",
       budget: toNumber(payload.budget),
+      invitationToken: createInvitationToken(),
+      subscriptionTemplateId: normalizeText(payload.subscriptionTemplateId || ""),
       status: "pending",
       createdAt: nowString(),
       updatedAt: nowString(),
@@ -231,29 +248,45 @@ export class BookingsService {
         throw new BadRequestException(`用餐人数需在 ${room.capacityMin}-${room.capacityMax} 位之间`);
       }
 
-      const conflict = await this.databaseService.queryOne<{ id: string }>(
-        `SELECT id
+      const activeBookings = await this.databaseService.queryRows<Array<{
+        id: string;
+        diningDate: string | Date;
+        diningTime: string | Date;
+      }>>(
+        `SELECT
+          id,
+          dining_date AS diningDate,
+          dining_time AS diningTime
         FROM bookings
-        WHERE room_id = ? AND dining_date = ? AND dining_time = ? AND status IN ('pending', 'confirmed')
-        LIMIT 1
+        WHERE room_id = ? AND dining_date = ? AND status IN ('pending', 'confirmed')
         FOR UPDATE`,
-        [booking.roomId, booking.diningDate, booking.diningTime],
+        [booking.roomId, booking.diningDate],
         connection,
       );
 
+      const conflict = activeBookings.find((item) =>
+        doBookingSlotsOverlap(
+          formatDate(item.diningDate),
+          formatTime(item.diningTime),
+          booking.diningDate,
+          booking.diningTime,
+        ),
+      );
+
       if (conflict) {
-        throw new ConflictException("该包间在当前时间段已被占用，请更换时间或包间");
+        throw new ConflictException("该包间前后两小时内已有预订，请更换时间或包间");
       }
 
       await this.databaseService.execute(
         `INSERT INTO bookings (
-          id, merchant_id, merchant_name, merchant_address, merchant_latitude,
+          id, user_id, merchant_id, merchant_name, merchant_address, merchant_latitude,
           merchant_longitude, room_id, room_name, min_spend, dining_date, dining_time,
           guest_count, contact_name, contact_phone, remarks, occasion, budget, status,
-          created_at, updated_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          invitation_token, subscription_template_id, created_at, updated_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
           booking.id,
+          booking.userId || null,
           booking.merchantId,
           room.merchantName,
           room.merchantAddress,
@@ -271,6 +304,8 @@ export class BookingsService {
           booking.occasion,
           booking.budget,
           booking.status,
+          booking.invitationToken,
+          booking.subscriptionTemplateId,
           booking.createdAt,
           booking.updatedAt,
         ],
@@ -285,64 +320,70 @@ export class BookingsService {
         merchantLongitude: room.merchantLongitude,
         roomName: room.name,
         minSpend: room.minSpend,
-      });
+      }, true);
     });
   }
 
-  async listPublicBookings(contactPhone = "") {
-    const phone = normalizeText(contactPhone);
-    if (!isMainlandMobile(phone)) {
-      throw new BadRequestException("请提供正确手机号查询订单");
-    }
-
-    const rows = await this.databaseService.queryRows<any[]>(
-      `SELECT
-        id,
-        merchant_id AS merchantId,
-        merchant_name AS merchantName,
-        merchant_address AS merchantAddress,
-        merchant_latitude AS merchantLatitude,
-        merchant_longitude AS merchantLongitude,
-        room_id AS roomId,
-        room_name AS roomName,
-        min_spend AS minSpend,
-        dining_date AS diningDate,
-        dining_time AS diningTime,
-        guest_count AS guestCount,
-        contact_name AS contactName,
-        contact_phone AS contactPhone,
-        remarks,
-        occasion,
-        budget,
-        status,
-        created_at AS createdAt,
-        updated_at AS updatedAt
-      FROM bookings
-      WHERE contact_phone = ?
-      ORDER BY dining_date DESC, dining_time DESC, created_at DESC`,
-      [phone],
-    );
-
-    return { items: rows.map((row) => this.mapBooking(row)) };
+  async listPublicBookings(_contactPhone = "") {
+    throw new UnauthorizedException("手机号查询已停用，请登录查看账号订单；历史订单请联系商家");
   }
 
-  async getPublicBooking(id: string, contactPhone = "") {
-    const phone = normalizeText(contactPhone);
-    if (!isMainlandMobile(phone)) {
-      throw new BadRequestException("请提供正确手机号查看订单");
-    }
+  async getPublicBooking(_id: string, _contactPhone = "") {
+    throw new UnauthorizedException("手机号查询已停用，请登录查看账号订单；历史订单请联系商家");
+  }
 
+  async listUserBookings(userId: string) {
+    const rows = await this.databaseService.queryRows<any[]>(
+      `${this.bookingSelectSql} WHERE user_id = ?
+      ORDER BY dining_date DESC, dining_time DESC, created_at DESC`,
+      [userId],
+    );
+    return { items: rows.map((row) => this.mapBooking(row, true)) };
+  }
+
+  async getUserBooking(userId: string, id: string) {
     const booking = await this.findBookingById(id);
-    if (!booking || booking.contactPhone !== phone) {
+    if (
+      !booking ||
+      !canAccessBooking(booking.userId || "", userId, booking.contactPhone, "")
+    ) {
+      throw new NotFoundException("订单不存在");
+    }
+    return this.mapBooking(booking, true);
+  }
+
+  async cancelUserBooking(userId: string, id: string) {
+    const booking = await this.findBookingById(id);
+    if (
+      !booking ||
+      !canAccessBooking(booking.userId || "", userId, booking.contactPhone, "")
+    ) {
       throw new NotFoundException("订单不存在");
     }
 
-    return this.mapBooking(booking);
+    if (!isBookingTransitionAllowed("user", booking.status, "cancelled")) {
+      throw new BadRequestException(`订单当前状态「${mapStatusLabel(booking.status)}」不能取消`);
+    }
+
+    await this.databaseService.execute(
+      "UPDATE bookings SET status = 'cancelled', updated_at = ? WHERE id = ? AND user_id = ?",
+      [nowString(), id, userId],
+    );
+    const updated = await this.findBookingById(id);
+    return this.mapBooking(updated!, true);
   }
 
-  async getPublicInvitation(id: string) {
+  async cancelPublicBooking(_id: string, _contactPhone = "") {
+    throw new UnauthorizedException("手机号查询已停用，请登录查看账号订单；历史订单请联系商家");
+  }
+
+  async getPublicInvitation(id: string, invitationToken = "") {
     const booking = await this.findBookingById(id);
     if (!booking) {
+      throw new NotFoundException("邀请函不存在");
+    }
+
+    if (!isInvitationTokenValid(booking.invitationToken || "", invitationToken)) {
       throw new NotFoundException("邀请函不存在");
     }
 
@@ -371,6 +412,7 @@ export class BookingsService {
     return this.databaseService.queryOne<any>(
       `SELECT
         id,
+        user_id AS userId,
         merchant_id AS merchantId,
         merchant_name AS merchantName,
         merchant_address AS merchantAddress,
@@ -387,6 +429,8 @@ export class BookingsService {
         remarks,
         occasion,
         budget,
+        invitation_token AS invitationToken,
+        subscription_template_id AS subscriptionTemplateId,
         status,
         created_at AS createdAt,
         updated_at AS updatedAt
@@ -398,9 +442,10 @@ export class BookingsService {
     );
   }
 
-  private mapBooking(row: any) {
+  private mapBooking(row: any, includeInvitationToken = false) {
     return {
       id: row.id,
+      userId: row.userId || "",
       merchantId: row.merchantId,
       merchantName: row.merchantName,
       merchantAddress: row.merchantAddress,
@@ -417,11 +462,41 @@ export class BookingsService {
       remarks: row.remarks || "",
       occasion: row.occasion || "",
       budget: Number(row.budget || 0),
+      ...(includeInvitationToken ? { invitationToken: row.invitationToken || "" } : {}),
+      subscriptionTemplateId: row.subscriptionTemplateId || "",
       status: row.status,
       rawStatus: row.status,
       statusLabel: mapStatusLabel(row.status),
       createdAt: formatDateTime(row.createdAt),
       updatedAt: formatDateTime(row.updatedAt),
     };
+  }
+
+  private get bookingSelectSql() {
+    return `SELECT
+      id,
+      user_id AS userId,
+      merchant_id AS merchantId,
+      merchant_name AS merchantName,
+      merchant_address AS merchantAddress,
+      merchant_latitude AS merchantLatitude,
+      merchant_longitude AS merchantLongitude,
+      room_id AS roomId,
+      room_name AS roomName,
+      min_spend AS minSpend,
+      dining_date AS diningDate,
+      dining_time AS diningTime,
+      guest_count AS guestCount,
+      contact_name AS contactName,
+      contact_phone AS contactPhone,
+      remarks,
+      occasion,
+      budget,
+      invitation_token AS invitationToken,
+      subscription_template_id AS subscriptionTemplateId,
+      status,
+      created_at AS createdAt,
+      updated_at AS updatedAt
+    FROM bookings`;
   }
 }

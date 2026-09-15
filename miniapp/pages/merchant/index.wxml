@@ -4,6 +4,7 @@
   <block wx:if="{{merchant}}">
     <!-- 商户信息头 -->
     <view class="merchant-header">
+      <view class="merchant-header__kicker">PRIVATE ROOM COLLECTION</view>
       <view class="merchant-header__name">{{merchant.name}}</view>
       <view class="merchant-header__address">{{merchant.address}}</view>
       <view class="merchant-header__meta">
@@ -13,11 +14,11 @@
       <view class="merchant-header__phone" wx:if="{{merchant.contactPhone}}">
         电话：{{merchant.contactPhone}}
       </view>
-      <button class="nav-button" bindtap="openLocation">地图导航</button>
+      <button class="nav-button" bindtap="openLocation">查看位置与导航</button>
     </view>
 
     <!-- 包间列表 -->
-    <view class="room-list-title">包间列表</view>
+    <view class="room-list-heading"><view class="room-list-title">选择包间</view><view class="room-list-hint">点击查看预订</view></view>
     <block wx:for="{{merchant.rooms}}" wx:key="id">
       <view class="room-card" data-room-id="{{item.id}}" bindtap="goReserve">
         <view class="room-card__header">
@@ -32,6 +33,7 @@
         <view class="room-card__tags" wx:if="{{item.features.length}}">
           <view class="room-card__tag" wx:for="{{item.features}}" wx:for-item="feat" wx:key="*this">{{feat}}</view>
         </view>
+        <view class="room-card__action">预订此包间 <text>→</text></view>
       </view>
     </block>
 

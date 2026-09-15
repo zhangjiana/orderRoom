@@ -288,18 +288,25 @@ Page({
     const { id, status } = event.currentTarget.dataset;
     const booking = this.data.allBookings.find((item) => item.id === id);
 
-    if (!booking || booking.rawStatus !== "pending") {
+    const allowed =
+      booking &&
+      ((booking.rawStatus === "pending" && ["confirmed", "rejected"].includes(status)) ||
+        (booking.rawStatus === "confirmed" && ["completed", "cancelled"].includes(status)));
+    if (!allowed) {
       return;
     }
 
+    const actionLabels = {
+      confirmed: "确认订单",
+      rejected: "拒绝订单",
+      completed: "完成订单",
+      cancelled: "取消订单",
+    };
     const modal = await openConfirmModal({
-      title: status === "confirmed" ? "确认订单" : "拒绝订单",
-      content:
-        status === "confirmed"
-          ? `确认 ${booking.contactName} 的预订？`
-          : `确认拒绝 ${booking.contactName} 的预订？`,
-      confirmText: status === "confirmed" ? "确认" : "拒绝",
-      confirmColor: status === "confirmed" ? "#9c6b36" : "#b54d32",
+      title: actionLabels[status],
+      content: `确定${actionLabels[status]}：${booking.contactName} 的预订？`,
+      confirmText: "确定",
+      confirmColor: ["rejected", "cancelled"].includes(status) ? "#b54d32" : "#9c6b36",
     });
 
     if (!modal.confirm) {
@@ -312,7 +319,7 @@ Page({
       await api.updateMerchantBookingStatus(id, status, this.data.token);
       await this.loadBookings(this.data.token);
       wx.showToast({
-        title: status === "confirmed" ? "已确认" : "已拒绝",
+        title: actionLabels[status],
         icon: "success",
       });
     } catch (error) {

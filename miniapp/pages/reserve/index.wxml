@@ -4,6 +4,7 @@
   <block wx:if="{{merchant}}">
     <!-- 已选包间信息 -->
     <view class="selected-room-info" wx:if="{{selectedRoom}}">
+      <view class="selected-room-info__kicker">YOUR SELECTION</view>
       <view class="selected-room-info__merchant">{{merchant.name}}</view>
       <view class="selected-room-info__room">{{selectedRoom.name}} · {{selectedRoom.capacityMin}}-{{selectedRoom.capacityMax}} 位</view>
       <view class="selected-room-info__price">¥{{selectedRoom.minSpend}} 起</view>
@@ -11,7 +12,8 @@
 
     <!-- 预订表单 -->
     <view class="form-card">
-      <view class="form-title">提交预订</view>
+      <view class="form-title">确认用餐安排</view>
+      <view class="form-intro">提交后商家将尽快与您电话确认，本次申请暂不收取费用。</view>
 
       <!-- 用餐安排 -->
       <view class="form-block">
@@ -19,7 +21,7 @@
         <view class="field-row">
           <view class="field-col">
             <view class="field-label">就餐日期</view>
-            <picker mode="date" value="{{form.date}}" bindchange="handleDateChange">
+            <picker mode="date" value="{{form.date}}" start="{{form.date}}" bindchange="handleDateChange">
               <view class="field-picker">{{form.date}}</view>
             </picker>
           </view>
@@ -71,7 +73,13 @@
       </view>
 
       <view class="submit-section">
-        <button class="primary-button" bindtap="submitBooking">确认提交预订</button>
+        <button
+          class="primary-button"
+          bindtap="submitBooking"
+          loading="{{submitting}}"
+          disabled="{{submitting}}"
+        >{{submitting ? '正在提交...' : '确认提交预订'}}</button>
+        <view class="submit-note">提交即表示您同意商家通过预留手机号联系确认</view>
       </view>
     </view>
   </block>

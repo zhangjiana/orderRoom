@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>智维云 - 巡检计划</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=PingFang+SC&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed-dim": "#afc6ff",
+                    "secondary": "#266d00",
+                    "on-secondary": "#ffffff",
+                    "on-primary-container": "#fefcff",
+                    "surface-container-highest": "#e0e3e6",
+                    "inverse-surface": "#2d3133",
+                    "surface-container": "#eceef1",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-dim": "#d8dadd",
+                    "on-surface-variant": "#414755",
+                    "on-tertiary-container": "#fffbff",
+                    "on-tertiary-fixed-variant": "#614000",
+                    "surface-bright": "#f7f9fc",
+                    "on-error": "#ffffff",
+                    "surface-container-high": "#e6e8eb",
+                    "surface": "#f7f9fc",
+                    "on-secondary-fixed": "#062100",
+                    "surface-container-low": "#f2f4f7",
+                    "on-primary-fixed-variant": "#004398",
+                    "inverse-on-surface": "#eff1f4",
+                    "tertiary-fixed-dim": "#ffba45",
+                    "on-primary-fixed": "#001a43",
+                    "error-container": "#ffdad6",
+                    "tertiary": "#7d5400",
+                    "on-secondary-fixed-variant": "#1a5200",
+                    "on-secondary-container": "#287100",
+                    "error": "#ba1a1a",
+                    "background": "#f7f9fc",
+                    "on-background": "#191c1e",
+                    "primary-container": "#006ef2",
+                    "on-error-container": "#93000a",
+                    "tertiary-container": "#9d6a00",
+                    "tertiary-fixed": "#ffddb0",
+                    "primary-fixed": "#d9e2ff",
+                    "primary": "#0057c2",
+                    "outline-variant": "#c1c6d7",
+                    "secondary-container": "#85fa51",
+                    "inverse-primary": "#afc6ff",
+                    "on-surface": "#191c1e",
+                    "surface-tint": "#0059c7",
+                    "on-primary": "#ffffff",
+                    "outline": "#727786",
+                    "surface-variant": "#e0e3e6",
+                    "secondary-fixed": "#88fd54",
+                    "secondary-fixed-dim": "#6de039",
+                    "on-tertiary": "#ffffff",
+                    "on-tertiary-fixed": "#281800"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "gutter": "16px",
+                    "xl": "32px",
+                    "base": "8px",
+                    "sm": "8px",
+                    "md": "16px",
+                    "lg": "24px",
+                    "container-margin": "24px",
+                    "xs": "4px"
+            },
+            "fontFamily": {
+                    "display-lg": ["Inter, PingFang SC"],
+                    "label-sm": ["Inter, PingFang SC"],
+                    "body-md": ["Inter, PingFang SC"],
+                    "title-lg": ["Inter, PingFang SC"],
+                    "body-lg": ["Inter, PingFang SC"],
+                    "label-md": ["Inter, PingFang SC"],
+                    "headline-md-mobile": ["Inter, PingFang SC"],
+                    "headline-md": ["Inter, PingFang SC"],
+                    "title-md": ["Inter, PingFang SC"],
+                    "headline-sm": ["Inter, PingFang SC"]
+            },
+            "fontSize": {
+                    "display-lg": ["30px", {"lineHeight": "38px", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "body-md": ["14px", {"lineHeight": "22px", "fontWeight": "400"}],
+                    "title-lg": ["18px", {"lineHeight": "26px", "fontWeight": "500"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                    "headline-md-mobile": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "title-md": ["16px", {"lineHeight": "24px", "fontWeight": "500"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #e0e3e6; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #c1c6d7; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md text-body-md overflow-hidden">
+<!-- Sidebar Wrapper -->
+<aside class="fixed left-0 top-0 h-full w-[240px] bg-surface-container-lowest dark:bg-inverse-surface border-r border-outline-variant dark:border-outline shadow-sm flex flex-col transition-all duration-200 ease-in-out z-50">
+<div class="p-lg flex flex-col gap-xs">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">cloud_done</span>
+</div>
+<div>
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary dark:text-primary-fixed-dim leading-none">智维云</h1>
+<p class="text-[10px] text-on-surface-variant opacity-70">社区物业巡检平台</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 px-sm mt-md">
+<div class="space-y-1">
+<!-- Navigation Items based on JSON -->
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>驾驶舱</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="precision_manufacturing">precision_manufacturing</span>
+<span>设备管理</span>
+</a>
+<!-- Active Item -->
+<a class="flex items-center gap-md px-md py-sm bg-secondary-container text-on-secondary-container border-r-[3px] border-primary font-title-md text-title-md rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="event_note" style="font-variation-settings: 'FILL' 1;">event_note</span>
+<span>巡检计划</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="assignment">assignment</span>
+<span>任务管理</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="engineering">engineering</span>
+<span>工单中心</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="map">map</span>
+<span>空间地图</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span>统计报表</span>
+</a>
+</div>
+</nav>
+<div class="p-lg mt-auto space-y-md">
+<button class="w-full bg-primary text-white py-sm rounded-lg font-title-md text-title-md flex items-center justify-center gap-sm shadow-md hover:opacity-90 active:scale-95 transition-all">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+                发起巡检
+            </button>
+<div class="flex items-center gap-md px-md py-sm text-on-surface-variant border-t border-outline-variant pt-lg">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>系统设置</span>
+</div>
+</div>
+</aside>
+<!-- Main Content Shell -->
+<main class="ml-[240px] h-screen flex flex-col">
+<!-- Top Navigation -->
+<header class="sticky top-0 z-40 w-full bg-surface dark:bg-background border-b border-outline-variant dark:border-outline flex justify-between items-center h-16 px-lg">
+<div class="flex items-center gap-xl">
+<div class="relative group">
+<span class="absolute inset-y-0 left-3 flex items-center text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]" data-icon="search">search</span>
+</span>
+<input class="pl-10 pr-md py-xs bg-surface-container-low border border-outline-variant rounded-full w-64 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" placeholder="搜索计划、负责人..." type="text"/>
+</div>
+<nav class="hidden md:flex items-center gap-lg">
+<a class="text-primary border-b-2 border-primary font-title-md text-title-md pb-1" href="#">首页</a>
+<a class="text-on-surface-variant hover:text-primary font-label-md text-label-md transition-colors" href="#">运行大盘</a>
+<a class="text-on-surface-variant hover:text-primary font-label-md text-label-md transition-colors" href="#">工单追踪</a>
+</nav>
+</div>
+<div class="flex items-center gap-lg">
+<div class="flex items-center gap-sm">
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors cursor-pointer active:scale-95">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors cursor-pointer active:scale-95">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors cursor-pointer active:scale-95">
+<span class="material-symbols-outlined" data-icon="dark_mode">dark_mode</span>
+</button>
+</div>
+<div class="h-8 w-[1px] bg-outline-variant mx-xs"></div>
+<div class="flex items-center gap-sm group cursor-pointer">
+<div class="text-right">
+<p class="font-label-md text-label-md text-on-surface font-bold leading-tight">管理员</p>
+<p class="text-[10px] text-on-surface-variant">物业经理</p>
+</div>
+<img alt="管理员头像" class="w-9 h-9 rounded-full border-2 border-outline-variant group-hover:border-primary transition-colors" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhxt6S7jzfbhDRDzxjAsWGi1gVj7U99NeqkQMAeLGj2OL5xy4XSOASls1131eSirukgi3RCwDUc7XjnCBF-mMLvO_JgY6ZQFAf0g3vbAVpDifZCokJvc8jxu5nWTQQC_DphVvax3PVKMjc5vjMhCYhkhbY1JwKFgX7tjiQqDtoxPBJhYQGdOJ_LyhQmQFkt35i1IDuuoI0zqNv-M6wNQY1rN-2qQ2DMcBEVYgyM4d5zSRwHB5pYzFBiA8DwKTCUV2JZ_4pNOdhQSs"/>
+</div>
+</div>
+</header>
+<!-- Content Canvas -->
+<div class="flex-1 overflow-y-auto p-lg bg-[#F5F7FA]">
+<!-- Breadcrumbs & Actions -->
+<div class="flex justify-between items-end mb-lg">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">巡检计划管理</h2>
+<p class="text-on-surface-variant mt-xs">规划并监控社区内各区域设备的高效检查路径</p>
+</div>
+<div class="flex gap-md">
+<button class="px-lg py-sm bg-white border border-outline-variant text-on-surface rounded-lg hover:bg-surface-container-low transition-all flex items-center gap-sm" onclick="alert('导出报表...')">
+<span class="material-symbols-outlined text-[18px]" data-icon="download">download</span>
+                        导出报表
+                    </button>
+<button class="px-lg py-sm bg-primary text-white rounded-lg hover:shadow-lg active:scale-95 transition-all flex items-center gap-sm" id="openModal">
+<span class="material-symbols-outlined text-[18px]" data-icon="add">add</span>
+                        新建巡检计划
+                    </button>
+</div>
+</div>
+<!-- Stats Overview Cards (Bento Style) -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-md mb-lg">
+<div class="bg-white p-lg rounded-xl shadow-sm border border-outline-variant flex justify-between items-center overflow-hidden relative">
+<div class="z-10">
+<p class="text-on-surface-variant font-label-md">总计划数</p>
+<h3 class="text-display-lg font-display-lg text-on-surface mt-xs">24</h3>
+</div>
+<div class="text-primary/10 absolute -right-4 -bottom-4">
+<span class="material-symbols-outlined text-[100px]" data-icon="assignment">assignment</span>
+</div>
+</div>
+<div class="bg-white p-lg rounded-xl shadow-sm border border-outline-variant flex justify-between items-center overflow-hidden relative">
+<div class="z-10">
+<p class="text-on-surface-variant font-label-md">已启用计划</p>
+<h3 class="text-display-lg font-display-lg text-secondary mt-xs">18</h3>
+</div>
+<div class="text-secondary/10 absolute -right-4 -bottom-4">
+<span class="material-symbols-outlined text-[100px]" data-icon="check_circle">check_circle</span>
+</div>
+</div>
+<div class="bg-white p-lg rounded-xl shadow-sm border border-outline-variant flex justify-between items-center overflow-hidden relative">
+<div class="z-10">
+<p class="text-on-surface-variant font-label-md">待执行任务</p>
+<h3 class="text-display-lg font-display-lg text-tertiary mt-xs">12</h3>
+</div>
+<div class="text-tertiary/10 absolute -right-4 -bottom-4">
+<span class="material-symbols-outlined text-[100px]" data-icon="schedule">schedule</span>
+</div>
+</div>
+<div class="bg-white p-lg rounded-xl shadow-sm border border-outline-variant flex justify-between items-center overflow-hidden relative">
+<div class="z-10">
+<p class="text-on-surface-variant font-label-md">关联设备数</p>
+<h3 class="text-display-lg font-display-lg text-primary mt-xs">142</h3>
+</div>
+<div class="text-primary/10 absolute -right-4 -bottom-4">
+<span class="material-symbols-outlined text-[100px]" data-icon="devices">devices</span>
+</div>
+</div>
+</div>
+<!-- Main List Section -->
+<div class="bg-white rounded-xl shadow-sm border border-outline-variant overflow-hidden">
+<!-- Filters Toolbar -->
+<div class="p-md border-b border-outline-variant flex flex-wrap gap-md items-center justify-between bg-surface-container-lowest">
+<div class="flex gap-md">
+<div class="flex p-1 bg-surface-container-low rounded-lg">
+<button class="px-lg py-xs bg-white text-primary shadow-sm rounded-md font-label-md transition-all">全部</button>
+<button class="px-lg py-xs text-on-surface-variant hover:text-primary font-label-md transition-all">已启用</button>
+<button class="px-lg py-xs text-on-surface-variant hover:text-primary font-label-md transition-all">已禁用</button>
+</div>
+<select class="bg-white border-outline-variant rounded-lg text-body-md py-xs px-md focus:ring-primary">
+<option>所有频率</option>
+<option>每日</option>
+<option>每周</option>
+<option>每月</option>
+</select>
+</div>
+<div class="text-on-surface-variant text-label-sm">
+                        共查询到 <span class="text-primary font-bold">24</span> 条巡检计划
+                    </div>
+</div>
+<!-- Table Content -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-[#FAFAFA] border-b border-outline-variant">
+<tr>
+<th class="px-lg py-md text-on-surface-variant font-medium text-label-md">计划名称</th>
+<th class="px-lg py-md text-on-surface-variant font-medium text-label-md">执行频率</th>
+<th class="px-lg py-md text-on-surface-variant font-medium text-label-md">关联设备</th>
+<th class="px-lg py-md text-on-surface-variant font-medium text-label-md">负责人</th>
+<th class="px-lg py-md text-on-surface-variant font-medium text-label-md">创建时间</th>
+<th class="px-lg py-md text-on-surface-variant font-medium text-label-md">当前状态</th>
+<th class="px-lg py-md text-on-surface-variant font-medium text-label-md text-center">操作</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-lg py-md">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded bg-primary/10 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]" data-icon="electric_bolt">electric_bolt</span>
+</div>
+<span class="font-title-md text-on-surface group-hover:text-primary transition-colors">配电房日常巡检</span>
+</div>
+</td>
+<td class="px-lg py-md">
+<span class="px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-label-sm">每日 (09:00)</span>
+</td>
+<td class="px-lg py-md">
+<div class="flex items-center gap-xs">
+<span class="font-bold text-on-surface">12</span>
+<span class="text-label-sm text-on-surface-variant">台设备</span>
+</div>
+</td>
+<td class="px-lg py-md">
+<div class="flex items-center gap-sm">
+<img alt="负责人" class="w-6 h-6 rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQ6FoFIRpncXQhz8gvbbr7UxfE50D4UXR6uddm5qyoeVnAaFa83yMx_KDpK5m5MiLrBl3wjoupfSQy4MQ0eVJDj98RmPLX8xgXKv6T8918-VwpqY7S_n_prsWz4Udg40wfcm0saDitOnHvEGaoytFwgsYot73PdUfyu9xkO9e4sdP8RTLCEBW74NJIM0FTUWn5FZ434RJJYqWOJaQG_HrHQs3PAskN_Fs-3WxboMBb4AP8VNIxQw99QqoGLMid3NvWm0wKfYzPR40"/>
+<span>张三 (维保主管)</span>
+</div>
+</td>
+<td class="px-lg py-md text-on-surface-variant">2023-11-20</td>
+<td class="px-lg py-md">
+<div class="flex items-center gap-md">
+<div class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-outline-variant rounded-full peer peer-focus:ring-2 peer-focus:ring-primary/30 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</div>
+<span class="text-secondary font-medium">已启用</span>
+</div>
+</td>
+<td class="px-lg py-md">
+<div class="flex justify-center gap-md">
+<button class="text-primary hover:underline font-medium">详情</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="edit">edit</span>
+</button>
+<button class="text-on-surface-variant hover:text-error transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="delete">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-lg py-md">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded bg-tertiary/10 text-tertiary flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]" data-icon="water_drop">water_drop</span>
+</div>
+<span class="font-title-md text-on-surface group-hover:text-primary transition-colors">二次供水泵房月检</span>
+</div>
+</td>
+<td class="px-lg py-md">
+<span class="px-3 py-1 rounded-full bg-orange-100 text-orange-700 text-label-sm">每月 (15号)</span>
+</td>
+<td class="px-lg py-md">
+<div class="flex items-center gap-xs">
+<span class="font-bold text-on-surface">5</span>
+<span class="text-label-sm text-on-surface-variant">台设备</span>
+</div>
+</td>
+<td class="px-lg py-md">
+<div class="flex items-center gap-sm">
+<img alt="负责人" class="w-6 h-6 rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuASHbeCpFC2tasyQm-N9zdBYFGudm6VFQGuEkMJYJQrC03DF_gJ27inAtWEkw_eNcFBNr58YylujpOiOVrur8tNXxEe3LCefpAS9vOi89tFjhLeSl2HwnHYfjPASGCO3hePc7sghJhhohzmlv6GhDbA40EjH6DUca4kBKjbHzWlflTdAcrBFa9Opr87E0Tv_5tjLCTGpyo5OlGVVPmWqyNzu2RoqzH5mmyQkwWcq76YDe7-Y00XiXlF7St8vsNVfBodc3I-jRxPhg0"/>
+<span>李四</span>
+</div>
+</td>
+<td class="px-lg py-md text-on-surface-variant">2023-10-15</td>
+<td class="px-lg py-md">
+<div class="flex items-center gap-md">
+<div class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-outline-variant rounded-full peer peer-focus:ring-2 peer-focus:ring-primary/30 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</div>
+<span class="text-secondary font-medium">已启用</span>
+</div>
+</td>
+<td class="px-lg py-md">
+<div class="flex justify-center gap-md">
+<button class="text-primary hover:underline font-medium">详情</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="edit">edit</span>
+</button>
+<button class="text-on-surface-variant hover:text-error transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="delete">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 (Disabled) -->
+<tr class="hover:bg-surface-container-low transition-colors group opacity-75">
+<td class="px-lg py-md">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded bg-surface-container-high text-on-surface-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]" data-icon="fire_extinguisher">fire_extinguisher</span>
+</div>
+<span class="font-title-md text-on-surface group-hover:text-primary transition-colors line-through">消防器材周度点检</span>
+</div>
+</td>
+<td class="px-lg py-md">
+<span class="px-3 py-1 rounded-full bg-surface-container-high text-on-surface-variant text-label-sm">每周 (周三)</span>
+</td>
+<td class="px-lg py-md">
+<div class="flex items-center gap-xs">
+<span class="font-bold text-on-surface">85</span>
+<span class="text-label-sm text-on-surface-variant">台设备</span>
+</div>
+</td>
+<td class="px-lg py-md">
+<div class="flex items-center gap-sm">
+<img alt="负责人" class="w-6 h-6 rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXfsAQcWRMgWK3WOrDsZO32LQ38m5361TCpI3SM4vFx1wv7FwrCqnU8CfcNLYAAL3GG0Ukn_TB9tgENhYzp4xJVdJx41LU_cjAWU2cbDFySTUHnMfFdaaTqAgtOAJ2MeRdpoP-fTs8HhUqPWDGCcrReJVGSGEGrgcGR6p-rXqExNR85CguQJnBWkmbgPLx5rqewCujjcyrP1rvKTrvkNExoL_eTl0Un1zA7BmA7lsBMPfHmyikBkv5b0fa95h3NhIJa1vjYWeR1qM"/>
+<span>王五</span>
+</div>
+</td>
+<td class="px-lg py-md text-on-surface-variant">2023-09-01</td>
+<td class="px-lg py-md">
+<div class="flex items-center gap-md">
+<div class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-outline-variant rounded-full peer peer-focus:ring-2 peer-focus:ring-primary/30 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</div>
+<span class="text-error font-medium">已禁用</span>
+</div>
+</td>
+<td class="px-lg py-md">
+<div class="flex justify-center gap-md">
+<button class="text-primary hover:underline font-medium">详情</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="edit">edit</span>
+</button>
+<button class="text-on-surface-variant hover:text-error transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="delete">delete</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="p-md bg-[#FAFAFA] flex justify-between items-center text-label-md text-on-surface-variant border-t border-outline-variant">
+<div class="flex items-center gap-md">
+<span>显示第 1 至 10 条，共 24 条</span>
+</div>
+<div class="flex gap-xs">
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant hover:bg-white transition-colors cursor-not-allowed opacity-50">
+<span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded bg-primary text-white shadow-sm">1</button>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant hover:bg-white transition-colors">2</button>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant hover:bg-white transition-colors">3</button>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant hover:bg-white transition-colors">
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Modal Backdrop -->
+<div class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[60] hidden transition-opacity duration-300 opacity-0 flex items-center justify-center" id="modalBackdrop">
+<!-- Create Plan Modal -->
+<div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl overflow-hidden transform transition-all duration-300 scale-95 opacity-0" id="modalContent">
+<div class="p-lg border-b border-outline-variant flex justify-between items-center">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">新建巡检计划</h3>
+<button class="text-on-surface-variant hover:text-on-surface transition-colors" id="closeModal">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+</div>
+<div class="p-lg space-y-lg">
+<div class="grid grid-cols-2 gap-lg">
+<div class="space-y-sm">
+<label class="font-label-md text-on-surface-variant">计划名称</label>
+<input class="w-full px-md py-sm border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none" placeholder="例如：生活水箱年度清洗巡查" type="text"/>
+</div>
+<div class="space-y-sm">
+<label class="font-label-md text-on-surface-variant">执行频率</label>
+<select class="w-full px-md py-sm border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary outline-none">
+<option>每日</option>
+<option>每周</option>
+<option>每月</option>
+<option>每季度</option>
+</select>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-lg">
+<div class="space-y-sm">
+<label class="font-label-md text-on-surface-variant">负责人</label>
+<select class="w-full px-md py-sm border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary outline-none">
+<option>张三 (维保主管)</option>
+<option>李四</option>
+<option>王五</option>
+</select>
+</div>
+<div class="space-y-sm">
+<label class="font-label-md text-on-surface-variant">开始日期</label>
+<input class="w-full px-md py-sm border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary outline-none" type="date"/>
+</div>
+</div>
+<div class="space-y-sm">
+<label class="font-label-md text-on-surface-variant flex justify-between">
+                        关联设备 
+                        <span class="text-primary cursor-pointer hover:underline">+ 选择设备</span>
+</label>
+<div class="border border-outline-variant rounded-lg p-md bg-surface-container-low min-h-[100px] flex flex-wrap gap-sm items-start content-start">
+<div class="bg-white px-md py-xs rounded border border-outline-variant flex items-center gap-xs">
+<span class="text-label-sm">#A102 供水泵</span>
+<span class="material-symbols-outlined text-[14px] cursor-pointer" data-icon="close">close</span>
+</div>
+<div class="bg-white px-md py-xs rounded border border-outline-variant flex items-center gap-xs">
+<span class="text-label-sm">#B203 传感器</span>
+<span class="material-symbols-outlined text-[14px] cursor-pointer" data-icon="close">close</span>
+</div>
+<div class="text-on-surface-variant text-label-sm italic self-center ml-sm">已选择 2 台设备</div>
+</div>
+</div>
+<div class="space-y-sm">
+<label class="font-label-md text-on-surface-variant">巡检备注 (选填)</label>
+<textarea class="w-full px-md py-sm border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary outline-none" placeholder="输入巡检过程中的特殊注意事项..." rows="3"></textarea>
+</div>
+</div>
+<div class="p-lg bg-surface-container-low border-t border-outline-variant flex justify-end gap-md">
+<button class="px-xl py-sm bg-white border border-outline-variant rounded-lg hover:bg-white/80 transition-all" id="cancelModal">取消</button>
+<button class="px-xl py-sm bg-primary text-white rounded-lg hover:opacity-90 active:scale-95 transition-all shadow-md">确认创建</button>
+</div>
+</div>
+</div>
+<script>
+        // Modal Interaction Logic
+        const modalBackdrop = document.getElementById('modalBackdrop');
+        const modalContent = document.getElementById('modalContent');
+        const openModalBtn = document.getElementById('openModal');
+        const closeModalBtn = document.getElementById('closeModal');
+        const cancelModalBtn = document.getElementById('cancelModal');
+
+        const openModal = () => {
+            modalBackdrop.classList.remove('hidden');
+            setTimeout(() => {
+                modalBackdrop.classList.remove('opacity-0');
+                modalContent.classList.remove('opacity-0', 'scale-95');
+            }, 10);
+        };
+
+        const closeModal = () => {
+            modalBackdrop.classList.add('opacity-0');
+            modalContent.classList.add('opacity-0', 'scale-95');
+            setTimeout(() => {
+                modalBackdrop.classList.add('hidden');
+            }, 300);
+        };
+
+        openModalBtn.addEventListener('click', openModal);
+        closeModalBtn.addEventListener('click', closeModal);
+        cancelModalBtn.addEventListener('click', closeModal);
+        
+        // Background click to close
+        modalBackdrop.addEventListener('click', (e) => {
+            if (e.target === modalBackdrop) closeModal();
+        });
+
+        // Theme Toggle Micro-interaction (Placeholder for demo)
+        const darkToggle = document.querySelector('[data-icon="dark_mode"]');
+        darkToggle.parentElement.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+        });
+    </script>
+</body></html>

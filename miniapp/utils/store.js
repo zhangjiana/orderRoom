@@ -1,5 +1,6 @@
 const LAST_PHONE_KEY = "yanqing_last_phone";
 const MERCHANT_TOKEN_KEY = "yanqing_merchant_token";
+const USER_TOKEN_KEY = "yanqing_user_token";
 
 function pad(value) {
   return String(value).padStart(2, "0");
@@ -33,6 +34,18 @@ function clearMerchantToken() {
   wx.removeStorageSync(MERCHANT_TOKEN_KEY);
 }
 
+function getUserToken() {
+  return wx.getStorageSync(USER_TOKEN_KEY) || "";
+}
+
+function saveUserToken(token) {
+  if (token) wx.setStorageSync(USER_TOKEN_KEY, token);
+}
+
+function clearUserToken() {
+  wx.removeStorageSync(USER_TOKEN_KEY);
+}
+
 function getBookingStatusClass(status) {
   const classMap = {
     待确认: "status-pending",
@@ -60,7 +73,7 @@ function mapRoom(room) {
     status: room.status,
     level: room.status === "available" ? "available" : "warm",
     levelClass: room.status === "available" ? "status-available" : "status-warm",
-    availability: room.status === "available" ? "可预订" : "需确认",
+    availability: room.status === "available" ? "可申请" : "需确认",
     nextBooking: "请以商家确认为准",
     activeCount: 0,
   };
@@ -106,9 +119,16 @@ function mapBooking(booking) {
     occasion: booking.occasion || "未填写",
     budget: booking.budget || booking.minSpend,
     remarks: booking.remarks,
+    invitationToken: booking.invitationToken || "",
     status: booking.statusLabel,
     rawStatus: booking.rawStatus || booking.status,
     statusClass: getBookingStatusClass(booking.statusLabel),
+    timelineStep:
+      (booking.rawStatus || booking.status) === "completed"
+        ? 3
+        : (booking.rawStatus || booking.status) === "confirmed"
+          ? 2
+          : 1,
     estimateFee: booking.minSpend,
     createdAt: booking.createdAt,
   };
@@ -121,6 +141,9 @@ module.exports = {
   getMerchantToken,
   saveMerchantToken,
   clearMerchantToken,
+  getUserToken,
+  saveUserToken,
+  clearUserToken,
   getBookingStatusClass,
   mapRoom,
   mapMerchant,

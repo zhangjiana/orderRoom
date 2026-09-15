@@ -36,5 +36,7 @@ export default () => ({
   wechatMiniapp: {
     appId: process.env.WECHAT_MINIAPP_APPID || "",
     appSecret: process.env.WECHAT_MINIAPP_SECRET || "",
+    bookingStatusTemplateId: process.env.WECHAT_BOOKING_STATUS_TEMPLATE_ID || "",
+    bookingStatusPage: process.env.WECHAT_BOOKING_STATUS_PAGE || "pages/bookings/index",
   },
 });

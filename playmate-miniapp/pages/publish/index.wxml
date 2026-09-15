@@ -1,0 +1,15 @@
+<view class="page"><text class="eyebrow">MAKE A LITTLE PLAN</text><view class="title">快乐，从你发起。</view><view class="sub">不用精心策划，一起玩一小时就很好。</view><view class="notice">本地体验版 · 发布仅保存在当前设备。</view>
+<view class="card">
+<view class="field"><view class="label">想一起玩什么？</view><input maxlength="60" placeholder="比如：周六一起去公园骑车" value="{{form.title}}" data-key="title" bindinput="field"/></view>
+<view class="field"><view class="label">活动类型</view><picker range="{{categories}}" bindchange="category"><view class="picker">{{form.category}}　⌄</view></picker></view>
+<view class="row"><view class="field half"><view class="label">哪一天</view><picker mode="date" value="{{form.date}}" data-key="date" bindchange="field"><view class="picker">{{form.date}}</view></picker></view><view class="field half"><view class="label">几点开始</view><picker mode="time" value="{{form.time}}" data-key="time" bindchange="field"><view class="picker">{{form.time}}</view></picker></view></view>
+<view class="sub">每次 1 小时，开始时截止报名。</view>
+<view class="field"><view class="label">公共集合地点</view><input maxlength="60" value="{{form.location}}" data-key="location" bindinput="field" placeholder="公园名称 + 公共入口，勿填住址"/></view>
+<view class="row"><view class="field half"><view class="label">最小年龄</view><input type="number" value="{{form.minAge}}" data-key="minAge" bindinput="field"/></view><view class="field half"><view class="label">最大年龄</view><input type="number" value="{{form.maxAge}}" data-key="maxAge" bindinput="field"/></view></view>
+<view class="row"><view class="field half"><view class="label">至少几个家庭成行</view><input type="number" value="{{form.minFamilies}}" data-key="minFamilies" bindinput="field"/></view><view class="field half"><view class="label">最多几个家庭</view><input type="number" value="{{form.capacity}}" data-key="capacity" bindinput="field"/></view></view>
+<view class="sub">含你家在内，建议 2～4 个家庭。</view>
+<view class="field"><view class="label">补充说明</view><textarea maxlength="300" value="{{form.note}}" data-key="note" bindinput="field" placeholder="带什么、怎么玩、遇雨安排……"/></view>
+</view>
+<checkbox-group bindchange="agree"><label class="agreement"><checkbox color="#285b43" value="yes" checked="{{agreed}}"/>公共场所见面，每个家庭由家长全程陪同</label></checkbox-group>
+<view wx:if="{{error}}" class="error">{{error}}</view><button class="primary" bindtap="submit" loading="{{busy}}" disabled="{{busy}}">发布本地约玩</button><view class="footer-note">你将自动加入本次活动，占 1 个家庭名额。</view>
+</view>

@@ -1,0 +1,11 @@
+const test = require('node:test');
+const assert = require('node:assert/strict');
+const d = require('../utils/domain');
+const now = new Date(2026, 8, 14, 10).getTime();
+const input = () => ({ title: '公园玩球', location: '中心公园公共草坪', date: '2026-09-19', time: '16:00', minAge: 4, maxAge: 8, minFamilies: 2, capacity: 3, category: '户外运动', note: '自带水' });
+test('发布者计入人数且报名后成行', () => { const a = d.create(input(), 'host', now); assert.equal(d.status(a, now), '待成行'); assert.equal(d.status(d.join(a, 'me', 6, now), now), '已成行'); });
+test('重复报名和满员均拒绝', () => { let a = d.join(d.create(input(), 'host', now), 'me', 6, now); assert.throws(() => d.join(a, 'me', 6, now), /已经/); a = d.join(a, 'third', 6, now); assert.throws(() => d.join(a, 'fourth', 6, now), /满/); });
+test('退出恢复待成行，发起人退出即取消', () => { const a = d.join(d.create(input(), 'host', now), 'me', 6, now); assert.equal(d.status(d.leave(a, 'me', now), now), '待成行'); assert.equal(d.status(d.leave(a, 'host', now), now), '已取消'); });
+test('年龄不符和开始后不能报名', () => { const a = d.create(input(), 'host', now); assert.throws(() => d.join(a, 'me', 9, now), /年龄/); assert.throws(() => d.join(a, 'me', 6, a.startAt), /报名/); });
+test('截止不足人数未成行，正常结束可识别', () => { const a = d.create(input(), 'host', now); assert.equal(d.status(a, a.startAt), '未成行'); const b = d.join(a, 'me', 6, now); assert.equal(d.status(b, b.endAt), '已结束'); });
+test('拒绝空字段、过去时间、非法容量和年龄范围', () => { for (const patch of [{title:' '}, {location:''}, {date:'2020-01-01'}, {capacity:1}, {minAge:9,maxAge:4}, {date:'2026-02-31'}, {capacity:NaN}]) assert.throws(() => d.create({...input(),...patch}, 'host', now)); });

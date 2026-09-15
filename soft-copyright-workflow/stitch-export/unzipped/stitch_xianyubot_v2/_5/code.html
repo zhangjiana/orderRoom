@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Noto+Sans+SC:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body { font-family: 'Inter', 'Noto Sans SC', sans-serif; background-color: #f7f9fc; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .map-dot { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
+        .map-dot:hover { transform: scale(1.5); z-index: 50; }
+        .pulse-red { animation: pulse-red 2s infinite; }
+        @keyframes pulse-red {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(186, 26, 26, 0.7); }
+            70% { transform: scale(1.2); box-shadow: 0 0 0 10px rgba(186, 26, 26, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(186, 26, 26, 0); }
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e0e3e6; border-radius: 10px; }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#0057c2",
+                        "on-primary": "#ffffff",
+                        "primary-container": "#006ef2",
+                        "secondary": "#266d00",
+                        "on-secondary": "#ffffff",
+                        "secondary-container": "#85fa51",
+                        "on-secondary-container": "#287100",
+                        "surface": "#f7f9fc",
+                        "on-surface": "#191c1e",
+                        "surface-variant": "#e0e3e6",
+                        "on-surface-variant": "#414755",
+                        "outline": "#727786",
+                        "outline-variant": "#c1c6d7",
+                        "error": "#ba1a1a",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#f2f4f7",
+                        "surface-container": "#eceef1",
+                        "surface-container-high": "#e6e8eb",
+                        "inverse-surface": "#2d3133"
+                    },
+                    "spacing": { "gutter": "16px", "xl": "32px", "base": "8px", "sm": "8px", "md": "16px", "lg": "24px", "xs": "4px" },
+                    "fontSize": {
+                        "display-lg": ["30px", { "lineHeight": "38px", "fontWeight": "600" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "title-md": ["16px", { "lineHeight": "24px", "fontWeight": "500" }],
+                        "body-md": ["14px", { "lineHeight": "22px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="overflow-hidden">
+<!-- Shell Container -->
+<div class="flex h-screen w-full overflow-hidden">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-[240px] bg-surface-container-lowest border-r border-outline-variant flex flex-col z-50">
+<div class="p-lg">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary text-[20px]">precision_manufacturing</span>
+</div>
+<div>
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary">智维云</h1>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-wider">社区物业巡检平台</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 px-sm space-y-1 overflow-y-auto custom-scrollbar">
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md text-body-md">驾驶舱</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">precision_manufacturing</span>
+<span class="font-body-md text-body-md">设备管理</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">event_note</span>
+<span class="font-body-md text-body-md">巡检计划</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">assignment</span>
+<span class="font-body-md text-body-md">任务管理</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">engineering</span>
+<span class="font-body-md text-body-md">工单中心</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm bg-secondary-container text-on-secondary-container border-r-[3px] border-primary font-title-md text-title-md rounded-lg" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">map</span>
+<span class="font-body-md text-body-md">空间地图</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-body-md text-body-md">统计报表</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md text-body-md">系统设置</span>
+</a>
+</nav>
+<div class="p-md border-t border-outline-variant">
+<button class="w-full bg-primary text-on-primary py-sm rounded-lg font-label-md flex items-center justify-center gap-xs">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                    发起巡检
+                </button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 ml-[240px] flex flex-col h-screen">
+<!-- TopNavBar -->
+<header class="sticky top-0 z-40 w-full flex justify-between items-center h-16 px-lg bg-surface border-b border-outline-variant">
+<div class="flex items-center gap-lg">
+<h2 class="font-title-md text-title-md text-on-surface font-bold">空间地图 - 万科翡翠公园</h2>
+<div class="hidden md:flex gap-md">
+<span class="text-primary border-b-2 border-primary font-title-md text-title-md pb-1 cursor-pointer">园区视图</span>
+<span class="text-on-surface-variant hover:text-primary transition-colors cursor-pointer font-label-md text-label-md">楼栋透视</span>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="flex items-center bg-surface-container-high px-md py-xs rounded-full gap-sm">
+<span class="material-symbols-outlined text-outline text-[20px]">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md w-48" placeholder="搜索设备或点位..." type="text"/>
+</div>
+<div class="flex gap-sm">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">help_outline</span>
+</button>
+</div>
+<div class="flex items-center gap-sm border-l border-outline-variant pl-md ml-xs">
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant">
+<img alt="Admin" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjZ29Cv6bQXFuhiUZI0yN8LLC9sc-iUIcs8EAq7VpW5rpFimIKoE0MqE5kZ2kpkPMjzY7xrmUGErgpRFKS1PO87aGSNco-8LdPD9QpFnSSkRXjXEkyL4S3Jv-by5lUyt6Jd86itFZwkt5doTqyhFbKZxIloA3UvjP_GC59MEtIUBbCVi0JfO5OS6OZNZ41RLdiHJGABY8xUU1h154VJ3l7nhDphHK6zcC5EjskJgA6IlGRl9IA56B0nKmWwtorsexXkV5uT-ceLP8"/>
+</div>
+<span class="font-label-md text-on-surface">管理员</span>
+</div>
+</div>
+</header>
+<!-- Map Content Split View -->
+<div class="flex-1 flex overflow-hidden">
+<!-- Left: Spatial Tree -->
+<aside class="w-72 bg-surface-container-lowest border-r border-outline-variant flex flex-col overflow-hidden">
+<div class="p-md border-b border-outline-variant bg-surface-container-low">
+<h3 class="font-title-md text-title-md text-on-surface flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary">account_tree</span>
+                            空间结构
+                        </h3>
+</div>
+<div class="flex-1 overflow-y-auto p-sm custom-scrollbar">
+<!-- Root: Campus -->
+<div class="mb-sm">
+<div class="flex items-center gap-sm p-sm bg-primary-container/10 rounded text-primary font-bold cursor-pointer">
+<span class="material-symbols-outlined text-[18px]">domain</span>
+<span class="font-body-md">万科翡翠公园</span>
+</div>
+<!-- Buildings -->
+<div class="ml-6 mt-1 space-y-1">
+<!-- Building 1 (Expanded) -->
+<div>
+<div class="flex items-center justify-between p-sm hover:bg-surface-container-low rounded cursor-pointer group">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-[18px] text-outline">keyboard_arrow_down</span>
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">apartment</span>
+<span class="font-body-md text-on-surface">A座 - 写字楼</span>
+</div>
+<span class="text-xs text-error font-bold">2 告警</span>
+</div>
+<!-- Floors -->
+<div class="ml-6 space-y-0.5">
+<div class="p-sm pl-md hover:bg-surface-container-low rounded cursor-pointer text-on-surface-variant text-body-md flex items-center justify-between">
+<span>28F 顶层机房</span>
+<div class="w-2 h-2 rounded-full bg-error"></div>
+</div>
+<div class="p-sm pl-md bg-secondary-container/20 text-on-secondary-container rounded cursor-pointer font-medium text-body-md flex items-center justify-between">
+<span>15F 办公区</span>
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+</div>
+<div class="p-sm pl-md hover:bg-surface-container-low rounded cursor-pointer text-on-surface-variant text-body-md flex items-center justify-between">
+<span>B1F 地库停车场</span>
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+</div>
+</div>
+</div>
+<!-- Building 2 -->
+<div class="flex items-center gap-sm p-sm hover:bg-surface-container-low rounded cursor-pointer text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px] text-outline">keyboard_arrow_right</span>
+<span class="material-symbols-outlined text-[18px]">apartment</span>
+<span class="font-body-md">B座 - 酒店式公寓</span>
+</div>
+<!-- Building 3 -->
+<div class="flex items-center gap-sm p-sm hover:bg-surface-container-low rounded cursor-pointer text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px] text-outline">keyboard_arrow_right</span>
+<span class="material-symbols-outlined text-[18px]">apartment</span>
+<span class="font-body-md">C座 - 商业综合体</span>
+</div>
+</div>
+</div>
+</div>
+<div class="p-md bg-surface-container-low border-t border-outline-variant">
+<div class="flex justify-between items-center text-label-sm text-on-surface-variant mb-sm">
+<span>设备统计</span>
+<span class="text-primary font-bold">124 总数</span>
+</div>
+<div class="flex h-1.5 w-full bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-[85%]"></div>
+<div class="h-full bg-error w-[15%]"></div>
+</div>
+<div class="flex justify-between mt-xs text-[10px] text-on-surface-variant">
+<span class="flex items-center gap-xs"><i class="w-2 h-2 rounded-full bg-secondary block"></i> 105 运行中</span>
+<span class="flex items-center gap-xs"><i class="w-2 h-2 rounded-full bg-error block"></i> 19 异常</span>
+</div>
+</div>
+</aside>
+<!-- Center: Map Canvas -->
+<section class="flex-1 relative bg-surface-container overflow-hidden group">
+<!-- Map Controls -->
+<div class="absolute top-md right-md flex flex-col gap-sm z-30">
+<div class="flex flex-col bg-surface-container-lowest rounded-lg shadow-md border border-outline-variant">
+<button class="p-sm hover:bg-surface-container-low border-b border-outline-variant"><span class="material-symbols-outlined">add</span></button>
+<button class="p-sm hover:bg-surface-container-low"><span class="material-symbols-outlined">remove</span></button>
+</div>
+<button class="bg-surface-container-lowest p-sm rounded-lg shadow-md border border-outline-variant hover:bg-surface-container-low">
+<span class="material-symbols-outlined">my_location</span>
+</button>
+<button class="bg-surface-container-lowest p-sm rounded-lg shadow-md border border-outline-variant hover:bg-surface-container-low">
+<span class="material-symbols-outlined">layers</span>
+</button>
+</div>
+<!-- Map Overlay Stats -->
+<div class="absolute top-md left-md z-30">
+<div class="bg-surface-container-lowest/90 backdrop-blur-md border border-outline-variant px-md py-sm rounded-xl shadow-sm flex items-center gap-lg">
+<div class="flex flex-col">
+<span class="text-[10px] text-on-surface-variant uppercase font-bold">当前层级</span>
+<span class="text-body-md font-bold text-on-surface">A座 / 15F 办公区</span>
+</div>
+<div class="h-8 w-px bg-outline-variant"></div>
+<div class="flex items-center gap-sm">
+<div class="w-2 h-2 rounded-full bg-error pulse-red"></div>
+<span class="text-body-md text-error font-bold">2 处告警待处理</span>
+</div>
+</div>
+</div>
+<!-- Main Map Rendering (Pseudo-CAD/Floorplan) -->
+<div class="w-full h-full relative flex items-center justify-center p-xl">
+<div class="relative w-full max-w-4xl aspect-[16/9] bg-white rounded-xl shadow-2xl overflow-hidden border border-outline-variant">
+<!-- Background Map Image -->
+<img alt="Technical blueprint" class="w-full h-full object-cover opacity-10 grayscale mix-blend-multiply" data-alt="A clean, minimalist architectural floor plan blueprint displayed on a white technical paper surface. The drawing features thin, precise grey lines representing walls, corridors, and rooms of a modern office complex. The aesthetic is high-tech and professional, with a light-mode color palette dominated by whites and soft greys. The lighting is even and bright, emphasizing clarity and architectural precision." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEd5GR9IGvjH23RIeFD3q8sX3mxp_778t_lQ1RgRjzubylsP_pLq_SJvI-Ea4tbFuyCWaAm2cwCHcwVxPZdfTLRg0775Xcf8h5gWfp4OWh-eoVi3ArZrH2_2Y0uWXIIFjnX1KX0748f1spr4R4FKJOK7wuo2oRn9JMaGRAIlbAOmkUAPZ7vKzcdOIMdSm4GEdfgm7keCdRNQJKK8r-Oe92Za5YGW_04zJIQhdh9fI5Qb9kJ3ytUjwUAv0MhdbjggrAyDcV_R9TEh4"/>
+<!-- SVG Blueprint Lines -->
+<svg class="absolute inset-0 w-full h-full text-outline-variant" fill="none" viewbox="0 0 800 450">
+<path d="M50 50 H750 V400 H50 Z" stroke="currentColor" stroke-width="2"></path>
+<path d="M200 50 V400 M400 50 V400 M600 50 V400" stroke="currentColor" stroke-width="1"></path>
+<path d="M50 200 H750" stroke="currentColor" stroke-dasharray="4 4" stroke-width="1"></path>
+<rect fill="#f8fafc" height="80" rx="4" stroke="currentColor" width="100" x="250" y="100"></rect>
+<rect fill="#f8fafc" height="80" rx="4" stroke="currentColor" width="120" x="450" y="100"></rect>
+<rect fill="#f8fafc" height="100" rx="4" stroke="currentColor" width="300" x="250" y="250"></rect>
+</svg>
+<!-- Interactive Device Markers -->
+<!-- Marker 1: Normal -->
+<div class="absolute top-[25%] left-[35%] map-dot group/marker" onclick="togglePopup('popup-1')">
+<div class="w-6 h-6 bg-secondary text-on-secondary rounded-full flex items-center justify-center shadow-lg border-2 border-white">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">router</span>
+</div>
+<div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover/marker:block whitespace-nowrap bg-inverse-surface text-white text-[10px] px-2 py-1 rounded">
+                                    核心交换机-A1
+                                </div>
+</div>
+<!-- Marker 2: Error -->
+<div class="absolute top-[30%] left-[65%] map-dot group/marker pulse-red" onclick="togglePopup('popup-2')">
+<div class="w-8 h-8 bg-error text-on-error rounded-full flex items-center justify-center shadow-lg border-2 border-white">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">ac_unit</span>
+</div>
+<div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover/marker:block whitespace-nowrap bg-inverse-surface text-white text-[10px] px-2 py-1 rounded">
+                                    空调机组-E04 (故障)
+                                </div>
+</div>
+<!-- Marker 3: Normal -->
+<div class="absolute top-[70%] left-[45%] map-dot group/marker" onclick="togglePopup('popup-3')">
+<div class="w-6 h-6 bg-secondary text-on-secondary rounded-full flex items-center justify-center shadow-lg border-2 border-white">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">videocam</span>
+</div>
+<div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover/marker:block whitespace-nowrap bg-inverse-surface text-white text-[10px] px-2 py-1 rounded">
+                                    监控点-西南
+                                </div>
+</div>
+<!-- Marker 4: Warning -->
+<div class="absolute top-[65%] left-[20%] map-dot group/marker" onclick="togglePopup('popup-4')">
+<div class="w-6 h-6 bg-tertiary text-on-tertiary rounded-full flex items-center justify-center shadow-lg border-2 border-white">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</div>
+<div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover/marker:block whitespace-nowrap bg-inverse-surface text-white text-[10px] px-2 py-1 rounded">
+                                    配电箱-P02 (负载较高)
+                                </div>
+</div>
+</div>
+<!-- Device Info Popups (Contextual) -->
+<div class="hidden absolute top-[15%] left-[55%] z-40 w-64 bg-surface-container-lowest rounded-xl shadow-2xl border border-error/20 overflow-hidden animate-in fade-in zoom-in duration-200" id="popup-2">
+<div class="bg-error text-on-error p-md flex justify-between items-start">
+<div>
+<h4 class="font-bold text-body-lg">空调机组-E04</h4>
+<p class="text-xs opacity-90">设备编号: HVAC-2024-004</p>
+</div>
+<button class="hover:bg-black/10 rounded-full p-xs" onclick="togglePopup('popup-2')">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<div class="p-md space-y-md">
+<div class="grid grid-cols-2 gap-md text-xs">
+<div>
+<p class="text-outline">运行状态</p>
+<p class="text-error font-bold">异常停机</p>
+</div>
+<div>
+<p class="text-outline">最近检查</p>
+<p class="text-on-surface">2024-05-18</p>
+</div>
+<div>
+<p class="text-outline">当前温度</p>
+<p class="text-on-surface">32.5 °C</p>
+</div>
+<div>
+<p class="text-outline">出风压力</p>
+<p class="text-on-surface">0.12 MPa</p>
+</div>
+</div>
+<div class="p-sm bg-error-container rounded-lg border border-error/10">
+<p class="text-[10px] text-on-error-container font-bold mb-1">告警详情：</p>
+<p class="text-xs text-on-error-container">检测到压缩机过热，已自动断电保护。建议立即派遣维修人员。</p>
+</div>
+<div class="flex gap-sm">
+<button class="flex-1 bg-primary text-on-primary py-xs rounded text-xs font-bold hover:brightness-110 transition-all">创建维修工单</button>
+<button class="flex-1 border border-outline py-xs rounded text-xs hover:bg-surface-container-low transition-all">查看历史</button>
+</div>
+</div>
+</div>
+<!-- Generic Success Popup (Toggle Hidden) -->
+<div class="hidden absolute top-[10%] left-[25%] z-40 w-64 bg-surface-container-lowest rounded-xl shadow-2xl border border-outline-variant overflow-hidden" id="popup-1">
+<div class="bg-secondary text-on-secondary p-md flex justify-between items-start">
+<div>
+<h4 class="font-bold text-body-lg">核心交换机-A1</h4>
+<p class="text-xs opacity-90">设备编号: NET-CORE-001</p>
+</div>
+<button class="hover:bg-black/10 rounded-full p-xs" onclick="togglePopup('popup-1')">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<div class="p-md space-y-md">
+<div class="grid grid-cols-2 gap-md text-xs">
+<div>
+<p class="text-outline">运行状态</p>
+<p class="text-secondary font-bold">运行良好</p>
+</div>
+<div>
+<p class="text-outline">在线率</p>
+<p class="text-on-surface font-bold">99.98%</p>
+</div>
+</div>
+<button class="w-full bg-primary-container/10 text-primary py-xs rounded text-xs font-bold hover:bg-primary-container/20 transition-all">远程诊断</button>
+</div>
+</div>
+</div>
+<!-- Legend Floating Card -->
+<div class="absolute bottom-md left-md z-30">
+<div class="bg-surface-container-lowest/80 backdrop-blur-md border border-outline-variant p-md rounded-xl shadow-lg">
+<h5 class="text-[10px] text-on-surface-variant font-bold uppercase mb-md">图例说明</h5>
+<div class="space-y-sm">
+<div class="flex items-center gap-sm">
+<div class="w-3 h-3 rounded-full bg-secondary"></div>
+<span class="text-xs text-on-surface">正常设备</span>
+</div>
+<div class="flex items-center gap-sm">
+<div class="w-3 h-3 rounded-full bg-error pulse-red"></div>
+<span class="text-xs text-on-surface">故障告警</span>
+</div>
+<div class="flex items-center gap-sm">
+<div class="w-3 h-3 rounded-full bg-tertiary"></div>
+<span class="text-xs text-on-surface">维护提醒</span>
+</div>
+<div class="flex items-center gap-sm">
+<div class="w-3 h-3 rounded-full bg-outline-variant"></div>
+<span class="text-xs text-on-surface">离线/未激活</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+</div>
+<script>
+        function togglePopup(id) {
+            const popup = document.getElementById(id);
+            const allPopups = ['popup-1', 'popup-2', 'popup-3', 'popup-4'];
+            
+            if (popup.classList.contains('hidden')) {
+                // Close others
+                allPopups.forEach(pId => {
+                    const p = document.getElementById(pId);
+                    if (p) p.classList.add('hidden');
+                });
+                popup.classList.remove('hidden');
+            } else {
+                popup.classList.add('hidden');
+            }
+        }
+
+        // Close popups on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                ['popup-1', 'popup-2', 'popup-3', 'popup-4'].forEach(id => {
+                    const p = document.getElementById(id);
+                    if (p) p.classList.add('hidden');
+                });
+            }
+        });
+    </script>
+</body></html>

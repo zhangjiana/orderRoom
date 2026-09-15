@@ -13,12 +13,13 @@ Page({
       return;
     }
 
-    this.loadInvitation(options.id);
+    this.setData({ invitationToken: options.token || "" });
+    this.loadInvitation(options.id, options.token || "");
   },
 
-  async loadInvitation(id) {
+  async loadInvitation(id, invitationToken) {
     try {
-      const invitation = await api.getBookingInvitation(id);
+      const invitation = await api.getBookingInvitation(id, invitationToken);
       this.setData({ loading: false, invitation });
     } catch (error) {
       this.setData({ loading: false });
@@ -47,7 +48,9 @@ Page({
       title: invitation
         ? `${invitation.hostName} 邀请你参加${invitation.occasion || "宴请"}`
         : "宴请宾朋邀请函",
-      path: invitation ? `/pages/invitation/index?id=${invitation.id}` : "/pages/rooms/index",
+      path: invitation
+        ? `/pages/invitation/index?id=${invitation.id}&token=${encodeURIComponent(this.data.invitationToken)}`
+        : "/pages/rooms/index",
     };
   },
 });

@@ -1,3 +1,4 @@
+import { randomBytes } from "node:crypto";
 import { Injectable, OnApplicationShutdown, OnModuleInit } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import mysql, { Pool, PoolConnection } from "mysql2/promise";
@@ -199,8 +200,19 @@ export class DatabaseService implements OnModuleInit, OnApplicationShutdown {
     `);
 
     await this.execute(`
+      CREATE TABLE IF NOT EXISTS users (
+        id VARCHAR(40) PRIMARY KEY,
+        wx_openid VARCHAR(100) NOT NULL UNIQUE,
+        created_at DATETIME NOT NULL,
+        last_login_at DATETIME NOT NULL,
+        INDEX idx_user_last_login_at (last_login_at)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    `);
+
+    await this.execute(`
       CREATE TABLE IF NOT EXISTS bookings (
         id VARCHAR(40) PRIMARY KEY,
+        user_id VARCHAR(40) NULL,
         merchant_id VARCHAR(40) NOT NULL,
         merchant_name VARCHAR(120) NOT NULL,
         merchant_address VARCHAR(255) NOT NULL,
@@ -217,13 +229,79 @@ export class DatabaseService implements OnModuleInit, OnApplicationShutdown {
         remarks VARCHAR(255) NOT NULL DEFAULT '',
         occasion VARCHAR(60) NOT NULL DEFAULT '',
         budget INT NOT NULL DEFAULT 0,
+        invitation_token VARCHAR(64) NOT NULL,
+        subscription_template_id VARCHAR(100) NOT NULL DEFAULT '',
         status VARCHAR(24) NOT NULL,
         created_at DATETIME NOT NULL,
         updated_at DATETIME NOT NULL,
         INDEX idx_booking_status (status),
+        INDEX idx_booking_user_id (user_id),
         INDEX idx_booking_merchant_id (merchant_id),
         INDEX idx_booking_contact_phone (contact_phone),
         INDEX idx_booking_room_slot (room_id, dining_date, dining_time)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    `);
+
+    const invitationTokenColumn = await this.queryOne<{ columnName: string }>(
+      `SELECT column_name AS columnName
+      FROM information_schema.columns
+      WHERE table_schema = ? AND table_name = 'bookings' AND column_name = 'invitation_token'
+      LIMIT 1`,
+      [this.mysqlConfig.database],
+    );
+
+    if (!invitationTokenColumn) {
+      await this.execute(
+        "ALTER TABLE bookings ADD COLUMN invitation_token VARCHAR(64) NOT NULL DEFAULT '' AFTER budget",
+      );
+    }
+
+    const bookingUserColumn = await this.queryOne<{ columnName: string }>(
+      `SELECT column_name AS columnName
+      FROM information_schema.columns
+      WHERE table_schema = ? AND table_name = 'bookings' AND column_name = 'user_id'
+      LIMIT 1`,
+      [this.mysqlConfig.database],
+    );
+    if (!bookingUserColumn) {
+      await this.execute(
+        "ALTER TABLE bookings ADD COLUMN user_id VARCHAR(40) NULL AFTER id, ADD INDEX idx_booking_user_id (user_id)",
+      );
+    }
+
+    const subscriptionTemplateColumn = await this.queryOne<{ columnName: string }>(
+      `SELECT column_name AS columnName
+      FROM information_schema.columns
+      WHERE table_schema = ? AND table_name = 'bookings' AND column_name = 'subscription_template_id'
+      LIMIT 1`,
+      [this.mysqlConfig.database],
+    );
+    if (!subscriptionTemplateColumn) {
+      await this.execute(
+        "ALTER TABLE bookings ADD COLUMN subscription_template_id VARCHAR(100) NOT NULL DEFAULT '' AFTER invitation_token",
+      );
+    }
+
+    const bookingsWithoutInvitationToken = await this.queryRows<Array<{ id: string }>>(
+      "SELECT id FROM bookings WHERE invitation_token = ''",
+    );
+    for (const booking of bookingsWithoutInvitationToken) {
+      await this.execute("UPDATE bookings SET invitation_token = ? WHERE id = ?", [
+        randomBytes(24).toString("hex"),
+        booking.id,
+      ]);
+    }
+
+    await this.execute(`
+      CREATE TABLE IF NOT EXISTS user_sessions (
+        id VARCHAR(40) PRIMARY KEY,
+        user_id VARCHAR(40) NOT NULL,
+        token_hash VARCHAR(64) NOT NULL UNIQUE,
+        created_at DATETIME NOT NULL,
+        last_active_at DATETIME NOT NULL,
+        expires_at DATETIME NOT NULL,
+        INDEX idx_user_session_user_id (user_id),
+        INDEX idx_user_session_expires_at (expires_at)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
     `);
 

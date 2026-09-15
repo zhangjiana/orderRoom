@@ -1,17 +1,29 @@
 .search-section {
+  padding: 30rpx 28rpx 28rpx;
+  border-radius: 20rpx;
+  background: linear-gradient(145deg, #332a23 0%, #4d3b2d 100%);
   margin-bottom: 28rpx;
 }
+.account-section {
+  padding: 30rpx 28rpx 28rpx;
+  border-radius: 20rpx;
+  background: linear-gradient(145deg, #332a23 0%, #4d3b2d 100%);
+  margin-bottom: 28rpx;
+}
+.search-section__kicker { color: #d6b78f; font-size: 19rpx; font-weight: 700; letter-spacing: .18em; }
 
 .search-section__title {
   font-size: 38rpx;
   font-weight: 700;
-  color: #2b241d;
+  margin-top: 8rpx;
+  color: #fffaf2;
+  font-family: "Songti SC", serif;
 }
 
 .search-section__hint {
   margin-top: 8rpx;
   font-size: 24rpx;
-  color: #8a7b6d;
+  color: #c7b8a8;
 }
 
 .search-bar {
@@ -23,7 +35,7 @@
 .search-input {
   flex: 1;
   padding: 20rpx 24rpx;
-  border-radius: 22rpx;
+  border-radius: 14rpx;
   border: 1rpx solid rgba(160, 136, 112, 0.16);
   background: #fffdfa;
   font-size: 28rpx;
@@ -32,12 +44,12 @@
 
 .search-btn {
   width: 140rpx;
-  border-radius: 22rpx;
+  border-radius: 14rpx;
   font-size: 28rpx;
   line-height: 1;
   padding: 22rpx 0;
   font-weight: 600;
-  background: linear-gradient(135deg, #b68148 0%, #8e5d2a 100%);
+  background: #b98550;
   color: #ffffff;
 }
 
@@ -100,4 +112,9 @@
 
 .booking-card__nav-btn::after {
   border: none;
+}
+
+.booking-card__nav-btn--danger {
+  color: #a64f3d;
+  border-color: rgba(166, 79, 61, 0.3);
 }

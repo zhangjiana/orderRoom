@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>智维云 - 驾驶舱</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=PingFang+SC&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed-dim": "#afc6ff",
+                        "secondary": "#266d00",
+                        "on-secondary": "#ffffff",
+                        "on-primary-container": "#fefcff",
+                        "surface-container-highest": "#e0e3e6",
+                        "inverse-surface": "#2d3133",
+                        "surface-container": "#eceef1",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-dim": "#d8dadd",
+                        "on-surface-variant": "#414755",
+                        "on-tertiary-container": "#fffbff",
+                        "on-tertiary-fixed-variant": "#614000",
+                        "surface-bright": "#f7f9fc",
+                        "on-error": "#ffffff",
+                        "surface-container-high": "#e6e8eb",
+                        "surface": "#f7f9fc",
+                        "on-secondary-fixed": "#062100",
+                        "surface-container-low": "#f2f4f7",
+                        "on-primary-fixed-variant": "#004398",
+                        "inverse-on-surface": "#eff1f4",
+                        "tertiary-fixed-dim": "#ffba45",
+                        "on-primary-fixed": "#001a43",
+                        "error-container": "#ffdad6",
+                        "tertiary": "#7d5400",
+                        "on-secondary-fixed-variant": "#1a5200",
+                        "on-secondary-container": "#287100",
+                        "error": "#ba1a1a",
+                        "background": "#f7f9fc",
+                        "on-background": "#191c1e",
+                        "primary-container": "#006ef2",
+                        "on-error-container": "#93000a",
+                        "tertiary-container": "#9d6a00",
+                        "tertiary-fixed": "#ffddb0",
+                        "primary-fixed": "#d9e2ff",
+                        "primary": "#0057c2",
+                        "outline-variant": "#c1c6d7",
+                        "secondary-container": "#85fa51",
+                        "inverse-primary": "#afc6ff",
+                        "on-surface": "#191c1e",
+                        "surface-tint": "#0059c7",
+                        "on-primary": "#ffffff",
+                        "outline": "#727786",
+                        "surface-variant": "#e0e3e6",
+                        "secondary-fixed": "#88fd54",
+                        "secondary-fixed-dim": "#6de039",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-fixed": "#281800"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "gutter": "16px",
+                        "xl": "32px",
+                        "base": "8px",
+                        "sm": "8px",
+                        "md": "16px",
+                        "lg": "24px",
+                        "container-margin": "24px",
+                        "xs": "4px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Inter, PingFang SC"],
+                        "label-sm": ["Inter, PingFang SC"],
+                        "body-md": ["Inter, PingFang SC"],
+                        "title-lg": ["Inter, PingFang SC"],
+                        "body-lg": ["Inter, PingFang SC"],
+                        "label-md": ["Inter, PingFang SC"],
+                        "headline-md": ["Inter, PingFang SC"],
+                        "title-md": ["Inter, PingFang SC"],
+                        "headline-sm": ["Inter, PingFang SC"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["30px", {"lineHeight": "38px", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "18px", "fontWeight": "400"}],
+                        "body-md": ["14px", {"lineHeight": "22px", "fontWeight": "400"}],
+                        "title-lg": ["18px", {"lineHeight": "26px", "fontWeight": "500"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "title-md": ["16px", {"lineHeight": "24px", "fontWeight": "500"}],
+                        "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #F5F7FA;
+            font-family: 'Inter', 'PingFang SC', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .ant-card {
+            background: #ffffff;
+            border: 1px solid #E5E7EB;
+            box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .ant-card:hover {
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .status-pill {
+            padding: 2px 8px;
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body class="text-on-surface">
+<!-- Sidebar Shell -->
+<aside class="fixed left-0 top-0 h-full w-[240px] bg-surface-container-lowest border-r border-outline-variant flex flex-col z-50 overflow-y-auto">
+<div class="p-lg flex items-center gap-sm">
+<div class="w-8 h-8 bg-primary rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">cloud_done</span>
+</div>
+<div>
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary">智维云</h1>
+<p class="text-[10px] text-outline">社区物业巡检平台</p>
+</div>
+</div>
+<nav class="flex-1 px-md space-y-1">
+<a class="flex items-center gap-md px-md py-sm rounded-lg bg-secondary-container text-on-secondary-container border-r-[3px] border-primary font-title-md text-title-md transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span>驾驶舱</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">precision_manufacturing</span>
+<span>设备管理</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">event_note</span>
+<span>巡检计划</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">assignment</span>
+<span>任务管理</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">engineering</span>
+<span>工单中心</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">map</span>
+<span>空间地图</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span>统计报表</span>
+</a>
+<div class="pt-lg pb-sm px-md text-outline uppercase text-[11px] font-bold tracking-wider">系统管理</div>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>系统设置</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">person</span>
+<span>个人中心</span>
+</a>
+</nav>
+<div class="p-md mt-auto">
+<button class="w-full py-md bg-primary text-on-primary rounded-lg flex items-center justify-center gap-sm font-label-md active:scale-95 transition-transform">
+<span class="material-symbols-outlined">add</span>
+<span>发起巡检</span>
+</button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-[240px] flex-1 min-h-screen">
+<!-- Top Navigation -->
+<header class="sticky top-0 z-40 w-full bg-surface border-b border-outline-variant flex justify-between items-center h-16 px-lg">
+<div class="flex items-center gap-xl">
+<div class="relative w-80">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded-full text-body-md focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all" placeholder="搜索设备、工单或资源..." type="text"/>
+</div>
+<nav class="hidden lg:flex items-center gap-lg">
+<a class="text-primary border-b-2 border-primary font-title-md text-title-md pb-1" href="#">首页</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-md" href="#">运行大盘</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-md" href="#">工单追踪</a>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<button class="p-2 rounded-full hover:bg-surface-container-high transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 rounded-full hover:bg-surface-container-high transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined">help_outline</span>
+</button>
+<div class="h-6 w-[1px] bg-outline-variant mx-sm"></div>
+<div class="flex items-center gap-sm cursor-pointer hover:bg-surface-container-high p-1 pr-3 rounded-full transition-all">
+<img class="w-8 h-8 rounded-full border border-outline-variant" data-alt="A professional headshot of a middle-aged male facility administrator with a confident smile, wearing a modern business-casual attire. The background is a brightly lit, clean corporate office setting with soft-focus glass panels and cool blue architectural accents, consistent with a high-end enterprise software user profile." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFfpXzwJ7TWnTCYmcbIJ-LYmhEIyAWDrHeaeKxHC5HC29PnV5ugRC-aCj1LdbUCfhxHjU5xyMb8PYFEn1v7JtwgueBtZJPPSljzgg3PKu7Y7WIatPuL7eW1suwO5f-DLtuqNMlAYT46wm41b1MLDmepyQJdg85mHQRcE8CZN4NJbimQK3fYHpburhS62I3e1AfIEKNGHOpMFfD4LEw9YS6EsQs71j5U3ymBSQc2XTthX6mINOloFZmV_2V9CIfULm16VvgZTi_MFM"/>
+<span class="text-label-md font-medium">管理员</span>
+</div>
+</div>
+</header>
+<!-- Dashboard Canvas -->
+<div class="p-lg space-y-lg">
+<!-- Header Section -->
+<div class="flex justify-between items-end">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">驾驶舱概览</h2>
+<p class="text-on-surface-variant text-body-md mt-1">欢迎回来，当前系统运行状态良好，共监控 1,284 台设备。</p>
+</div>
+<div class="flex gap-sm">
+<button class="px-md py-sm bg-surface-container-lowest border border-outline-variant rounded-lg text-body-md font-medium hover:bg-surface-container-low transition-colors">
+                        导出报告
+                    </button>
+<button class="px-md py-sm bg-primary text-on-primary rounded-lg text-body-md font-medium shadow-sm hover:shadow-md transition-all active:scale-95">
+                        同步数据
+                    </button>
+</div>
+</div>
+<!-- Metric Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-md">
+<!-- Card 1 -->
+<div class="ant-card p-lg flex flex-col gap-sm">
+<div class="flex justify-between items-start">
+<span class="text-outline text-label-md">设备健康率</span>
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">health_and_safety</span>
+</div>
+<div class="flex items-baseline gap-xs">
+<span class="text-display-lg font-display-lg">98.5</span>
+<span class="text-body-md font-medium text-outline">%</span>
+</div>
+<div class="flex items-center gap-xs text-[12px] text-secondary">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+<span>较上周上升 0.4%</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="ant-card p-lg flex flex-col gap-sm">
+<div class="flex justify-between items-start">
+<span class="text-outline text-label-md">今日待处理工单</span>
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">pending_actions</span>
+</div>
+<div class="flex items-baseline gap-xs">
+<span class="text-display-lg font-display-lg">12</span>
+<span class="text-body-md font-medium text-outline">件</span>
+</div>
+<div class="flex items-center gap-xs text-[12px] text-error">
+<span class="material-symbols-outlined text-[14px]">priority_high</span>
+<span>其中 3 件为高优先级</span>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="ant-card p-lg flex flex-col gap-sm">
+<div class="flex justify-between items-start">
+<span class="text-outline text-label-md">本月巡检完成率</span>
+<span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<div class="flex items-baseline gap-xs">
+<span class="text-display-lg font-display-lg">95.0</span>
+<span class="text-body-md font-medium text-outline">%</span>
+</div>
+<div class="flex items-center gap-xs text-[12px] text-outline">
+<span>当前进度: 456 / 480</span>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="ant-card p-lg flex flex-col gap-sm border-l-4 border-l-error">
+<div class="flex justify-between items-start">
+<span class="text-outline text-label-md">当前异常告警</span>
+<span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<div class="flex items-baseline gap-xs">
+<span class="text-display-lg font-display-lg text-error">3</span>
+<span class="text-body-md font-medium text-outline">个</span>
+</div>
+<div class="flex items-center gap-xs text-[12px] text-on-surface-variant">
+<span class="px-1.5 py-0.5 bg-error-container text-on-error-container rounded">紧急</span>
+<span>最近更新: 14:32</span>
+</div>
+</div>
+</div>
+<!-- Charts and Rankings -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-lg">
+<!-- Trend Chart Section -->
+<div class="lg:col-span-2 ant-card flex flex-col">
+<div class="px-lg py-md border-b border-outline-variant flex justify-between items-center">
+<h3 class="font-title-lg text-title-lg">工单与巡检趋势 (过去7天)</h3>
+<div class="flex gap-md">
+<div class="flex items-center gap-xs">
+<span class="w-3 h-3 rounded-full bg-primary"></span>
+<span class="text-label-sm">工单量</span>
+</div>
+<div class="flex items-center gap-xs">
+<span class="w-3 h-3 rounded-full bg-secondary"></span>
+<span class="text-label-sm">已巡检</span>
+</div>
+</div>
+</div>
+<div class="p-lg flex-1 min-h-[320px] flex items-end justify-between relative">
+<!-- Simulated Chart Visualization -->
+<div class="absolute inset-x-lg top-16 bottom-16 border-l border-b border-outline-variant/30 flex flex-col justify-between text-outline text-[10px]">
+<span>100</span><span>75</span><span>50</span><span>25</span><span>0</span>
+</div>
+<div class="flex-1 h-full flex items-end justify-around px-8 relative z-10">
+<!-- Mon -->
+<div class="flex flex-col items-center gap-2 group cursor-pointer">
+<div class="flex gap-1 items-end h-40">
+<div class="w-4 bg-primary rounded-t-sm transition-all group-hover:opacity-80" style="height: 60%"></div>
+<div class="w-4 bg-secondary rounded-t-sm transition-all group-hover:opacity-80" style="height: 75%"></div>
+</div>
+<span class="text-label-sm text-outline">周一</span>
+</div>
+<!-- Tue -->
+<div class="flex flex-col items-center gap-2 group cursor-pointer">
+<div class="flex gap-1 items-end h-40">
+<div class="w-4 bg-primary rounded-t-sm" style="height: 45%"></div>
+<div class="w-4 bg-secondary rounded-t-sm" style="height: 80%"></div>
+</div>
+<span class="text-label-sm text-outline">周二</span>
+</div>
+<!-- Wed -->
+<div class="flex flex-col items-center gap-2 group cursor-pointer">
+<div class="flex gap-1 items-end h-40">
+<div class="w-4 bg-primary rounded-t-sm" style="height: 85%"></div>
+<div class="w-4 bg-secondary rounded-t-sm" style="height: 90%"></div>
+</div>
+<span class="text-label-sm text-outline">周三</span>
+</div>
+<!-- Thu -->
+<div class="flex flex-col items-center gap-2 group cursor-pointer">
+<div class="flex gap-1 items-end h-40">
+<div class="w-4 bg-primary rounded-t-sm" style="height: 40%"></div>
+<div class="w-4 bg-secondary rounded-t-sm" style="height: 60%"></div>
+</div>
+<span class="text-label-sm text-outline">周四</span>
+</div>
+<!-- Fri -->
+<div class="flex flex-col items-center gap-2 group cursor-pointer">
+<div class="flex gap-1 items-end h-40">
+<div class="w-4 bg-primary rounded-t-sm" style="height: 70%"></div>
+<div class="w-4 bg-secondary rounded-t-sm" style="height: 85%"></div>
+</div>
+<span class="text-label-sm text-outline">周五</span>
+</div>
+<!-- Sat -->
+<div class="flex flex-col items-center gap-2 group cursor-pointer">
+<div class="flex gap-1 items-end h-40">
+<div class="w-4 bg-primary rounded-t-sm" style="height: 30%"></div>
+<div class="w-4 bg-secondary rounded-t-sm" style="height: 40%"></div>
+</div>
+<span class="text-label-sm text-outline">周六</span>
+</div>
+<!-- Sun -->
+<div class="flex flex-col items-center gap-2 group cursor-pointer">
+<div class="flex gap-1 items-end h-40">
+<div class="w-4 bg-primary rounded-t-sm" style="height: 25%"></div>
+<div class="w-4 bg-secondary rounded-t-sm" style="height: 35%"></div>
+</div>
+<span class="text-label-sm text-outline">周日</span>
+</div>
+</div>
+</div>
+</div>
+<!-- High Risk Equipment Ranking -->
+<div class="ant-card flex flex-col">
+<div class="px-lg py-md border-b border-outline-variant flex justify-between items-center">
+<h3 class="font-title-lg text-title-lg">高风险设备排行</h3>
+<span class="material-symbols-outlined text-outline cursor-pointer hover:text-on-surface">more_horiz</span>
+</div>
+<div class="p-lg space-y-md">
+<div class="flex items-center gap-md p-md rounded-lg hover:bg-surface-container-low transition-colors border border-transparent hover:border-outline-variant">
+<div class="w-10 h-10 rounded bg-error-container text-error flex items-center justify-center font-bold">1</div>
+<div class="flex-1">
+<p class="text-body-md font-bold">#2 电梯曳引机</p>
+<p class="text-label-sm text-outline">运行过热 | A座15层</p>
+</div>
+<div class="text-right">
+<p class="text-body-md font-bold text-error">92</p>
+<p class="text-[10px] text-outline">风险指数</p>
+</div>
+</div>
+<div class="flex items-center gap-md p-md rounded-lg hover:bg-surface-container-low transition-colors border border-transparent hover:border-outline-variant">
+<div class="w-10 h-10 rounded bg-tertiary-container text-tertiary flex items-center justify-center font-bold">2</div>
+<div class="flex-1">
+<p class="text-body-md font-bold">地下2层 补压泵</p>
+<p class="text-label-sm text-outline">压力异常 | 泵房 B</p>
+</div>
+<div class="text-right">
+<p class="text-body-md font-bold text-tertiary">85</p>
+<p class="text-[10px] text-outline">风险指数</p>
+</div>
+</div>
+<div class="flex items-center gap-md p-md rounded-lg hover:bg-surface-container-low transition-colors border border-transparent hover:border-outline-variant">
+<div class="w-10 h-10 rounded bg-surface-container-highest text-on-surface flex items-center justify-center font-bold">3</div>
+<div class="flex-1">
+<p class="text-body-md font-bold">3号 配电柜</p>
+<p class="text-label-sm text-outline">负载预警 | 配电室</p>
+</div>
+<div class="text-right">
+<p class="text-body-md font-bold">78</p>
+<p class="text-[10px] text-outline">风险指数</p>
+</div>
+</div>
+<button class="w-full py-2 text-primary font-label-md text-center border border-primary/20 rounded-lg hover:bg-primary/5 transition-colors">查看全部排行</button>
+</div>
+</div>
+</div>
+<!-- Recent Work Orders Table -->
+<div class="ant-card">
+<div class="px-lg py-md border-b border-outline-variant flex justify-between items-center">
+<h3 class="font-title-lg text-title-lg">最近工单列表</h3>
+<div class="flex items-center gap-sm">
+<select class="text-label-md border-outline-variant rounded bg-transparent px-2 py-1 focus:ring-primary/20">
+<option>全部分类</option>
+<option>维修</option>
+<option>巡检</option>
+</select>
+<button class="text-primary text-label-md">查看全部</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-surface-container-low text-on-surface-variant font-label-md border-b border-outline-variant">
+<tr>
+<th class="px-lg py-md font-medium">工单号</th>
+<th class="px-lg py-md font-medium">关联设备</th>
+<th class="px-lg py-md font-medium">优先级</th>
+<th class="px-lg py-md font-medium">处理人</th>
+<th class="px-lg py-md font-medium">状态</th>
+<th class="px-lg py-md font-medium text-right">操作</th>
+</tr>
+</thead>
+<tbody class="text-body-md divide-y divide-outline-variant">
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="px-lg py-md font-medium">WO-20231027-01</td>
+<td class="px-lg py-md">冷水机组 #1</td>
+<td class="px-lg py-md">
+<span class="flex items-center gap-xs text-error">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+                                        紧急
+                                    </span>
+</td>
+<td class="px-lg py-md flex items-center gap-sm">
+<div class="w-6 h-6 rounded-full bg-primary-fixed text-primary text-[10px] flex items-center justify-center font-bold">张</div>
+                                    张工
+                                </td>
+<td class="px-lg py-md">
+<span class="status-pill bg-error/10 text-error">处理中</span>
+</td>
+<td class="px-lg py-md text-right">
+<button class="text-primary hover:underline">详情</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="px-lg py-md font-medium">WO-20231027-04</td>
+<td class="px-lg py-md">消防水箱 液位仪</td>
+<td class="px-lg py-md">
+<span class="flex items-center gap-xs text-tertiary">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                                        高
+                                    </span>
+</td>
+<td class="px-lg py-md flex items-center gap-sm">
+<div class="w-6 h-6 rounded-full bg-secondary-fixed text-secondary text-[10px] flex items-center justify-center font-bold">李</div>
+                                    李工
+                                </td>
+<td class="px-lg py-md">
+<span class="status-pill bg-primary/10 text-primary">待分派</span>
+</td>
+<td class="px-lg py-md text-right">
+<button class="text-primary hover:underline">详情</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="px-lg py-md font-medium">WO-20231026-92</td>
+<td class="px-lg py-md">中央空调 换气扇</td>
+<td class="px-lg py-md">
+<span class="flex items-center gap-xs text-outline">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+                                        普通
+                                    </span>
+</td>
+<td class="px-lg py-md flex items-center gap-sm">
+<div class="w-6 h-6 rounded-full bg-surface-container-highest text-on-surface text-[10px] flex items-center justify-center font-bold">王</div>
+                                    王工
+                                </td>
+<td class="px-lg py-md">
+<span class="status-pill bg-secondary/10 text-secondary">已完成</span>
+</td>
+<td class="px-lg py-md text-right">
+<button class="text-primary hover:underline">详情</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+<!-- Success Modal Notification Mockup (Floating Micro-interaction) -->
+<div class="fixed bottom-lg right-lg bg-inverse-surface text-inverse-on-surface px-lg py-md rounded-xl shadow-xl flex items-center gap-md transform translate-y-20 opacity-0 transition-all duration-500 z-[100]" id="toast">
+<span class="material-symbols-outlined text-secondary-container">check_circle</span>
+<div class="flex flex-col">
+<span class="text-label-md font-bold">同步成功</span>
+<span class="text-[12px] opacity-80">系统数据已更新至最新状态。</span>
+</div>
+</div>
+<script>
+        // Simple Micro-interaction for the "Sync" button
+        document.querySelector('button.bg-primary:not(.w-full)').addEventListener('click', function() {
+            const toast = document.getElementById('toast');
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+                toast.classList.remove('translate-y-0', 'opacity-100');
+            }, 3000);
+        });
+
+        // Hover effect for table rows
+        const rows = document.querySelectorAll('tbody tr');
+        rows.forEach(row => {
+            row.addEventListener('mouseenter', () => {
+                row.style.transform = 'translateX(4px)';
+                row.style.transition = 'transform 0.2s ease-out';
+            });
+            row.addEventListener('mouseleave', () => {
+                row.style.transform = 'translateX(0)';
+            });
+        });
+    </script>
+</body></html>

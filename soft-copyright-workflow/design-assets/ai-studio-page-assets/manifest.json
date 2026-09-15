@@ -1,0 +1,263 @@
+{
+  "assets": [
+    {
+      "contentType": "image/svg+xml",
+      "id": "54781dd911a92069",
+      "kind": "image",
+      "name": "192px.svg",
+      "path": "/var/folders/k_/9dnts8_x4zg1jyzxh6b_8y0w0000gn/T/browser-use/assets/2414751f-c0bf-46ac-981e-eff68a0714c0/54781dd911a92069.svg",
+      "url": "https://www.gstatic.com/images/branding/productlogos/drive_2026/v2/web/192px.svg"
+    },
+    {
+      "contentType": "image/svg+xml",
+      "id": "afc4702588c2337c",
+      "kind": "image",
+      "name": "android_color.svg",
+      "path": "/var/folders/k_/9dnts8_x4zg1jyzxh6b_8y0w0000gn/T/browser-use/assets/2414751f-c0bf-46ac-981e-eff68a0714c0/afc4702588c2337c.svg",
+      "url": "https://www.gstatic.com/aistudio/android/android_color.svg"
+    },
+    {
+      "contentType": "image/svg+xml",
+      "id": "1776a343a2f9e6af",
+      "kind": "image",
+      "name": "192px.svg",
+      "path": "/var/folders/k_/9dnts8_x4zg1jyzxh6b_8y0w0000gn/T/browser-use/assets/2414751f-c0bf-46ac-981e-eff68a0714c0/1776a343a2f9e6af.svg",
+      "url": "https://www.gstatic.com/images/branding/productlogos/docs_2026/v2/web/192px.svg"
+    },
+    {
+      "contentType": "image/svg+xml",
+      "id": "ed077fc37f279aa7",
+      "kind": "image",
+      "name": "192px.svg",
+      "path": "/var/folders/k_/9dnts8_x4zg1jyzxh6b_8y0w0000gn/T/browser-use/assets/2414751f-c0bf-46ac-981e-eff68a0714c0/ed077fc37f279aa7.svg",
+      "url": "https://www.gstatic.com/images/branding/productlogos/calendar_2026/v2/web/192px.svg"
+    },
+    {
+      "contentType": "image/svg+xml",
+      "id": "b8bb9ebe4adc6b8b",
+      "kind": "image",
+      "name": "192px.svg",
+      "path": "/var/folders/k_/9dnts8_x4zg1jyzxh6b_8y0w0000gn/T/browser-use/assets/2414751f-c0bf-46ac-981e-eff68a0714c0/b8bb9ebe4adc6b8b.svg",
+      "url": "https://www.gstatic.com/images/branding/productlogos/sheets_2026/v2/web/192px.svg"
+    },
+    {
+      "contentType": "image/svg+xml",
+      "id": "70dda24bb92d6fb8",
+      "kind": "image",
+      "name": "192px.svg",
+      "path": "/var/folders/k_/9dnts8_x4zg1jyzxh6b_8y0w0000gn/T/browser-use/assets/2414751f-c0bf-46ac-981e-eff68a0714c0/70dda24bb92d6fb8.svg",
+      "url": "https://www.gstatic.com/images/branding/productlogos/slides_2026/v2/web/192px.svg"
+    },
+    {
+      "contentType": "image/svg+xml",
+      "id": "8dc1f7fc4c48e1f3",
+      "kind": "image",
+      "name": "192px.svg",
+      "path": "/var/folders/k_/9dnts8_x4zg1jyzxh6b_8y0w0000gn/T/browser-use/assets/2414751f-c0bf-46ac-981e-eff68a0714c0/8dc1f7fc4c48e1f3.svg",
+      "url": "https://www.gstatic.com/images/branding/productlogos/gmail_2026/v2/web/192px.svg"
+    },
+    {
+      "contentType": "image/svg+xml",
+      "id": "251a9d8c2a7c1614",
+      "kind": "image",
+      "name": "192px.svg",
+      "path": "/var/folders/k_/9dnts8_x4zg1jyzxh6b_8y0w0000gn/T/browser-use/assets/2414751f-c0bf-46ac-981e-eff68a0714c0/251a9d8c2a7c1614.svg",
+      "url": "https://www.gstatic.com/images/branding/productlogos/tasks_2026/v2/web/192px.svg"
+    },
+    {
+      "contentType": "image/svg+xml",
+      "id": "592629966ba36e05",
+      "kind": "image",
+      "name": "192px.svg",
+      "path": "/var/folders/k_/9dnts8_x4zg1jyzxh6b_8y0w0000gn/T/browser-use/assets/2414751f-c0bf-46ac-981e-eff68a0714c0/592629966ba36e05.svg",
+      "url": "https://www.gstatic.com/images/branding/productlogos/chat_2026/v2/web/192px.svg"
+    },
+    {
+      "contentType": "image/svg+xml",
+      "id": "cef35cd08043c053",
+      "kind": "image",
+      "name": "192px.svg",
+      "path": "/var/folders/k_/9dnts8_x4zg1jyzxh6b_8y0w0000gn/T/browser-use/assets/2414751f-c0bf-46ac-981e-eff68a0714c0/cef35cd08043c053.svg",
+      "url": "https://www.gstatic.com/images/branding/productlogos/forms_2026/v2/web/192px.svg"
+    },
+    {
+      "contentType": "image/svg+xml",
+      "id": "e81356bf5693f906",
+      "kind": "image",
+      "name": "192px.svg",
+      "path": "/var/folders/k_/9dnts8_x4zg1jyzxh6b_8y0w0000gn/T/browser-use/assets/2414751f-c0bf-46ac-981e-eff68a0714c0/e81356bf5693f906.svg",
+      "url": "https://www.gstatic.com/images/branding/productlogos/meet_2026/v2/web/192px.svg"
+    },
+    {
+      "contentType": "image/svg+xml",
+      "id": "d2fdd5d58921126a",
+      "kind": "image",
+      "name": "192px.svg",
+      "path": "/var/folders/k_/9dnts8_x4zg1jyzxh6b_8y0w0000gn/T/browser-use/assets/2414751f-c0bf-46ac-981e-eff68a0714c0/d2fdd5d58921126a.svg",
+      "url": "https://www.gstatic.com/images/branding/productlogos/keep_2026/v2/web/192px.svg"
+    },
+    {
+      "contentType": "image/svg+xml",
+      "id": "f57ac9a53a8b7626",
+      "kind": "image",
+      "name": "192px.svg",
+      "path": "/var/folders/k_/9dnts8_x4zg1jyzxh6b_8y0w0000gn/T/browser-use/assets/2414751f-c0bf-46ac-981e-eff68a0714c0/f57ac9a53a8b7626.svg",
+      "url": "https://www.gstatic.com/images/branding/productlogos/contacts/v9/192px.svg"
+    },
+    {
+      "contentType": "image/svg+xml",
+      "id": "52e08f71cb8fc6b3",
+      "kind": "image",
+      "name": "mono_firebase_dark.svg",
+      "path": "/var/folders/k_/9dnts8_x4zg1jyzxh6b_8y0w0000gn/T/browser-use/assets/2414751f-c0bf-46ac-981e-eff68a0714c0/52e08f71cb8fc6b3.svg",
+      "url": "https://www.gstatic.com/mobilesdk/250721_mobilesdk/mono_firebase_dark.svg"
+    },
+    {
+      "contentType": "image/png",
+      "id": "2afe46970de9afcb",
+      "kind": "image",
+      "name": "bring_any_idea_to_life.png",
+      "path": "/var/folders/k_/9dnts8_x4zg1jyzxh6b_8y0w0000gn/T/browser-use/assets/2414751f-c0bf-46ac-981e-eff68a0714c0/2afe46970de9afcb.png",
+      "url": "https://www.gstatic.com/aistudio/starter-apps/thumbnails/bring_any_idea_to_life.png"
+    },
+    {
+      "contentType": "image/png",
+      "id": "908b8f4a400d6792",
+      "kind": "image",
+      "name": "paintaplace-2.png",
+      "path": "/var/folders/k_/9dnts8_x4zg1jyzxh6b_8y0w0000gn/T/browser-use/assets/2414751f-c0bf-46ac-981e-eff68a0714c0/908b8f4a400d6792.png",
+      "url": "https://www.gstatic.com/aistudio/starter-apps/thumbnails/paintaplace-2.png"
+    },
+    {
+      "contentType": "image/png",
+      "id": "e1f31676aea90fd4",
+      "kind": "image",
+      "name": "gembooth-2.png",
+      "path": "/var/folders/k_/9dnts8_x4zg1jyzxh6b_8y0w0000gn/T/browser-use/assets/2414751f-c0bf-46ac-981e-eff68a0714c0/e1f31676aea90fd4.png",
+      "url": "https://www.gstatic.com/aistudio/starter-apps/thumbnails/gembooth-2.png"
+    },
+    {
+      "contentType": "image/png",
+      "id": "21aeb223acdf4a70",
+      "kind": "image",
+      "name": "shader_pilot.png",
+      "path": "/var/folders/k_/9dnts8_x4zg1jyzxh6b_8y0w0000gn/T/browser-use/assets/2414751f-c0bf-46ac-981e-eff68a0714c0/21aeb223acdf4a70.png",
+      "url": "https://www.gstatic.com/aistudio/starter-apps/thumbnails/shader_pilot.png"
+    },
+    {
+      "contentType": "image/png",
+      "id": "6dcec84717b57cb2",
+      "kind": "image",
+      "name": "ACg8ocJIR8Pf15Hso3eSnrgRdHAyDXUd1ZjflRGGt_mijvhQfEPq0w=s64-cc-mo",
+      "path": "/var/folders/k_/9dnts8_x4zg1jyzxh6b_8y0w0000gn/T/browser-use/assets/2414751f-c0bf-46ac-981e-eff68a0714c0/6dcec84717b57cb2",
+      "url": "https://lh3.googleusercontent.com/a/ACg8ocJIR8Pf15Hso3eSnrgRdHAyDXUd1ZjflRGGt_mijvhQfEPq0w=s64-cc-mo"
+    },
+    {
+      "contentType": "image/svg+xml",
+      "id": "201f0ea61bffe2e0",
+      "kind": "image",
+      "name": "1-animate-with-veo.svg",
+      "path": "/var/folders/k_/9dnts8_x4zg1jyzxh6b_8y0w0000gn/T/browser-use/assets/2414751f-c0bf-46ac-981e-eff68a0714c0/201f0ea61bffe2e0.svg",
+      "url": "https://www.gstatic.com/aistudio/starter-apps/loading-cards/1-animate-with-veo.svg"
+    },
+    {
+      "contentType": "image/svg+xml",
+      "id": "9aaeebc1aa2420a5",
+      "kind": "image",
+      "name": "svg-1",
+      "path": "/var/folders/k_/9dnts8_x4zg1jyzxh6b_8y0w0000gn/T/browser-use/assets/2414751f-c0bf-46ac-981e-eff68a0714c0/9aaeebc1aa2420a5.svg",
+      "url": "inline-svg:9aaeebc1aa2420a5"
+    },
+    {
+      "contentType": "image/svg+xml",
+      "id": "d86989d36515b70c",
+      "kind": "image",
+      "name": "svg-2",
+      "path": "/var/folders/k_/9dnts8_x4zg1jyzxh6b_8y0w0000gn/T/browser-use/assets/2414751f-c0bf-46ac-981e-eff68a0714c0/d86989d36515b70c.svg",
+      "url": "inline-svg:d86989d36515b70c"
+    },
+    {
+      "contentType": "image/svg+xml",
+      "id": "7cca18e629748f06",
+      "kind": "image",
+      "name": "svg-3",
+      "path": "/var/folders/k_/9dnts8_x4zg1jyzxh6b_8y0w0000gn/T/browser-use/assets/2414751f-c0bf-46ac-981e-eff68a0714c0/7cca18e629748f06.svg",
+      "url": "inline-svg:7cca18e629748f06"
+    },
+    {
+      "contentType": "image/svg+xml",
+      "id": "a239e2cd3db199cc",
+      "kind": "image",
+      "name": "svg-4",
+      "path": "/var/folders/k_/9dnts8_x4zg1jyzxh6b_8y0w0000gn/T/browser-use/assets/2414751f-c0bf-46ac-981e-eff68a0714c0/a239e2cd3db199cc.svg",
+      "url": "inline-svg:a239e2cd3db199cc"
+    },
+    {
+      "contentType": "image/svg+xml",
+      "id": "a76386fceacc835b",
+      "kind": "image",
+      "name": "svg-5",
+      "path": "/var/folders/k_/9dnts8_x4zg1jyzxh6b_8y0w0000gn/T/browser-use/assets/2414751f-c0bf-46ac-981e-eff68a0714c0/a76386fceacc835b.svg",
+      "url": "inline-svg:a76386fceacc835b"
+    }
+  ],
+  "directoryPath": "/var/folders/k_/9dnts8_x4zg1jyzxh6b_8y0w0000gn/T/browser-use/assets/2414751f-c0bf-46ac-981e-eff68a0714c0",
+  "failures": [
+    {
+      "contentType": null,
+      "id": "ec9718f994194424",
+      "name": "generate_204",
+      "reason": "Asset response type missing is not valid for image",
+      "url": "https://aistudio.google.com/generate_204?Nbts4w"
+    },
+    {
+      "contentType": null,
+      "id": "7fc42f4c28fdf8e0",
+      "name": "a",
+      "reason": "Loaded resource fetch failed: Asset bundling failed; page fetch failed: Browser Use encountered an error interacting with this webpage: TypeError: Failed to fetch\n    at nj (<anonymous>:1:41)\n    at <anonymous>:1:354",
+      "url": "https://www.googletagmanager.com/a?v=3&t=l&pid=2066536031&rv=6621&tag_exp=0~115938465~115938469~118228215~119027222&u=AAAAAIAIAAAAAACIAAAgAAAQ&ut=AAAI&h=Ag&gtm=45He6621v9168426611za200zd9168426611&ccid=168426611&cid=GTM-TT9C75WP&l=L2542.S3.Y0.B18.E8062.I3078.TC27.HTC0.F3780.C6~gtm.init_consent.S2.V2.E24.TS5zone.TI156.TE0~gtm.init.S0.V0.E20.TS5zone.TI156.TE0~gtm.js.S0.V0.E21.TS5googtag.TI57.TE4.TS5gaawe.TI32.TE2.TS6paused.TI110.TE0.TS5zone.TI156.TE0.TS5lcl.TI158.TE0.TS5lcl.TI160.TE0.TS5cl.TI163.TE0.TS5googtag.TI87.TE2.TS5gaawe.TI86.TE1.TS6paused.TI117.TE11.TS5lcl.TI161.TE11.TS5lcl.TI162.TE11.TS5cl.TI164.TE11.TS5lcl.TI165.TE11~*.S0.V0.E12.TS5gaawe.TI63.TE2.TS5gaawe.TI137.TE1.TS5zone.TI156.TE6~gtm.dom.S0.V0.E7.TS5ytl.TI157.TE0.TS5zone.TI156.TE5~gtm.load.S0.V0.E14.TS5zone.TI156.TE0.TS5sdl.TI159.TE0~gtm.scrollDepth.S1.V0~gtm.scrollDepth.S0.V0.TS1paused.TI37.TE0~gtm.scrollDepth.S0.V0.TS1zone.TI156.TE0~gtm.scrollDepth.S0.V0.TS1paused.TI37.TE0.TS1zone.TI156.TE0"
+    },
+    {
+      "contentType": null,
+      "id": "dd15c8fa3f90f438",
+      "name": "logo_ai_studio_color_1x_web_32dp.png",
+      "reason": "Loaded resource fetch failed: Asset bundling failed; page fetch failed: Browser Use encountered an error interacting with this webpage: TypeError: Failed to fetch\n    at nj (<anonymous>:1:41)\n    at <anonymous>:1:354",
+      "url": "https://www.gstatic.com/images/branding/productlogos/ai_studio/v1/web-32dp/logo_ai_studio_color_1x_web_32dp.png"
+    },
+    {
+      "contentType": null,
+      "id": "6323478fd3725d94",
+      "name": "7-create-conversational.svg",
+      "reason": "Loaded resource fetch failed: Asset bundling failed; page fetch failed: Browser Use encountered an error interacting with this webpage: TypeError: Failed to fetch\n    at nj (<anonymous>:1:41)\n    at <anonymous>:1:354",
+      "url": "https://gstatic.com/aistudio/starter-apps/loading-cards/7-create-conversational.svg"
+    },
+    {
+      "contentType": null,
+      "id": "82674f808911b693",
+      "name": "704493486",
+      "reason": "Loaded resource fetch failed: Asset bundling failed; page fetch failed: Browser Use encountered an error interacting with this webpage: TypeError: Failed to fetch\n    at nj (<anonymous>:1:41)\n    at <anonymous>:1:354",
+      "url": "https://www.googleadservices.com/ccm/conversion/704493486/?random=1780580342135&cv=11&fst=1780580342135&fmt=3&bg=ffffff&guid=ON&async=1&en=conversion&gtm=45be6621v9210034359z89241536683za20gzb9241536683zd9168426611xea&gcs=G111&gcd=13r3r3l3r5l1&dma=0&tag_exp=0~115616985~115938465~115938469~118228215~119027222~119064590&u_w=1728&u_h=1117&url=https%3A%2F%2Faistudio.google.com%2Fapps%2F013e9df9-5598-4c51-9efa-685e1fa6e4c3%3FshowPreview%3Dtrue%26showAssistant%3Dtrue&ref=https%3A%2F%2Fapp-companion-430619.appspot.com%2F&rcb=4&label=NNrOCLGb7_UbEK7v9s8C&capi=1&frm=0&tiba=Untitled%20%7C%20Google%20AI%20Studio&bttype=purchase&value=0&hn=www.googleadservices.com&npa=0&pscdl=noapi&auid=1638350796.1774962680&uaa=arm&uab=64&uafvl=Chromium%3B148.0.7778.181%7CGoogle%2520Chrome%3B148.0.7778.181%7CNot%252FA)Brand%3B99.0.0.0&uamb=0&uam=&uap=macOS&uapv=15.6.1&uaw=0&ec_mode=a&oid=1168973884.1780580342&oidsrc=3&ecsid=1637073743.1780580342&_tu=CBA&gcl_ctr=22~1~0&em=tv.1"
+    },
+    {
+      "contentType": null,
+      "id": "9f9f96cd519c9c8b",
+      "name": "704493486",
+      "reason": "Loaded resource fetch failed: Asset bundling failed; page fetch failed: Browser Use encountered an error interacting with this webpage: TypeError: Failed to fetch\n    at nj (<anonymous>:1:41)\n    at <anonymous>:1:354",
+      "url": "https://www.googleadservices.com/ccm/conversion/704493486/?random=1780580358330&cv=11&fst=1780580358330&fmt=3&bg=ffffff&guid=ON&async=1&en=conversion&gtm=45be6621v9210034359z89241536683za20gzb9241536683zd9168426611xea&gcs=G111&gcd=13r3r3l3r5l1&dma=0&tag_exp=0~115616985~115938465~115938469~118228215~119027222~119064590&u_w=1728&u_h=1117&url=https%3A%2F%2Faistudio.google.com%2Fapps%2F013e9df9-5598-4c51-9efa-685e1fa6e4c3%3FshowPreview%3Dtrue%26showAssistant%3Dtrue&ref=https%3A%2F%2Fapp-companion-430619.appspot.com%2F&rcb=4&label=NNrOCLGb7_UbEK7v9s8C&capi=1&frm=0&tiba=Untitled%20%7C%20Google%20AI%20Studio&bttype=purchase&value=0&hn=www.googleadservices.com&npa=0&pscdl=noapi&auid=1638350796.1774962680&uaa=arm&uab=64&uafvl=Chromium%3B148.0.7778.181%7CGoogle%2520Chrome%3B148.0.7778.181%7CNot%252FA)Brand%3B99.0.0.0&uamb=0&uam=&uap=macOS&uapv=15.6.1&uaw=0&ec_mode=a&oid=919966721.1780580358&oidsrc=3&ecsid=1637073743.1780580342&_tu=CBA&gcl_ctr=23~1~0&em=tv.1"
+    },
+    {
+      "contentType": null,
+      "id": "c45388bf390b0609",
+      "name": "704493486",
+      "reason": "Loaded resource fetch failed: Asset bundling failed; page fetch failed: Browser Use encountered an error interacting with this webpage: TypeError: Failed to fetch\n    at nj (<anonymous>:1:41)\n    at <anonymous>:1:354",
+      "url": "https://www.googleadservices.com/ccm/conversion/704493486/?random=1780580387614&cv=11&fst=1780580387614&fmt=3&bg=ffffff&guid=ON&async=1&en=conversion&gtm=45be6621v9210034359z89241536683za20gzb9241536683zd9168426611xea&gcs=G111&gcd=13r3r3l3r5l1&dma=0&tag_exp=0~115616985~115938465~115938469~118228215~119027222~119064590&u_w=1728&u_h=1117&url=https%3A%2F%2Faistudio.google.com%2Fapps%2F013e9df9-5598-4c51-9efa-685e1fa6e4c3%3FshowPreview%3Dtrue%26showAssistant%3Dtrue&ref=https%3A%2F%2Fapp-companion-430619.appspot.com%2F&rcb=4&label=NNrOCLGb7_UbEK7v9s8C&capi=1&frm=0&tiba=Untitled%20%7C%20Google%20AI%20Studio&bttype=purchase&value=0&hn=www.googleadservices.com&npa=0&pscdl=noapi&auid=1638350796.1774962680&uaa=arm&uab=64&uafvl=Chromium%3B148.0.7778.181%7CGoogle%2520Chrome%3B148.0.7778.181%7CNot%252FA)Brand%3B99.0.0.0&uamb=0&uam=&uap=macOS&uapv=15.6.1&uaw=0&ec_mode=a&oid=872847585.1780580388&oidsrc=3&ecsid=1637073743.1780580342&_tu=CBA&gcl_ctr=24~1~0&em=tv.1"
+    }
+  ],
+  "manifestPath": "/var/folders/k_/9dnts8_x4zg1jyzxh6b_8y0w0000gn/T/browser-use/assets/2414751f-c0bf-46ac-981e-eff68a0714c0/manifest.json",
+  "summary": {
+    "downloadedCount": 25,
+    "elapsedMs": 1513.3182919999817,
+    "failedCount": 7,
+    "requestedCount": 32
+  }
+}

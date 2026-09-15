@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Param, Post, Query } from "@nestjs/common";
+import { Body, Controller, Get, Param, Patch, Post, Query, Req, UseGuards } from "@nestjs/common";
 import { MerchantsService } from "../merchants/merchants.service";
 import { BookingsService } from "../bookings/bookings.service";
+import { UserAuthGuard, UserAuthenticatedRequest } from "./user-auth.guard";
 
 @Controller("api/public")
 export class PublicController {
@@ -29,8 +30,12 @@ export class PublicController {
   }
 
   @Post("bookings")
-  async createBooking(@Body() body: Record<string, unknown>) {
-    return this.bookingsService.createBooking(body);
+  @UseGuards(UserAuthGuard)
+  async createBooking(
+    @Body() body: Record<string, unknown>,
+    @Req() request: UserAuthenticatedRequest,
+  ) {
+    return this.bookingsService.createBooking(body, request.user?.id || "");
   }
 
   @Get("bookings")
@@ -43,8 +48,37 @@ export class PublicController {
     return this.bookingsService.getPublicBooking(id, contactPhone);
   }
 
+  @Patch("bookings/:id/cancel")
+  async cancelBooking(@Param("id") id: string, @Body("contactPhone") contactPhone = "") {
+    return this.bookingsService.cancelPublicBooking(id, contactPhone);
+  }
+
+  @Get("me/bookings")
+  @UseGuards(UserAuthGuard)
+  async myBookings(@Req() request: UserAuthenticatedRequest) {
+    return this.bookingsService.listUserBookings(request.user?.id || "");
+  }
+
+  @Get("me/bookings/:id")
+  @UseGuards(UserAuthGuard)
+  async myBooking(
+    @Param("id") id: string,
+    @Req() request: UserAuthenticatedRequest,
+  ) {
+    return this.bookingsService.getUserBooking(request.user?.id || "", id);
+  }
+
+  @Patch("me/bookings/:id/cancel")
+  @UseGuards(UserAuthGuard)
+  async cancelMyBooking(
+    @Param("id") id: string,
+    @Req() request: UserAuthenticatedRequest,
+  ) {
+    return this.bookingsService.cancelUserBooking(request.user?.id || "", id);
+  }
+
   @Get("bookings/:id/invitation")
-  async invitation(@Param("id") id: string) {
-    return this.bookingsService.getPublicInvitation(id);
+  async invitation(@Param("id") id: string, @Query("token") token = "") {
+    return this.bookingsService.getPublicInvitation(id, token);
   }
 }

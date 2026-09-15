@@ -1,6 +1,6 @@
 module.exports = {
   appName: "宴请宾朋",
-  apiBaseUrl: "http://127.0.0.1:3001",
+  apiBaseUrl: "https://room.68686088.xyz",
   subscriptionTemplates: {
     bookingStatus: [],
   },

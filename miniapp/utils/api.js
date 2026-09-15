@@ -73,14 +73,72 @@ async function getMerchantDetail(id) {
   };
 }
 
-async function createBooking(payload) {
+async function createBooking(payload, token = store.getUserToken()) {
   const result = await request({
     url: "/api/public/bookings",
     method: "POST",
     data: payload,
+    token,
   });
 
   store.saveLastPhone(payload.contactPhone);
+  return store.mapBooking(result);
+}
+
+function wxLoginCode() {
+  return new Promise((resolve, reject) => {
+    wx.login({
+      success(result) {
+        if (result.code) resolve(result.code);
+        else reject(new Error("微信登录失败"));
+      },
+      fail: reject,
+    });
+  });
+}
+
+async function userLogin() {
+  const loginCode = await wxLoginCode();
+  const result = await request({
+    url: "/api/public/auth/login",
+    method: "POST",
+    data: { loginCode },
+  });
+  store.saveUserToken(result.token);
+  return result;
+}
+
+async function ensureUserLogin() {
+  const token = store.getUserToken();
+  if (token) {
+    try {
+      await request({ url: "/api/public/auth/me", token });
+      return token;
+    } catch (_error) {
+      store.clearUserToken();
+    }
+  }
+
+  const result = await userLogin();
+  return result.token;
+}
+
+async function getMyBookings(token = store.getUserToken()) {
+  const result = await request({ url: "/api/public/me/bookings", token });
+  return (result.items || []).map(store.mapBooking);
+}
+
+async function getMyBookingDetail(id, token = store.getUserToken()) {
+  const result = await request({ url: `/api/public/me/bookings/${id}`, token });
+  return store.mapBooking(result);
+}
+
+async function cancelMyBooking(id, token = store.getUserToken()) {
+  const result = await request({
+    url: `/api/public/me/bookings/${id}/cancel`,
+    method: "PATCH",
+    token,
+  });
   return store.mapBooking(result);
 }
 
@@ -100,24 +158,40 @@ async function getBookingDetail(id, phone) {
   return store.mapBooking(result);
 }
 
-async function getBookingInvitation(id) {
+async function getBookingInvitation(id, invitationToken) {
   return request({
-    url: `/api/public/bookings/${id}/invitation`,
+    url: `/api/public/bookings/${id}/invitation?token=${encodeURIComponent(invitationToken)}`,
   });
+}
+
+async function cancelBooking(id, contactPhone) {
+  const result = await request({
+    url: `/api/public/bookings/${id}/cancel`,
+    method: "PATCH",
+    data: { contactPhone },
+  });
+
+  return store.mapBooking(result);
 }
 
 function requestBookingSubscription() {
   const tmplIds = (config.subscriptionTemplates && config.subscriptionTemplates.bookingStatus) || [];
 
   if (!tmplIds.length || !wx.requestSubscribeMessage) {
-    return Promise.resolve({ skipped: true });
+    return Promise.resolve({ acceptedTemplateId: "" });
   }
 
   return new Promise((resolve) => {
     wx.requestSubscribeMessage({
       tmplIds,
-      success: resolve,
-      fail: resolve,
+      success(result) {
+        const acceptedTemplateId =
+          tmplIds.find((templateId) => result[templateId] === "accept") || "";
+        resolve({ acceptedTemplateId });
+      },
+      fail() {
+        resolve({ acceptedTemplateId: "" });
+      },
     });
   });
 }
@@ -216,9 +290,15 @@ module.exports = {
   getNearbyMerchants,
   getMerchantDetail,
   createBooking,
+  userLogin,
+  ensureUserLogin,
+  getMyBookings,
+  getMyBookingDetail,
+  cancelMyBooking,
   getBookingsByPhone,
   getBookingDetail,
   getBookingInvitation,
+  cancelBooking,
   requestBookingSubscription,
   merchantWxLogin,
   getMerchantSession,
